@@ -88,7 +88,7 @@ app.get('/', function (req, res) {
 
 });
 
-app.get('/webhook/', function (req, res) {
+app.post('/webhook/', function (req, res) {
 	//  USED FOR SET UP:
 	// if(req.query['hub.verify_token'] == process.env['VERIFYTOKEN']) {
 	// 	res.send(req.query['hub.challenge']);
