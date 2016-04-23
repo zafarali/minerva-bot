@@ -26,6 +26,9 @@ app.get('/', function (req, res) {
 	// var deferred = q.defer();
 	// console.log(typeof(req.query.subject));
 	// console.log(req.query.code);
+	if(!req.query.subject){
+		res.send({error:'MUST SPECIFY AT LEAST 1 COURSE'})
+	}
 	var query = prepare_query('201701', req.query.subject, req.query.code);
 	// console.log(query);
 	request(query, function (error, response, body) {
