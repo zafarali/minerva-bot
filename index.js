@@ -26,7 +26,7 @@ app.get('/', function (req, res) {
 	// var deferred = q.defer();
 	// console.log(typeof(req.query.subject));
 	// console.log(req.query.code);
-	var query = prepare_query('201701', req.query.subject.toUpperCase(), req.query.code);
+	var query = prepare_query('201701', req.query.subject, req.query.code);
 	// console.log(query);
 	request(query, function (error, response, body) {
 		// if ( error ) { return deferred.reject( error ); }
@@ -68,11 +68,18 @@ app.get('/', function (req, res) {
 		res.send({ 'courses':courses });
 	});
 
-})
+});
+
+app.get('/webhook/', function (req, res) {
+	if(req.query['hub.verify_token'] == process.env['VERIFYTOKEN']) {
+		res.send(req.query['hub.challenge']);
+	}
+	res.send('Error, wrong token');
+});
 
 app.listen( app.get('port'), function() {
 	console.log('running now on port ', app.get('port') );
-})
+});
 
 function information_map(index){
 	switch (index) {
@@ -125,7 +132,7 @@ function prepare_query ( term, subject, code, title ) {
 	  var subject = typeof subject !== 'undefined' ?  subject : '';
 	  var code = typeof code !== 'undefined' ?  code : '';
 	  var term = typeof term !== 'undefined' ?  term : '201609';
-
+	  subject = subject.toUpperCase();
 	var EXTRA_stuff	= '?display_mode_in=LIST&search_mode_in='+
 	'&sel_subj=dummy&sel_day=dummy&sel_schd=dummy&sel_insm=dummy&'+
 	'sel_camp=dummy&sel_levl=dummy&sel_sess=dummy&sel_instr=dummy&sel_ptrm=dummy&sel_attr=dummy'+
