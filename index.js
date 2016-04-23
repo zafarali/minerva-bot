@@ -15,7 +15,8 @@ var end_points = {
 
 var FBTOKEN = process.env['FBTOKEN'];
 
-app.set('port', ( process.env.PORT || 5000 ) );
+app.set('port', ( process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 5000 ) );
+app.set('ip', ( process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1') );
 
 app.use(function(req,res,next){
     var _send = res.send;
@@ -58,12 +59,17 @@ app.get('/', function (req, res) {
 
 });
 
+
+app.get('/webhook', function (req, res) {
+		//  USED FOR SET UP:
+	if(req.query['hub.verify_token'] == process.env['VERIFYTOKEN']) {
+		res.send(req.query['hub.challenge']);
+	}
+	res.send('Error, wrong token');
+});
+
 app.post('/webhook/', function (req, res) {
-	//  USED FOR SET UP:
-	// if(req.query['hub.verify_token'] == process.env['VERIFYTOKEN']) {
-	// 	res.send(req.query['hub.challenge']);
-	// }
-	// res.send('Error, wrong token');
+
 
 	var messaging_events = req.body.entry[0].messaging;
 
@@ -75,6 +81,30 @@ app.post('/webhook/', function (req, res) {
 			var user_request = text.split(' ');
 			var subject = user_request[0];
 			var code = user_request[1];
+
+			
+			var query = prepare_query('201609', subject, code);
+			var replies_made = 0;
+
+			request(query, function (error, response, body) {
+				// if ( error ) { return deferred.reject( error ); }
+				if (error) { res.send({error:'ERROR OCCURED!'}); }
+				// deferred.resolve({body:body,response:response});
+				// console.log(body);
+				var courses = parse_data(body);
+				// console.log(courses);
+				if(courses.length > 0){
+					var first_course = courses[0];
+					var bot_reply = first_course.subject+
+					" " + first_course.course_code + " is " +
+					first_course.title+" It happens on "+first_course.days+
+					" between "+first_course.time+". The professor(s) "+first_course.instructor+
+					" teach at "+first_course.location;
+					reply(sender, bot_reply);
+					replies_made = replies_made+1;
+				}
+			});
+
 			var query = prepare_query('201701', subject, code);
 
 			request(query, function (error, response, body) {
@@ -84,14 +114,21 @@ app.post('/webhook/', function (req, res) {
 				// console.log(body);
 				var courses = parse_data(body);
 				// console.log(courses);
-				var first_course = courses[0];
-				var bot_reply = "Hey! "+first_course.subject+
-				" " + first_course.course_code + " is " +
-				first_course.title+", it happens on "+first_course.days+
-				" at "+first_course.time+". The professor(s) "+first_course.instructor+
-				" teach at "+first_course.location;
-				reply(sender, bot_reply);
+				if(courses.length > 0){
+					var first_course = courses[0];
+					var bot_reply = first_course.subject+
+					" " + first_course.course_code + " is " +
+					first_course.title+" It happens on "+first_course.days+
+					" between "+first_course.time+". The professor(s) "+first_course.instructor+
+					" teach at "+first_course.location;
+					reply(sender, bot_reply);
+					replies_made = replies_made+1;
+				}
 			});
+
+			if(replies_made===0){
+				reply(sender, "I could not find any information about that course...");
+			}
 
 		}
 	}
@@ -99,8 +136,8 @@ app.post('/webhook/', function (req, res) {
 	res.sendStatus(200);
 });
 
-app.listen( app.get('port'), function() {
-	console.log('running now on port ', app.get('port') );
+app.listen( app.get('port'), app.get('ip'), function() {
+	console.log('listening on', app.get('ip'), ' on port ', app.get('port') );
 });
 
 function information_map(index){

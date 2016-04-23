@@ -12,5 +12,9 @@
     "node-wit": "^3.2.2",
     "q": "^1.4.1",
     "request": "^2.72.0"
-  }
+  },
+  "scripts": {
+    "start": "supervisor index.js"
+  },
+  "main": "index.js"
 }
