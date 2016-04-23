@@ -13,6 +13,7 @@ var end_points = {
 	'results':'bwckschd.p_get_crse_unsec',
 }
 
+var FBTOKEN = process.env['FBTOKEN'];
 
 app.set('port', ( process.env.PORT || 5000 ) );
 
@@ -88,10 +89,24 @@ app.get('/', function (req, res) {
 });
 
 app.get('/webhook/', function (req, res) {
-	if(req.query['hub.verify_token'] == process.env['VERIFYTOKEN']) {
-		res.send(req.query['hub.challenge']);
+	//  USED FOR SET UP:
+	// if(req.query['hub.verify_token'] == process.env['VERIFYTOKEN']) {
+	// 	res.send(req.query['hub.challenge']);
+	// }
+	// res.send('Error, wrong token');
+
+	var messaging_events = req.body.entry[0].messaging;
+
+	for(i=0; i < messaging_events.length; i++){
+		var event = messaging_events[i];
+		var sender = event.sender.id;
+		if(event.message && event.message.text){
+			var text = event.message.text;
+			reply(sender, "hello!");
+		}
 	}
-	res.send('Error, wrong token');
+
+	res.sendStatus(200);
 });
 
 app.listen( app.get('port'), function() {
@@ -141,6 +156,28 @@ function information_map(index){
 		case 19:
 			return 'status';
 	}
+}
+
+function reply(sender, text){
+	var reply_data = {
+		text:text
+	};
+
+	request({
+		url:'https://graph.facebook.com/v2.6/me/messages',
+		qs: {access_token:FBTOKEN},
+		method: 'POST',
+		json: {
+			recepient: {id:sender},
+			message:reply_data,
+		}
+	}, function(error, response, body){
+		if(error){
+			console.log('ERROR SENDING MESSAGE',error);
+		}else if (response.body.error){
+			console.log('ERROR:', response.body.error);
+		}
+	});
 }
 
 function prepare_query ( term, subject, code, title ) {
