@@ -16,9 +16,22 @@ var end_points = {
 
 app.set('port', ( process.env.PORT || 5000 ) );
 
+app.use(function(req,res,next){
+    var _send = res.send;
+    var sent = false;
+    res.send = function(data){
+        if(sent) return;
+        _send.bind(res)(data);
+        sent = true;
+    };
+    next();
+});
+
 // Process application/x-www-form-urlencoded
 app.use( bodyParser.urlencoded( { extended:false} ) );
 app.use( bodyParser.json() );
+
+
 app.get('/', function (req, res) { 
 	// result.send('Minnerva Bot!');
 
@@ -55,7 +68,8 @@ app.get('/', function (req, res) {
 				// details in them, these are defined as those which do not
 				// have numeric CRNS in the 1st TD
 				var possible_crn = $(e).children().eq(1).text();
-				return !isNaN(+possible_crn);
+				var isLecture = $(e).children().eq(5).text();
+				return !isNaN(+possible_crn) && isLecture === 'Lecture';
 			}).each(function(i,e){
 				// e is a single TR here:
 				// get it's chldren which are the TDs:
