@@ -50,37 +50,7 @@ app.get('/', function (req, res) {
 		if (error) { res.send({error:'ERROR OCCURED!'}); }
 		// deferred.resolve({body:body,response:response});
 		// console.log(body);
-		var $ = cheerio.load(body);
-
-		// contains table rows which are longer than 1 element.
-		// now need a way to pick out relevant sections
-		var $relevant_tables = $('.datadisplaytable').children('tr').filter(function (index, element) {
-			return $(this).children().length > 1;
-		});
-
-
-		var courses = [];
-		// map all the TRs:
-		$relevant_tables.map( function (index, element) {
-			// this loop has the TRs as elements
-
-			$(this).filter(function(i,e){
-				// here we try to remove the TRs which do not have course
-				// details in them, these are defined as those which do not
-				// have numeric CRNS in the 1st TD
-				var possible_crn = $(e).children().eq(1).text();
-				var isLecture = $(e).children().eq(5).text();
-				return !isNaN(+possible_crn) && isLecture === 'Lecture';
-			}).each(function(i,e){
-				// e is a single TR here:
-				// get it's chldren which are the TDs:
-				var to_be_saved = {};
-				$(e).children().each(function (i_index, information) {
-					to_be_saved[information_map(i_index)] = $(information).text();
-				});
-				courses.push(to_be_saved);
-			});
-		});
+		var courses = parse_data(body);
 		// console.log(courses);
 
 		res.send({ 'courses':courses });
@@ -102,7 +72,27 @@ app.post('/webhook/', function (req, res) {
 		var sender = event.sender.id;
 		if(event.message && event.message.text){
 			var text = event.message.text;
-			reply(sender, "hello!");
+			var user_request = text.split(' ');
+			var subject = user_request[0];
+			var code = user_request[1];
+			var query = prepare_query('201701', subject, code);
+
+			request(query, function (error, response, body) {
+				// if ( error ) { return deferred.reject( error ); }
+				if (error) { res.send({error:'ERROR OCCURED!'}); }
+				// deferred.resolve({body:body,response:response});
+				// console.log(body);
+				var courses = parse_data(body);
+				// console.log(courses);
+				var first_course = courses[0];
+				var bot_reply = "Hey! "+first_course.subject+
+				" " + first_course.course_code + " is " +
+				first_course.title+", it happens on "+first_course.days+
+				" at "+first_course.time+". The professor(s) "+first_course.instructor+
+				" teach at "+first_course.location;
+				reply(sender, bot_reply);
+			});
+
 		}
 	}
 
@@ -144,18 +134,54 @@ function information_map(index){
 		case 13:
 			return 'WLcapacity';
 		case 14:
-			return 'WLenrolled';
+			return 'instructor';
 		case 15:
 			return 'WLremain';
 		case 16:
-			return 'instructor';
+			return 'location';
 		case 17:
 			return 'date';
 		case 18:
-			return 'location';
+			return 'date';
 		case 19:
 			return 'status';
 	}
+}
+
+function parse_data(body){
+	var $ = cheerio.load(body);
+
+	// contains table rows which are longer than 1 element.
+	// now need a way to pick out relevant sections
+	var $relevant_tables = $('.datadisplaytable').children('tr').filter(function (index, element) {
+		return $(this).children().length > 1;
+	});
+
+
+	var courses = [];
+	// map all the TRs:
+	$relevant_tables.map( function (index, element) {
+		// this loop has the TRs as elements
+
+		$(this).filter(function(i,e){
+			// here we try to remove the TRs which do not have course
+			// details in them, these are defined as those which do not
+			// have numeric CRNS in the 1st TD
+			var possible_crn = $(e).children().eq(1).text();
+			var isLecture = $(e).children().eq(5).text();
+			return !isNaN(+possible_crn) && isLecture === 'Lecture';
+		}).each(function(i,e){
+			// e is a single TR here:
+			// get it's chldren which are the TDs:
+			var to_be_saved = {};
+			$(e).children().each(function (i_index, information) {
+				to_be_saved[information_map(i_index)] = $(information).text();
+			});
+			courses.push(to_be_saved);
+		});
+	});
+
+	return courses;
 }
 
 function reply(sender, text){
