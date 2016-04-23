@@ -168,7 +168,7 @@ function reply(sender, text){
 		qs: {access_token:FBTOKEN},
 		method: 'POST',
 		json: {
-			recepient: {id:sender},
+			recipient: {id:sender},
 			message:reply_data,
 		}
 	}, function(error, response, body){
