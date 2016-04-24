@@ -1,0 +1,1 @@
+Minerva bot will never ask you for your username, ID or password.
