@@ -81,7 +81,7 @@ app.post('/webhook/', function (req, res) {
 		var sender = event.sender.id;
 		if(event.message && event.message.text){
 			var text = event.message.text;
-			console.log(text);
+			console.log('query recieved:', text);
 			parsePhrase(text, sender);
 
 		}
@@ -218,13 +218,13 @@ function prepare_query ( term, subject, code, title ) {
 
 function parsePhrase(user_text, sender){
 	// check if the phrase contains a course name:
-	var phrase = user_text.toUpperCase()
-	phrase.replace(/\s/g, '');
+	var phrase = user_text.toUpperCase().replace(/\s/g, '');
+	console.log(phrase);
 	var course_matches = phrase.match(course_regex);
 	if (course_matches){
-		console.log('non zero course_matches');
+		// console.log('non zero course_matches');
 		for (var i = 0; i < course_matches.length; i++) {
-			console.log('searching for',course_matches[i]);
+			// console.log('searching for',course_matches[i]);
 			var subject = course_matches[i].substr(0,4);
 			var code = course_matches[i].substr(4,6);
 			search_by_subject_code(subject, code, sender);
@@ -239,7 +239,7 @@ function parsePhrase(user_text, sender){
 function search_by_subject_code(subject, code, sender){
 	var fall = prepare_query('201609', subject, code);
 	var winter = prepare_query('201701', subject, code);
-	console.log('fall and winter queries created');
+	// console.log('fall and winter queries created');
 
 	request(fall, function (error, response, body) {
 		// if ( error ) { return deferred.reject( error ); }
@@ -248,11 +248,11 @@ function search_by_subject_code(subject, code, sender){
 		// console.log(body);
 		var courses = parse_data(body);
 		// console.log(courses);
-		console.log('courses found in the fall:',courses.length);
+		// console.log('courses found in the fall:',courses.length);
 		if(courses.length > 0){
 			var first_course = courses[0];
-			var bot_reply = first_course.subject+
-			"In the fall " + first_course.course_code + " is " +
+			var bot_reply = "In the fall " + first_course.subject+
+			first_course.course_code + " is " +
 			first_course.title+" It happens on "+first_course.days+
 			" between "+first_course.time+". The professor(s) "+first_course.instructor+
 			" teach at "+first_course.location;
@@ -267,11 +267,11 @@ function search_by_subject_code(subject, code, sender){
 		// console.log(body);
 		var courses = parse_data(body);
 		// console.log(courses);
-		console.log('courses found in the winter: ', courses.length);
+		// console.log('courses found in the winter: ', courses.length);
 		if(courses.length > 0){
 			var first_course = courses[0];
-			var bot_reply = first_course.subject+
-			"In the winter " + first_course.course_code + " is " +
+			var bot_reply = "In the winter " + first_course.subject+
+			first_course.course_code + " is " +
 			first_course.title+" It happens on "+first_course.days+
 			" between "+first_course.time+". The professor(s) "+first_course.instructor+
 			" teach at "+first_course.location;
@@ -283,7 +283,7 @@ function search_by_subject_code(subject, code, sender){
 function search_by_title(user_text, sender){
 	var fall = prepare_query('201609', '', '', user_text);
 	var winter = prepare_query('201701', '','', user_text);
-	console.log('search query for title created');
+	// console.log('search query for title created');
 	request(fall, function (error, response, body) {
 		// if ( error ) { return deferred.reject( error ); }
 		if (error) { res.send({error:'ERROR OCCURED!'}); }
@@ -291,11 +291,11 @@ function search_by_title(user_text, sender){
 		// console.log(body);
 		var courses = parse_data(body);
 		// console.log(courses);
-		console.log('courses found in the fall:',courses.length);
+		// console.log('courses found in the fall:',courses.length);
 		for (var i = 0; i < courses.length; i++) {
 			var first_course = courses[i];
-			var bot_reply = first_course.subject+
-			"In the fall " + first_course.course_code + " is " +
+			var bot_reply = "In the fall " + first_course.subject+
+			first_course.course_code + " is " +
 			first_course.title+" It happens on "+first_course.days+
 			" between "+first_course.time+". The professor(s) "+first_course.instructor+
 			" teach at "+first_course.location;
@@ -311,11 +311,11 @@ function search_by_title(user_text, sender){
 		var courses = parse_data(body);
 		// console.log(courses);
 
-		console.log('courses found in the winter:', courses.length)
+		// console.log('courses found in the winter:', courses.length)
 		for (var i = 0; i < courses.length; i++) {
 			var first_course = courses[i];
-			var bot_reply = first_course.subject+
-			"In the winter " + first_course.course_code + " is " +
+			var bot_reply = "In the winter " + first_course.subject+
+			first_course.course_code + " is " +
 			first_course.title+" It happens on "+first_course.days+
 			" between "+first_course.time+". The professor(s) "+first_course.instructor+
 			" teach at "+first_course.location;
