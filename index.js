@@ -81,8 +81,9 @@ app.post('/webhook/', function (req, res) {
 		var sender = event.sender.id;
 		if(event.message && event.message.text){
 			var text = event.message.text;
-
+			console.log(text);
 			parsePhrase(text, sender);
+
 		}
 	}
 
@@ -234,6 +235,8 @@ function parsePhrase(user_text, sender){
 function search_by_subject_code(subject, code, sender){
 	var fall = prepare_query('201609', subject, code);
 	var winter = prepare_query('201701', subject, code);
+	console.log('fall and winter queries created');
+
 	request(fall, function (error, response, body) {
 		// if ( error ) { return deferred.reject( error ); }
 		if (error) { res.send({error:'ERROR OCCURED!'}); }
@@ -241,6 +244,7 @@ function search_by_subject_code(subject, code, sender){
 		// console.log(body);
 		var courses = parse_data(body);
 		// console.log(courses);
+		console.log('courses found in the fall:',courses.length);
 		if(courses.length > 0){
 			var first_course = courses[0];
 			var bot_reply = first_course.subject+
@@ -259,6 +263,7 @@ function search_by_subject_code(subject, code, sender){
 		// console.log(body);
 		var courses = parse_data(body);
 		// console.log(courses);
+		console.log('courses found in the winter: ', courses.length);
 		if(courses.length > 0){
 			var first_course = courses[0];
 			var bot_reply = first_course.subject+
@@ -273,7 +278,8 @@ function search_by_subject_code(subject, code, sender){
 
 function search_by_title(user_text, sender){
 	var fall = prepare_query('201609', '', '', user_text);
-	var winter = prepare_query('201701', '', user_text);
+	var winter = prepare_query('201701', '','', user_text);
+	console.log('search query for title created');
 	request(fall, function (error, response, body) {
 		// if ( error ) { return deferred.reject( error ); }
 		if (error) { res.send({error:'ERROR OCCURED!'}); }
@@ -281,7 +287,7 @@ function search_by_title(user_text, sender){
 		// console.log(body);
 		var courses = parse_data(body);
 		// console.log(courses);
-
+		console.log('courses found in the fall:',courses.length);
 		for (var i = 0; i < courses.length; i++) {
 			var first_course = courses[i];
 			var bot_reply = first_course.subject+
@@ -300,6 +306,8 @@ function search_by_title(user_text, sender){
 		// console.log(body);
 		var courses = parse_data(body);
 		// console.log(courses);
+
+		console.log('courses found in the winter:', courses.length)
 		for (var i = 0; i < courses.length; i++) {
 			var first_course = courses[i];
 			var bot_reply = first_course.subject+
