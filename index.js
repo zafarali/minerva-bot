@@ -221,11 +221,15 @@ function parsePhrase(user_text, sender){
 	var phrase = user_text.toUpperCase()
 	phrase.replace(/\s/g, '');
 	var course_matches = phrase.match(course_regex);
-	for (var i = 0; i < course_matches.length; i++) {
-		var subject = course_matches[i].substr(0,4);
-		var code = course_matches[i].substr(4,6);
-		search_by_subject_code(subject, code, sender);
-	};
+	if (course_matches){
+		console.log('non zero course_matches');
+		for (var i = 0; i < course_matches.length; i++) {
+			console.log('searching for',course_matches[i]);
+			var subject = course_matches[i].substr(0,4);
+			var code = course_matches[i].substr(4,6);
+			search_by_subject_code(subject, code, sender);
+		};
+	}
 	// if it doesn't contain a course name, search by the title of the course:
 
 	search_by_title(user_text, sender);
