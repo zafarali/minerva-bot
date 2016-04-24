@@ -13,6 +13,9 @@ var end_points = {
 	'results':'bwckschd.p_get_crse_unsec',
 }
 
+
+var course_regex = /[a-z]{4}[0-9]{3}/gi;
+
 var FBTOKEN = process.env['FBTOKEN'];
 
 app.set('port', ( process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 5000 ) );
@@ -78,58 +81,8 @@ app.post('/webhook/', function (req, res) {
 		var sender = event.sender.id;
 		if(event.message && event.message.text){
 			var text = event.message.text;
-			var user_request = text.split(' ');
-			var subject = user_request[0];
-			var code = user_request[1];
 
-			
-			var query = prepare_query('201609', subject, code);
-			var replies_made = 0;
-
-			request(query, function (error, response, body) {
-				// if ( error ) { return deferred.reject( error ); }
-				if (error) { res.send({error:'ERROR OCCURED!'}); }
-				// deferred.resolve({body:body,response:response});
-				// console.log(body);
-				var courses = parse_data(body);
-				// console.log(courses);
-				if(courses.length > 0){
-					var first_course = courses[0];
-					var bot_reply = first_course.subject+
-					" " + first_course.course_code + " is " +
-					first_course.title+" It happens on "+first_course.days+
-					" between "+first_course.time+". The professor(s) "+first_course.instructor+
-					" teach at "+first_course.location;
-					reply(sender, bot_reply);
-					replies_made = replies_made+1;
-				}
-			});
-
-			var query = prepare_query('201701', subject, code);
-
-			request(query, function (error, response, body) {
-				// if ( error ) { return deferred.reject( error ); }
-				if (error) { res.send({error:'ERROR OCCURED!'}); }
-				// deferred.resolve({body:body,response:response});
-				// console.log(body);
-				var courses = parse_data(body);
-				// console.log(courses);
-				if(courses.length > 0){
-					var first_course = courses[0];
-					var bot_reply = first_course.subject+
-					" " + first_course.course_code + " is " +
-					first_course.title+" It happens on "+first_course.days+
-					" between "+first_course.time+". The professor(s) "+first_course.instructor+
-					" teach at "+first_course.location;
-					reply(sender, bot_reply);
-					replies_made = replies_made+1;
-				}
-			});
-
-			if(replies_made===0){
-				reply(sender, "I could not find any information about that course...");
-			}
-
+			parsePhrase(text, sender);
 		}
 	}
 
@@ -260,6 +213,104 @@ function prepare_query ( term, subject, code, title ) {
 	return ROOT_URL+end_points['results']+EXTRA_stuff + '&term_in='+term+'&sel_subj='+subject+'&sel_crse='+code+'&sel_title='+title;
 }
 
+
+
+function parsePhrase(user_text, sender){
+	// check if the phrase contains a course name:
+	var phrase = user_text.toUpperCase()
+	phrase.replace(/\s/g, '');
+	var course_matches = phrase.match(course_regex);
+	for (var i = 0; i < course_matches.length; i++) {
+		var subject = course_matches[i].substr(0,4);
+		var code = course_matches[i].substr(4,6);
+		search_by_subject_code(subject, code, sender);
+	};
+	// if it doesn't contain a course name, search by the title of the course:
+
+	search_by_title(user_text, sender);
+}
+
+
+function search_by_subject_code(subject, code, sender){
+	var fall = prepare_query('201609', subject, code);
+	var winter = prepare_query('201701', subject, code);
+	request(fall, function (error, response, body) {
+		// if ( error ) { return deferred.reject( error ); }
+		if (error) { res.send({error:'ERROR OCCURED!'}); }
+		// deferred.resolve({body:body,response:response});
+		// console.log(body);
+		var courses = parse_data(body);
+		// console.log(courses);
+		if(courses.length > 0){
+			var first_course = courses[0];
+			var bot_reply = first_course.subject+
+			"In the fall " + first_course.course_code + " is " +
+			first_course.title+" It happens on "+first_course.days+
+			" between "+first_course.time+". The professor(s) "+first_course.instructor+
+			" teach at "+first_course.location;
+			reply(sender, bot_reply);
+		}
+	});
+
+	request(winter, function (error, response, body) {
+		// if ( error ) { return deferred.reject( error ); }
+		if (error) { res.send({error:'ERROR OCCURED!'}); }
+		// deferred.resolve({body:body,response:response});
+		// console.log(body);
+		var courses = parse_data(body);
+		// console.log(courses);
+		if(courses.length > 0){
+			var first_course = courses[0];
+			var bot_reply = first_course.subject+
+			"In the winter " + first_course.course_code + " is " +
+			first_course.title+" It happens on "+first_course.days+
+			" between "+first_course.time+". The professor(s) "+first_course.instructor+
+			" teach at "+first_course.location;
+			reply(sender, bot_reply);
+		}
+	});
+}
+
+function search_by_title(user_text, sender){
+	var fall = prepare_query('201609', '', '', user_text);
+	var winter = prepare_query('201701', '', user_text);
+	request(fall, function (error, response, body) {
+		// if ( error ) { return deferred.reject( error ); }
+		if (error) { res.send({error:'ERROR OCCURED!'}); }
+		// deferred.resolve({body:body,response:response});
+		// console.log(body);
+		var courses = parse_data(body);
+		// console.log(courses);
+
+		for (var i = 0; i < courses.length; i++) {
+			var first_course = courses[i];
+			var bot_reply = first_course.subject+
+			"In the fall " + first_course.course_code + " is " +
+			first_course.title+" It happens on "+first_course.days+
+			" between "+first_course.time+". The professor(s) "+first_course.instructor+
+			" teach at "+first_course.location;
+			reply(sender, bot_reply);
+		};
+	});
+
+	request(winter, function (error, response, body) {
+		// if ( error ) { return deferred.reject( error ); }
+		if (error) { res.send({error:'ERROR OCCURED!'}); }
+		// deferred.resolve({body:body,response:response});
+		// console.log(body);
+		var courses = parse_data(body);
+		// console.log(courses);
+		for (var i = 0; i < courses.length; i++) {
+			var first_course = courses[i];
+			var bot_reply = first_course.subject+
+			"In the winter " + first_course.course_code + " is " +
+			first_course.title+" It happens on "+first_course.days+
+			" between "+first_course.time+". The professor(s) "+first_course.instructor+
+			" teach at "+first_course.location;
+			reply(sender, bot_reply);
+		};
+	});
+}
 
 
 	
