@@ -82,8 +82,9 @@ app.post('/webhook/', function (req, res) {
 		if(event.message && event.message.text){
 			var text = event.message.text;
 			console.log('query recieved:', text);
-			parsePhrase(text, sender);
-
+			if( text.length > 5 ) {
+				parsePhrase(text, sender);
+			}
 		}
 	}
 
