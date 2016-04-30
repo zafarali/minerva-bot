@@ -35,21 +35,19 @@ app.get('/', function (req, res) {
 	// var deferred = q.defer();
 	// console.log(typeof(req.query.subject));
 	// console.log(req.query.code);
-	if(!req.query.subject){
-		res.send({error:'MUST SPECIFY AT LEAST 1 COURSE'})
-	}
-	var query = prepare_query('201701', req.query.subject, req.query.code);
-	// console.log(query);
-	request(query, function (error, response, body) {
-		// if ( error ) { return deferred.reject( error ); }
-		if (error) { res.send({error:'ERROR OCCURED!'}); }
-		// deferred.resolve({body:body,response:response});
-		// console.log(body);
-		var courses = parse_data(body);
-		// console.log(courses);
+	res.send({error:'API is no longer accessible via get request'})
+	// var query = prepare_query('201701', req.query.subject, req.query.code);
+	// // console.log(query);
+	// request(query, function (error, response, body) {
+	// 	// if ( error ) { return deferred.reject( error ); }
+	// 	if (error) { res.send({error:'ERROR OCCURED!'}); }
+	// 	// deferred.resolve({body:body,response:response});
+	// 	// console.log(body);
+	// 	var courses = parse_data(body);
+	// 	// console.log(courses);
 
-		res.send({ 'courses':courses });
-	});
+	// 	res.send({ 'courses':courses });
+	// });
 
 });
 
