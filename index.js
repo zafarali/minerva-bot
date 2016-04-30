@@ -80,7 +80,7 @@ app.post('/webhook/', function (req, res) {
 			}
 			var text = event.message.text;
 			console.log('query recieved:', text);
-			chat.parse(test, args);
+			chat.parse(text, args);
 
 			var result = q(args);
 			for (var i = 0; i < args.queries.length; i++) {
