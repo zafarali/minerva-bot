@@ -72,8 +72,10 @@ function parse_data(body){
 			// details in them, these are defined as those which do not
 			// have numeric CRNS in the 1st TD
 			var possible_crn = $(e).children().eq(1).text();
-			var isLecture = $(e).children().eq(5).text();
-			return !isNaN(+possible_crn) && isLecture === 'Lecture';
+			var lectureType = $(e).children().eq(5).text() 
+			var isLecture = lectureType === 'Lecture' || lectureType === 'Seminar' || lectureType === 'Topics Course';
+			var isActive = $(e).children().eq(19).text() === 'Active';
+			return !isNaN(+possible_crn) && isLecture && isActive ;
 		}).each(function(i,e){
 			// e is a single TR here:
 			// get its chldren which are the TDs:
