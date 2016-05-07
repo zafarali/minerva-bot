@@ -52,7 +52,7 @@ function query_execute(args){
 			}
 			deferred.resolve(args);
 		}else{
-			args.replies.push("I'm sorry I couldn't find any courses for that in the "+year_to_season( query.substr(-6,6) )+" :(");
+			// args.replies.push("I'm sorry I couldn't find any courses for that in the "+year_to_season( query.substr(-6,6) )+" :(");
 			deferred.resolve(args);
 		}
 		// deferred.resolve(args);

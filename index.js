@@ -79,6 +79,8 @@ app.post('/webhook/', function (req, res) {
 			var text = event.message.text;
 			console.log('query recieved:', text);
 			chat.parse(text, args);
+			
+			var total_queryes = args.queries.length;
 
 			var result = q(args);
 			for (var i = 0; i < args.queries.length; i++) {
@@ -87,9 +89,13 @@ app.post('/webhook/', function (req, res) {
 
 			result.then(function(){
 				// reply all the messages
-				for (var i = 0; i < args.replies.length; i++) {
-					chat.reply(sender, args.replies[i]);
-				};
+				if(args.replies.length === 0){
+					chat.reply(sender, "I couldn\'t find any courses for that in the fall or winter :(")
+				}else{
+					for (var i = 0; i < args.replies.length; i++) {
+						chat.reply(sender, args.replies[i]);
+					};
+				}
 
 			}, function(err){
 				// reply the error
