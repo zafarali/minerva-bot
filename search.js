@@ -49,6 +49,9 @@ function query_execute(args){
 			args.replies.push(bot_reply)
 			}
 
+			if( args.replies.length == 0 ){
+				args.replies.push("I'm sorry I couldn't find any courses :(");
+			}
 			deferred.resolve(args);
 		}else{
 			deferred.resolve(args);
