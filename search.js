@@ -74,6 +74,7 @@ function generate_query_by_title(title, year){
 	// hard coded for now
 	var years = typeof year !== 'undefined' ?  [year] : ['201701','201609'];
 	var queries = [];
+	title = title.substr(0,30);
 	for (var i = 0; i < years.length; i++) {
 		queries.push( prepare_query(years[i], '', '', title) )
 	};

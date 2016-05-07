@@ -169,10 +169,19 @@ var REFINE_WORDS = {
 function refine_query_extract(key_words){
 	// refines key words extracted from a query
 	// using some hard coded logic... should imporve later
+
 	var refined = [];
 	var meta = {'when':false};
 	for (var i = 0; i < key_words.length; i++) {
-		if(key_words[i] !== '[end]' && key_words[i] !== 'teaches'){
+		if(key_words[i] === 'intro'){
+			refined.push('introduction');
+		}
+		// certain words can be skipped right off the bat
+		if(key_words[i] !== '[end]' && 
+			key_words[i] !== 'teaches' && 
+			key_words[i] !== 'professor' &&
+			key_words[i] !== 'instructor' &&
+			key_words[i] !== 'prof'){
 			// not an end word
 			if(key_words[i] === 'in'){
 				// is this "in" important?
@@ -187,7 +196,11 @@ function refine_query_extract(key_words){
 			} else if (key_words[i] === 'the'){
 				for (var j = 0; j < REFINE_WORDS['the'].include_when.length; j++) {
 					if( REFINE_WORDS['in'].include_when[j] === key_words[i-1] ){
-						refined.push(key_words[i])
+						// check if it is not an end word
+						if( (i<key_words.length-1 && key_words[i+1]!=='[end]') 
+							|| i == key_words.length-1 ){
+							refined.push(key_words[i])
+						}
 					}
 				};
 			} else {
@@ -207,6 +220,9 @@ function refine_query_extract(key_words){
 			}
 		}
 	};
+	if(refined[refined.length-1] === 'in'){
+		refined.pop()
+	}
 	return [ refined.join(' '), meta ] ;
 }
 
