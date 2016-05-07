@@ -22,6 +22,8 @@ function query_execute(args){
 		if(courses.length > 5){
 			bot_reply = "I found "+courses.length+" courses! Try a more specific query.";
 			args.replies.push(bot_reply);
+			deferred.resolve(args);
+
 		}else if(courses.length > 0){
 			if( query.match('&sel_subj=&sel_crse=') ){
 				// generic search query, return everything
@@ -48,12 +50,9 @@ function query_execute(args){
 			// args.replies.push(bot_reply);
 			args.replies.push(bot_reply)
 			}
-
-			if( args.replies.length == 0 ){
-				args.replies.push("I'm sorry I couldn't find any courses :(");
-			}
 			deferred.resolve(args);
 		}else{
+			args.replies.push("I'm sorry I couldn't find any courses for that query :(");
 			deferred.resolve(args);
 		}
 		// deferred.resolve(args);

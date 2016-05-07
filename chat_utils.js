@@ -4,13 +4,33 @@ var COURSE_REGEX = /[a-z]{4}[0-9]{3}/gi;
 var natural = require('natural')
 var jsonfile = require('jsonfile')
 var fs = require('fs');
- 
-var JSON_classifier = fs.readFileSync('./training/query_classify.json', 'utf8');
+var WORDS = require('./WORDS.js').WORDS;
+natural.LancasterStemmer.attach();
+var NGrams = natural.NGrams;
 
+// useful functions
+
+Array.prototype.unique = function(){
+	// from underscore.js
+   var u = {}, a = [];
+   for(var i = 0, l = this.length; i < l; ++i){
+      if(u.hasOwnProperty(this[i])) {
+         continue;
+      }
+      a.push(this[i]);
+      u[this[i]] = 1;
+   }
+   return a;
+}
+Array.prototype.contains = function(element){
+    return this.indexOf(element) > -1;
+};
+
+
+// load the classifiers
+var JSON_classifier = fs.readFileSync('./training/query_classify.json', 'utf8');
 var query_classify = natural.BayesClassifier.restore(JSON.parse(JSON_classifier));
 
-
-var NGrams = natural.NGrams;
 
 
 var FBTOKEN = process.env['FBTOKEN'];
@@ -40,34 +60,59 @@ function reply(sender, text){
 
 var COURSE_REGEX = /[a-z]{4}[0-9]{3}/gi;
 
-function parse_phrase(user_text, args){
+
+function contains_hello(user_text){
+	// checks if user input contains a greeting
+	var tokenized_input = user_text.tokenizeAndStem();
+	for (var i = 0; i < WORDS['greetings'].length; i++) {
+		if(tokenized_input.contains(WORDS['greetings'][i])){
+			return true;
+		}
+	}
+	return false;
+}
+function contains_how_are_you(user_text){
 	
+}
+function parse_phrase(user_text, args){
+	user_text = user_text.toLowerCase();
 
-	// check if the phrase is a hello phrase
-
-	// if(isHello){
-	// 	return;
-	// }
+	if(contains_hello(user_text)){
+		args.replies.push('Hey!')
+		args.replies.push('Try asking me about a certain course like "When is COMP 202" or using a course title like "who teaches forest management?"')
+		return;
+	}
 
 	// check if the user has mentioned a course
 	var phrase = user_text.toUpperCase().replace(/\s/g, '');
 	var course_matches = phrase.match(COURSE_REGEX);
 
 	if (course_matches && course_matches.length > 0){
+		var year = undefined;
+		if(user_text.split(' ').contains('fall')){
+			year = '201609';
+		}else if(user_text.split(' ').contains('winter')){
+			year = '201701';
+		}else if(user_text.split(' ').contains('summer')){
+			year = '201605';
+		}
 		for (var j = 0; j < course_matches.length; j++) {
 			var subject = course_matches[j].substr(0,4);
 			var code = course_matches[j].substr(4,6);
 			// console.log('matched:'+subject+' '+code);
-			args.queries = args.queries.concat( search.generate_query_by_subject_code(subject, code) );
+			args.queries = args.queries.concat( search.generate_query_by_subject_code(subject, code, year) );
 		};
 		
 	}else if(user_text.length > 5){
-		var extracted_query_words = freeform_query_extract(user_text).join(' ')
-		args.queries = args.queries.concat( search.generate_query_by_title(extracted_query_words) );
-
+		var extracted = freeform_query_extract(user_text)
+		var title = extracted[0];
+		var year = extracted[1].when ? extracted[1].when : undefined;
+		if(title.length>0){
+			args.queries = args.queries.concat( search.generate_query_by_title(title, year) );
+		}
 	}
 
-	if(args.queries.length == 0 && args.replies.length == 0){
+	if(args.queries.length === 0){
 		args.replies.push('I didn\'t quite understand what you\'re trying to ask me...');
 		args.replies.push('Try asking me about a certain course like "When is COMP 202" or using a course title like "who teaches forest management?"');
 	}
@@ -75,37 +120,10 @@ function parse_phrase(user_text, args){
 }
 
 
-Array.prototype.unique = function(){
-	// from underscore.js
-   var u = {}, a = [];
-   for(var i = 0, l = this.length; i < l; ++i){
-      if(u.hasOwnProperty(this[i])) {
-         continue;
-      }
-      a.push(this[i]);
-      u[this[i]] = 1;
-   }
-   return a;
-}
-
-
-
-var SKIP_WORDS = [
-	'courses',
-	'about',
-	'about',
-	'me',
-	'you',
-	'google',
-	'yahoo',
-	'minerva',
-	'fuck'
-]
-
 function bigram_contains_skip_word(bigram) {
 	var contains_stop_word = false;
-	for (var i = 0; i < SKIP_WORDS.length; i++) {
-		contains_stop_word = SKIP_WORDS[i] == bigram[0] || SKIP_WORDS[i] == bigram[1]
+	for (var i = 0; i < WORDS['skip_words'].length; i++) {
+		contains_stop_word = WORDS['skip_words'][i] == bigram[0] || WORDS['skip_words'][i] == bigram[1]
 	};
 	return contains_stop_word;
 }
@@ -129,46 +147,24 @@ function freeform_query_extract(user_text) {
 			search_extracted.push(bgrams[j][1]);
 		}
 	};
-	console.log('query extracted: ',search_extracted.unique());
-	console.log('from',user_text);
-	console.log('refined:', refine_query_extract(search_extracted.unique()));
-	return search_extracted.unique();
+	// console.log('query extracted: ',search_extracted.unique());
+	// console.log('from',user_text);
+	var refined_query = refine_query_extract(search_extracted.unique());
+	// console.log('original text: ',user_text,'\n->query:', refined_query);
+	return refined_query;
 }
 
 
-var REFINE_WORDS = [
-	'in':{
-		include_when:['topics', 'issues', 'culture', 'architecture', 
-		'methods', 'advances', 'models', 'communication', 'issues',
-		'problems', 'therapy', 'church', 'work', 'care', 'christianity', 
-		'sexuality', 'jews','laboratory', 'materials', 'technology',
-		'seminar', 'theories', 'civilization', 'medicine', 'research', 'behaviour',
-		'computers', 'writing', 'ethics', 'management', 'experiments', 'managing',
-		'cities', 'lipoproteins', 'turbulence', 'studies', 'resources', 
-		'psychology'],
+var REFINE_WORDS = {
+	'in': {
+		include_when:WORDS['in_keep_list'],
 		exclude_when:[]
 	},
-	{
-		word: 'the', 
+	'the': {
 		exclude_when:['[end]', 'fall', 'winter'],
-		include_when:[]
-	},
-	{
-		word: 'winter',
-		exclude_when:[],
-		include_when:[]
-	},
-	{
-		word: 'fall',
-		exclude_when:[],
-		include_when:[]
-	},
-	{
-		word: '[end]',
-		exclude_when:[],
-		include_when:[]
+		include_when:WORDS['the_keep_list']
 	}
-]
+}
 
 function refine_query_extract(key_words){
 	// refines key words extracted from a query
@@ -176,32 +172,42 @@ function refine_query_extract(key_words){
 	var refined = [];
 	var meta = {'when':false};
 	for (var i = 0; i < key_words.length; i++) {
-		if(key_words[i] !== '[end]'){
+		if(key_words[i] !== '[end]' && key_words[i] !== 'teaches'){
 			// not an end word
 			if(key_words[i] === 'in'){
 				// is this "in" important?
 				if(i>0){
 						// go through most of the cases when we include it
-					for (var j = 0; j < REFINE_WORDS['in']include_when.length; j++) {
-						if( REFINE_WORDS['in']include_when[j] === key_words[i-1] ){
+					for (var j = 0; j < REFINE_WORDS['in'].include_when.length; j++) {
+						if( REFINE_WORDS['in'].include_when[j] === key_words[i-1] ){
 							refined.push(key_words[i])
 						}
 					};
 				}
+			} else if (key_words[i] === 'the'){
+				for (var j = 0; j < REFINE_WORDS['the'].include_when.length; j++) {
+					if( REFINE_WORDS['in'].include_when[j] === key_words[i-1] ){
+						refined.push(key_words[i])
+					}
+				};
 			} else {
 				// we detect a date/semester
-				if( key_words[i] === 'fall' 
-					|| key_words[i] === 'winter'
-					|| key_words[i] === 'summer'){
-					meta['when'] = key_words[i]
-				}else{
+
+				if( key_words[i] === 'fall'){
+					meta['when'] = '201609'
+				} else if( key_words[i] === 'winter'){
+					meta['when'] = '201701'
+				} else if( key_words[i] === 'summer'){
+					meta['when'] = '201605'
+				} else {
 					// didn't find a reason not to include this
-					refined.push(key_words[i])			
+					refined.push(key_words[i])						
 				}
+			
 			}
 		}
 	};
-	return [ refined, meta ] ;
+	return [ refined.join(' '), meta ] ;
 }
 
 exports.parse = parse_phrase;
