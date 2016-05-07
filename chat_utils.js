@@ -99,7 +99,7 @@ function parse_phrase(user_text, args){
 		for (var j = 0; j < course_matches.length; j++) {
 			var subject = course_matches[j].substr(0,4);
 			var code = course_matches[j].substr(4,6);
-			// console.log('matched:'+subject+' '+code);
+			console.log('matched:'+subject+' '+code+',when:'+year);
 			args.queries = args.queries.concat( search.generate_query_by_subject_code(subject, code, year) );
 		};
 		
@@ -107,6 +107,7 @@ function parse_phrase(user_text, args){
 		var extracted = freeform_query_extract(user_text)
 		var title = extracted[0];
 		var year = extracted[1].when ? extracted[1].when : undefined;
+		console.log('query parsed:',extracted)
 		if(title.length>0){
 			args.queries = args.queries.concat( search.generate_query_by_title(title, year) );
 		}
@@ -222,12 +223,14 @@ function refine_query_extract(key_words){
 	};
 	if(refined[refined.length-1] === 'in' || 
 		refined[refined.length-1] === 'for' || 
-		refined[refined.length-1] === 'the'){
+		refined[refined.length-1] === 'the' ||
+		refined[refined.length-1] === 'me'){
 		refined.pop();
 	}
 	if(refined[0] === 'in' || 
 		refined[0] === 'for' || 
-		refined[0] === 'the'){
+		refined[0] === 'the' || 
+		refined[0] === 'me'){
 		refined.splice(0,1);
 	}
 	return [ refined.join(' '), meta ] ;

@@ -74,7 +74,8 @@ function parse_data(body){
 			var possible_crn = $(e).children().eq(1).text();
 			var lectureType = $(e).children().eq(5).text() 
 			var isLecture = lectureType === 'Lecture' || lectureType === 'Seminar' || lectureType === 'Topics Course';
-			var isActive = $(e).children().eq(19).text() === 'Active';
+			var isActive = $(e).children().eq(17).text() === 'Active';
+			
 			return !isNaN(+possible_crn) && isLecture && isActive ;
 		}).each(function(i,e){
 			// e is a single TR here:
