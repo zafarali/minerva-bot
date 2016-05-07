@@ -220,8 +220,15 @@ function refine_query_extract(key_words){
 			}
 		}
 	};
-	if(refined[refined.length-1] === 'in'){
-		refined.pop()
+	if(refined[refined.length-1] === 'in' || 
+		refined[refined.length-1] === 'for' || 
+		refined[refined.length-1] === 'the'){
+		refined.pop();
+	}
+	if(refined[0] === 'in' || 
+		refined[0] === 'for' || 
+		refined[0] === 'the'){
+		refined.splice(0,1);
 	}
 	return [ refined.join(' '), meta ] ;
 }
