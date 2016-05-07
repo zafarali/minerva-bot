@@ -20,7 +20,7 @@ function query_execute(args){
 		var courses = parse_data(body);
 
 		if(courses.length > 5){
-			bot_reply = "I found "+courses.length+" courses! Try a more specific query.";
+			bot_reply = "I found "+courses.length+" courses in the "+year_to_season( query.substr(-6,6) )+"! Try a more specific query.";
 			args.replies.push(bot_reply);
 			deferred.resolve(args);
 
@@ -52,7 +52,7 @@ function query_execute(args){
 			}
 			deferred.resolve(args);
 		}else{
-			args.replies.push("I'm sorry I couldn't find any courses for that query :(");
+			args.replies.push("I'm sorry I couldn't find any courses for that in the "+year_to_season( query.substr(-6,6) )+" :(");
 			deferred.resolve(args);
 		}
 		// deferred.resolve(args);

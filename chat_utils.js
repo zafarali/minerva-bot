@@ -113,8 +113,8 @@ function parse_phrase(user_text, args){
 	}
 
 	if(args.queries.length === 0){
-		args.replies.push('I didn\'t quite understand what you\'re trying to ask me...');
 		args.replies.push('Try asking me about a certain course like "When is COMP 202" or using a course title like "who teaches forest management?"');
+		args.replies.push('I didn\'t quite understand what you\'re trying to ask me...');
 	}
 
 }
