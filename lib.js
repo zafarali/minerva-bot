@@ -118,6 +118,8 @@ exports.year_to_season = function(year){
 			return 'fall';
 		case 1:
 			return 'winter';
+		case 5:
+			return 'summer';
 	}
 }
 exports.prepare_query = prepare_query;
