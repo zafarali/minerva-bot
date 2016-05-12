@@ -3,9 +3,10 @@ var COURSE_REGEX = /[a-z]{4}[0-9]{3}/gi;
 var natural = require('natural')
 var jsonfile = require('jsonfile')
 var fs = require('fs');
-var WORDS = require('./WORDS.js').WORDS;
+var WORDS = require('../WORDS.js').WORDS;
 natural.LancasterStemmer.attach();
 var NGrams = natural.NGrams;
+var path = require('path');
 
 var COURSE_REGEX = /[a-z]{4}[0-9]{3}/gi;
 
@@ -30,7 +31,7 @@ Array.prototype.contains = function(element){
 
 
 // load the classifiers
-var JSON_classifier = fs.readFileSync('./training/query_classify.json', 'utf8');
+var JSON_classifier = fs.readFileSync(path.resolve('./plugins/training', 'query_classify.json'), 'utf8');
 var query_classify = natural.BayesClassifier.restore(JSON.parse(JSON_classifier));
 
 

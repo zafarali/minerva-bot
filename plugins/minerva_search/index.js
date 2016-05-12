@@ -4,7 +4,7 @@ var search = require('./search.js');
 var parse_data = require('./lib.js').parse_data;
 var year_to_season = require('./lib.js').year_to_season;
 
-var __request = require('./utils.js').__request;
+var __request = require('../../utils.js').__request;
 
 function minerva_search(context){
 	if(context.completed){
@@ -15,20 +15,22 @@ function minerva_search(context){
 	var parsed = parser.parse(current_query);
 	var extracted = parsed[0];
 	var url_queries = parsed[1];
-	
+	console.log('extracted:',extracted)
+	context.history['extracted'] = context.history['extracted'].concat(extracted);
+	// console.log(url_queries)
 	if(url_queries.length > 0){
 
 		__request(url_queries, function(responses){
 
 			var total_responses = 0;
 			var url, response;
-			console.log(responses);
+			// console.log(responses);
 			for (var url_id = 0; url_id < url_queries.length; url_id++ ){
 				// using this forces us to go in order that the queries were parsed.
 				// i.e fall first, then winter.
 				
 				url = url_queries[url_id];
-				
+				// console.log(url);
 				response = responses[url];
 
 				if(!response){continue;}
@@ -36,7 +38,9 @@ function minerva_search(context){
 					//error encountered in one of the requests...
 					// deferred.reject(error);
 					console.log('error occured in ',url,'. error was', response.error);
+					throw Error(response.error);
 				}
+
 				var bot_reply;
 				var courses = parse_data(response.body);
 
@@ -111,4 +115,4 @@ function minerva_search(context){
 }
 
 
-exports.minerva_search = minerva_search;
+module.exports = minerva_search;
