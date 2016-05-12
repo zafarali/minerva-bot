@@ -1,49 +1,73 @@
-var chat = require('./chat_utils.js');
-var search = require('./search.js');
-
+var express = require('express');
+var bodyParser = require('body-parser');
+var request = require('request');
 var q = require('q');
-
-var test_strings = [
-	"how are you",
-	"who are you",
-	"whatsup",
-	"hello there",
-	"what time is biol 201", 
-	"where is phys 230?", 
-	"machine learning",
-	"when is principles of taxation?",
-	"who teaches topics in geometry in the fall",
-	"fuck off!",
-	"where is quantum physics",
-	"which room is intro biology in"
-];
+var minerva_search = require('./minerva_search.js').minerva_search;
 
 
+var app = express();
+app.set('port', 5000  );
+app.set('ip', '127.0.0.1');
 
-var q = require('q');
 
+app.use(function(req,res,next){
+    var _send = res.send;
+    var sent = false;
+    res.send = function(data){
+        if(sent) return;
+        _send.bind(res)(data);
+        sent = true;
+    };
+    next();
+});
 
-var args = {
-	queries: [],
-	replies: []
+// Process application/x-www-form-urlencoded
+app.use( bodyParser.urlencoded( { extended:false} ) );
+app.use( bodyParser.json() );
+
+var contexts = {}
+
+function get_or_create_context(user){
+	if(!contexts[user]){
+		contexts[user] = {past_queries:[]};
+	} 
+	return contexts[user];
 }
 
-for (var i = 0; i < test_strings.length; i++) {
-	// make everything upper case, replace spaces
-	chat.parse(test_strings[i], args);
-};
-// console.log(args)
-var result = q(args);
-for (var i = 0; i < args.queries.length; i++) {
-	// console.log('in for loop now')
-	// console.log('making promise for query:',args.queries[i]);
-	result = result.then(search.query_execute);
-};
+app.get('/', function(req, res){
+	if(!req.query['query'] || !req.query['user']){
+		res.send({error:'query or user not supplied'});
+	}
 
-result.then(function(res){
-	console.log('success!', res);
-	console.log(args);
-}, function(err){
-	console.log(arrays);
-	console.log('err', err);
-})
+	// extract user and query
+	var query = req.query['query'];
+	var user = req.query['user'];
+
+	// plugins to be executed
+	var to_execute = [ minerva_search ]
+	
+	// obtain a context
+	var history = get_or_create_context(user);
+	
+	context = {
+		history: history,
+		current_query: query,
+		completed: false,
+		replies:[]
+	}
+	
+	to_execute.reduce(q.when, q(context)).then(function(ctx){
+		ctx.history.past_queries.push(ctx.current_query);
+		res.send({global_context:contexts,local_context:ctx});
+	}).catch(function(err){
+		console.log(err)
+		res.send({error:err})
+	});
+
+});
+
+
+
+app.listen( app.get('port'), app.get('ip'), function() {
+	console.log('listening on', app.get('ip'), ' on port ', app.get('port') );
+});

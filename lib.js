@@ -93,7 +93,7 @@ function parse_data(body){
 
 function prepare_query ( term, subject, code, title ) {
 	// Prepares a query url to search the schedule
-	  var title = typeof title !== 'undefined' ?  title : '';
+	  var title = typeof title !== 'undefined' ?  title.replace(' ', '%20') : '';
 	  var subject = typeof subject !== 'undefined' ?  subject : '';
 	  var code = typeof code !== 'undefined' ?  code : '';
 	  var term = typeof term !== 'undefined' ?  term : '201609';
