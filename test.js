@@ -2,8 +2,9 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var request = require('request');
 var q = require('q');
-var minerva_search = require('./minerva_search.js').minerva_search;
-
+var minerva_search = require('./plugins').minerva_search;
+var fs = require('fs');
+var path = require('path');
 
 var app = express();
 app.set('port', 5000  );
@@ -25,11 +26,12 @@ app.use(function(req,res,next){
 app.use( bodyParser.urlencoded( { extended:false} ) );
 app.use( bodyParser.json() );
 
-var contexts = {}
+var contexts = JSON.parse(fs.readFileSync(path.resolve('./', 'history.json'), 'utf8')) || {};
+
 
 function get_or_create_context(user){
 	if(!contexts[user]){
-		contexts[user] = {past_queries:[]};
+		contexts[user] = {extracted:[]};
 	} 
 	return contexts[user];
 }
@@ -57,15 +59,26 @@ app.get('/', function(req, res){
 	}
 	
 	to_execute.reduce(q.when, q(context)).then(function(ctx){
-		ctx.history.past_queries.push(ctx.current_query);
+		// ctx.history.past_queries.push(ctx.current_query);
 		res.send({global_context:contexts,local_context:ctx});
 	}).catch(function(err){
 		console.log(err)
-		res.send({error:err})
+		res.send({error:err});
 	});
 
 });
+app.get('/dump_history/', function(req, res){
+	// dumps all user contexts to the file system and out
+	var contexts_string = JSON.stringify({contexts:contexts});
+	
+	fs.writeFile('./history.json', contexts_string, function (err) {
+		if (err) throw err;
+		// console.log('It\'s saved!');
+	});
 
+	res.send({contexts:contexts});
+		
+});
 
 
 app.listen( app.get('port'), app.get('ip'), function() {
