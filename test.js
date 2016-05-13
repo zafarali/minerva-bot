@@ -15,6 +15,7 @@ app.set('ip', '127.0.0.1');
 var minerva_search = require('./plugins').minerva_search;
 var help = require('./plugins').help;
 var conversation = require('./plugins').conversation;
+var showmore = require('./plugins').showmore;
 
 
 app.use(function(req,res,next){
@@ -100,16 +101,23 @@ app.post('/testhook/', function(req, res){
 
 			internals(event.message.text, sender).then(function(ctx){
 				// ctx.history.past_queries.push(ctx.current_query);
+				console.log('response completed');
 				if(ctx.replies.length === 0){
 					ctx.replies.push('I don\'t understand what you\'re asking me :(. I\'m always improving. Until then, you can ask me to HELP you.');
 				}
+				var default_time = 0; // 0ms waiting time
 				for (var i = 0; i < ctx.replies.length; i++) {
-					chat.reply(sender, ctx.replies[i], "EAAWEvzaBeiABAKBCX6B6j0BzUhnDq9urwcm5f0TZAcuEZCQgDBlsO2d6h6EtCv4vZBstxyiLz42R2Kt4zBCfnCv51jtbfI4iZBwhpee55usqUTuK0OprcrqBvZCQA8eWtRaw88nz4vccQsdGbiZC4PAsyBnLEfE8z7DXEGSyzlKAZDZD");
+					// time out for realism
+					setTimeout(function(){
+						chat.reply(sender, ctx.replies[i], "EAAWEvzaBeiABADFu5ZAKlkMJKUrxDXeSrUpHpxNsd57yZBhGIiGUipREI9AzzXcKtU0iyhbr7tS8l3hfBkmwLWvcRiLgaAN9gyOVSApGMtVes6zJ3yQX1b8wvFEGD1WTfsLcSPKfl0lrxuL9DSsPuSJKZChhnML869KlX6nKQZDZD");	
+					}, default_time);
+
+					default_time += 5; // increment reply time by 5s
 				};
 
 			}).catch(function(err){
 				console.log('error occured:',err)
-				chat.reply(sender, "Something went wrong... Try again!", "EAAWEvzaBeiABAKBCX6B6j0BzUhnDq9urwcm5f0TZAcuEZCQgDBlsO2d6h6EtCv4vZBstxyiLz42R2Kt4zBCfnCv51jtbfI4iZBwhpee55usqUTuK0OprcrqBvZCQA8eWtRaw88nz4vccQsdGbiZC4PAsyBnLEfE8z7DXEGSyzlKAZDZD");
+				chat.reply(sender, "Something went wrong... Try again!", "EAAWEvzaBeiABADFu5ZAKlkMJKUrxDXeSrUpHpxNsd57yZBhGIiGUipREI9AzzXcKtU0iyhbr7tS8l3hfBkmwLWvcRiLgaAN9gyOVSApGMtVes6zJ3yQX1b8wvFEGD1WTfsLcSPKfl0lrxuL9DSsPuSJKZChhnML869KlX6nKQZDZD");
 				res.send({error:err});
 			});
 		}
@@ -121,7 +129,7 @@ app.post('/testhook/', function(req, res){
 function internals(query, user){
 
 	// plugins to be executed
-	var to_execute = [ conversation, help, minerva_search ];
+	var to_execute = [ conversation, help, showmore, minerva_search ];
 
 	// obtain a context
 	var history = get_or_create_context(user);
