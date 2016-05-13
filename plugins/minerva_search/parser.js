@@ -35,16 +35,6 @@ var JSON_classifier = fs.readFileSync(path.resolve('./plugins/training', 'query_
 var query_classify = natural.BayesClassifier.restore(JSON.parse(JSON_classifier));
 
 
-function contains_hello(user_text){
-	// checks if user input contains a greeting
-	var tokenized_input = user_text.tokenizeAndStem();
-	for (var i = 0; i < WORDS['greetings'].length; i++) {
-		if(tokenized_input.contains(WORDS['greetings'][i])){
-			return true;
-		}
-	}
-	return false;
-}
 function contains_how_are_you(user_text){
 	
 }
@@ -52,6 +42,10 @@ function parse_phrase(user_text){
 
 	var queries = [];
 	user_text = user_text.toLowerCase();
+
+	if(user_text.length<=5){
+		return [false, []]
+	}
 	var parsed = [];
 	// @TODO: this should be in a separate "plugin"
 	// if(contains_hello(user_text)){

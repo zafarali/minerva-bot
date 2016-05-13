@@ -15,9 +15,15 @@ function minerva_search(context){
 	var current_query = context.current_query
 	var parsed = parser.parse(current_query);
 	var extracted = parsed[0];
+	if(!extracted){
+		context.replies.push('Try a longer query... Let me know if you need HELP!');
+		return context;
+	}
 	var url_queries = parsed[1];
 	console.log('extracted:',extracted)
 	context.history['extracted'] = context.history['extracted'].concat(extracted);
+
+
 	// console.log(url_queries)
 	if(url_queries.length > 0){
 
@@ -62,6 +68,12 @@ function minerva_search(context){
 							" between "+first_course.time+". The professor(s) "+first_course.instructor+
 							" teach at "+first_course.location;		
 
+
+							context.history['last_course'] = {
+								subject:first_course.subject, 
+								code:first_course.course_code
+							}
+
 							context.replies.push(bot_reply)
 						};
 					} else {
@@ -74,8 +86,11 @@ function minerva_search(context){
 						first_course.title+" It happens on "+first_course.days+
 						" between "+first_course.time+". The professor(s) "+first_course.instructor+
 						" teach at "+first_course.location;
-						// console.log(bot_reply);
-						// args.replies.push(bot_reply);
+
+						context.history['last_course'] = {
+							subject:first_course.subject, 
+							code:first_course.course_code
+						}
 						context.replies.push(bot_reply)
 					}//end query replies
 				}//end check for course lengths
