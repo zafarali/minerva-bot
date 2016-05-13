@@ -27,4 +27,25 @@ var __request = function (urls, callback) {
 	while (t--) { request(urls[t], handler); }
 };
 
+function array_unique(arr){
+	// from underscore.js
+   var u = {}, a = [];
+   for(var i = 0, l = arr.length; i < l; ++i){
+      if(u.hasOwnProperty(arr[i])) {
+         continue;
+      }
+      a.push(arr[i]);
+      u[arr[i]] = 1;
+   }
+   return a;
+}
+function array_contains(arry, element){
+    return arry.indexOf(element) > -1;
+};
+
+
+exports.arrays = {
+	contains:array_contains, 
+	unique:array_unique
+};
 exports.__request = __request;

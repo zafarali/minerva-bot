@@ -7,6 +7,7 @@ var year_to_season = require('./lib.js').year_to_season;
 var __request = require('../../utils.js').__request;
 
 function minerva_search(context){
+
 	if(context.completed){
 		return context;
 	}
