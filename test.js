@@ -132,6 +132,8 @@ app.post('/testhook/', function(req, res){
 				for (var i = 0; i < ctx.replies.length; i++) {
 					// time out for realism
 					setTimeout(function(){
+						console.log('sending:',ctx.replies[i])
+						console.log('to',sender)
 						chat.reply(sender, ctx.replies[i], TESTTOKEN);	
 					}, default_time);
 
@@ -140,7 +142,7 @@ app.post('/testhook/', function(req, res){
 
 			}).catch(function(err){
 				console.log('error occured:',err)
-				chat.reply(sender, {text:"Something went wrong... Try again!"}, TESTTOKEN);
+				chat.reply(sender, "Something went wrong... Try again!", TESTTOKEN);
 				res.send({error:err});
 			});
 		}
