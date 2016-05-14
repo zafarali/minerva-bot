@@ -51,11 +51,11 @@ function show_more(context){
 				context.history.last_course = null;
 				var $ = cheerio.load(body);
 				console.log($('.datadisplaytable td.dddefault').html());
-				if(!$('.datadisplaytable td.dddefault').html()){
-					context.replies.push('Unforunately, McGill has no more information available about this one...')
-				}else{
+
+				// if(!$('.datadisplaytable td.dddefault').html()){
+				// }else{
+				try{
 					context.replies.push('Showing you more about '+course.subject+' '+course.code+':');
-					
 					var to_send_back = $('.datadisplaytable td.dddefault').html().split('<br>');
 					var description = to_send_back[0];
 					context.replies.push(description)
@@ -67,6 +67,9 @@ function show_more(context){
 							context.replies.push('The restrictions are: '+element.split(':')[1])
 						}
 					});
+				}catch(error){
+					// error occured means this information did not exist.
+					context.replies.push('Unforunately, McGill has no more information available about this one...')
 				}
 				deferred.resolve(context);
 			});
