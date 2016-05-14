@@ -9,22 +9,33 @@ var q = require('q');
 function show_more(context){
 	// tokenize
 	var tokenized_input = context.current_query.toLowerCase().split(' ');
-
+	if(context.postback){
+		var is_show_me_query = context.postback.substr(0,5) === 'more@'
+	}
 	// check if the array contains 'show more' somewhere
-	if( utils.arrays.contains(tokenized_input, 'more') 
+	if( ( utils.arrays.contains(tokenized_input, 'more') 
 		&& ( utils.arrays.contains(tokenized_input, 'show') ||
-			utils.arrays.contains(tokenized_input, 'tell') ) ) {
+			utils.arrays.contains(tokenized_input, 'tell') ) ) || 
+		( context.postback && is_show_me_query ) ) {
 
 		// set the context as resolved
 		context.completed = true;
 
+		var course = false;
+		if(is_show_me_query){
+			// split the data
+			var data_split = context.postback.substr(5,8).split(',')
+			//create a holder object
+			course = { subject:data_split[0], code:data_split[1] }
+
+		}else if(context.history['last_course']){
+			course = context.history.last_course;
+		}
 		// check if the user has already searched something
-		if(context.history['last_course']){
+		if(course){
 			// create a promise
 
 			var deferred = q.defer();
-
-			var course = context.history.last_course;
 
 			// @TODO: to more loose matching here
 
@@ -44,7 +55,7 @@ function show_more(context){
 
 			return deferred.promise;
 		}else{
-			context.replies = ['Show you more of what? Ask about a course first... ;)'];
+			context.replies = ['Ask about a course first... ;)'];
 			return context;
 		}
 	}else{

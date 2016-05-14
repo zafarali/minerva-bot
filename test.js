@@ -11,6 +11,7 @@ app.set('ip', '127.0.0.1');
 
 
 // import plugins!
+var TESTTOKEN = "EAAWEvzaBeiABAKzDCDGNASV4ZCCUruxhWbh9hiAR5VZAkxzJtXNsU7lCYvJpYZAzcxBJKZB3WCWnJ9OhJaMJZCEys0N0JTVbYTTm4nGAH2313pAZA3bZAG5cNTf7W1ZBYDP5DoFZCFRF3OBbu7ko3UHZBvtcbx9N9ZA2cy6KFtUcXYQ4gZDZD";
 
 var minerva_search = require('./plugins').minerva_search;
 var help = require('./plugins').help;
@@ -33,7 +34,7 @@ app.use(function(req,res,next){
 app.use( bodyParser.urlencoded( { extended:false} ) );
 app.use( bodyParser.json() );
 
-var contexts = JSON.parse(fs.readFileSync(path.resolve('./', 'history.json'), 'utf8')) || {};
+var contexts = JSON.parse(fs.readFileSync(path.resolve('./', 'history.json'), 'utf8')).contexts || {};
 
 
 function get_or_create_context(user){
@@ -44,15 +45,19 @@ function get_or_create_context(user){
 }
 
 app.get('/', function(req, res){
-	if(!req.query['query'] || !req.query['user']){
+	if( !( req.query['query'] || req.query['postback'] ) || !req.query['user']){
 		res.send({error:'query or user not supplied'});
 	}
 
 	// extract user and query
-	var query = req.query['query'];
+	var query = req.query['query'] || '';
+	var postback = req.query['postback'] || '';
 	var user = req.query['user'];
 	
-	internals(query, user).then(function(ctx){
+	console.log('query recieved:', query);
+	console.log('postback recieved:', postback);
+
+	internals(query, user, postback).then(function(ctx){
 		// ctx.history.past_queries.push(ctx.current_query);
 		if(ctx.replies.length === 0){
 			ctx.replies.push('I don\'t understand what you\'re asking me :(. I\'m always improving. Until then, you can ask me to HELP you.');
@@ -96,20 +101,36 @@ app.post('/testhook/', function(req, res){
 		var event = messaging_events[i];
 		var sender = event.sender.id;
 		
-		if(event.message && event.message.text){
-			console.log('query recieved:', event.message.text);
 
-			internals(event.message.text, sender).then(function(ctx){
+
+		// handle explicit text messaging events or postbacks
+		if( (event.message && event.message.text ) 
+			|| (event.postback && event.postback.payload ) ){
+
+			var query, postback;
+
+			if(event.postback){
+				query = '' // if postback is defined, then query must be blank
+			}else{
+				postback = '' // message is defined, then postback must be blank
+			}
+
+			console.log('query recieved:', query);
+			console.log('postback recieved:', postback);
+
+			internals(query, sender, postback).then(function(ctx){
 				// ctx.history.past_queries.push(ctx.current_query);
 				console.log('response completed');
+
 				if(ctx.replies.length === 0){
 					ctx.replies.push('I don\'t understand what you\'re asking me :(. I\'m always improving. Until then, you can ask me to HELP you.');
 				}
+
 				var default_time = 0; // 0ms waiting time
 				for (var i = 0; i < ctx.replies.length; i++) {
 					// time out for realism
 					setTimeout(function(){
-						chat.reply(sender, ctx.replies[i], "EAAWEvzaBeiABADFu5ZAKlkMJKUrxDXeSrUpHpxNsd57yZBhGIiGUipREI9AzzXcKtU0iyhbr7tS8l3hfBkmwLWvcRiLgaAN9gyOVSApGMtVes6zJ3yQX1b8wvFEGD1WTfsLcSPKfl0lrxuL9DSsPuSJKZChhnML869KlX6nKQZDZD");	
+						chat.reply(sender, ctx.replies[i], TESTTOKEN);	
 					}, default_time);
 
 					default_time += 5; // increment reply time by 5s
@@ -117,7 +138,7 @@ app.post('/testhook/', function(req, res){
 
 			}).catch(function(err){
 				console.log('error occured:',err)
-				chat.reply(sender, "Something went wrong... Try again!", "EAAWEvzaBeiABADFu5ZAKlkMJKUrxDXeSrUpHpxNsd57yZBhGIiGUipREI9AzzXcKtU0iyhbr7tS8l3hfBkmwLWvcRiLgaAN9gyOVSApGMtVes6zJ3yQX1b8wvFEGD1WTfsLcSPKfl0lrxuL9DSsPuSJKZChhnML869KlX6nKQZDZD");
+				chat.reply(sender, {text:"Something went wrong... Try again!"}, TESTTOKEN);
 				res.send({error:err});
 			});
 		}
@@ -126,7 +147,7 @@ app.post('/testhook/', function(req, res){
 	res.sendStatus(200);
 })
 
-function internals(query, user){
+function internals(query, user, postback){
 
 	// plugins to be executed
 	var to_execute = [ conversation, help, showmore, minerva_search ];
@@ -137,6 +158,7 @@ function internals(query, user){
 	context = {
 		history: history,
 		current_query: query,
+		postback:postback,
 		completed: false,
 		replies:[]
 	}

@@ -5,6 +5,8 @@ var parse_data = require('./lib.js').parse_data;
 var year_to_season = require('./lib.js').year_to_season;
 
 var __request = require('../../utils.js').__request;
+var array_utils = require('../../utils.js').arrays;
+var chat_builders = require('../../chat_utils.js').builders;
 
 function minerva_search(context){
 
@@ -16,7 +18,7 @@ function minerva_search(context){
 	var parsed = parser.parse(current_query);
 	var extracted = parsed[0];
 	if(!extracted){
-		context.replies.push('Try a longer query... Let me know if you need HELP!');
+		context.replies.push('I work better if you ask me something more descriptive... Let me know if you need HELP!');
 		return context;
 	}
 	var url_queries = parsed[1];
@@ -31,7 +33,14 @@ function minerva_search(context){
 
 			var total_responses = 0;
 			var url, response;
-			// console.log(responses);
+			
+			var too_many_results = {
+				condition:false,
+				tuples:[],
+				examples:[]
+			};
+
+
 			for (var url_id = 0; url_id < url_queries.length; url_id++ ){
 				// using this forces us to go in order that the queries were parsed.
 				// i.e fall first, then winter.
@@ -52,8 +61,15 @@ function minerva_search(context){
 				var courses = parse_data(response.body);
 
 				if(courses.length > 5){
-					bot_reply = "I found "+courses.length+" courses in the "+year_to_season( url.substr(-6,6) )+"! Try a more specific query.";
-					context.replies.push(bot_reply);
+					
+					// handle the case with too many results!
+					too_many_results.condition = true;
+					too_many_results.tuples.push([year_to_season( url.substr(-6,6) ), courses.length])
+					// add some examples of the search results to display later.
+					for (var i = 0; i < 3; i++) {
+						too_many_results.examples.push(courses[i].title);
+					}
+
 					total_responses+=1;
 
 				}else if(courses.length > 0){
@@ -62,12 +78,22 @@ function minerva_search(context){
 						// generic search query, return everything
 						for (var i = 0; i < courses.length; i++) {
 							var first_course = courses[i];
+
 							bot_reply = "In " + year_to_season( url.substr(-6,6) ) + ", "
 							+ first_course.subject+ first_course.course_code + " is " +
-							first_course.title+" It happens on "+first_course.days+
-							" between "+first_course.time+". The professor(s) "+first_course.instructor+
-							" teach at "+first_course.location;		
+							first_course.title+" It takes place on "+first_course.days+
+							" at "+first_course.time+" in "+first_course.location+ 
+							" taught by "+first_course.instructor;
+							
 
+							bot_reply = chat_builders.structured_response(
+								bot_reply,
+								[
+									['postback', 'Give me a summary.', 'more@'+first_course.subject+','+first_course.course_code], //summary request
+									['web_url', 'Take me to the course page', 
+									'https://horizon.mcgill.ca/pban1/bwckschd.p_disp_listcrse?term_in='+url.substr(-6,6)+
+									'&subj_in='+first_course.subject+'&crse_in='+first_course.course_code+'&crn_in='+first_course.CRN] //link
+								])
 
 							context.history['last_course'] = {
 								subject:first_course.subject, 
@@ -77,23 +103,63 @@ function minerva_search(context){
 							context.replies.push(bot_reply)
 						};
 					} else {
-						// @TODO update this to show different sections.
-						var first_course = courses[0];
-						// converts year to season // last bit of the 
-						// string contains information about the semester
+						var first_course = courses[0]
 						bot_reply = "In " + year_to_season( url.substr(-6,6) ) + ", "
 						+ first_course.subject+ first_course.course_code + " is " +
-						first_course.title+" It happens on "+first_course.days+
-						" between "+first_course.time+". The professor(s) "+first_course.instructor+
-						" teach at "+first_course.location;
+						first_course.title+" It takes place on "+first_course.days+
+						" at "+first_course.time+" in "+first_course.location+ 
+						" taught by "+first_course.instructor;
+						
+
+						bot_reply = chat_builders.structured_response(
+							bot_reply,
+							[
+								['postback', 'Give me a summary.', 'more@'+first_course.subject+','+first_course.course_code], //summary request
+								['web_url', 'Take me to the course page', 
+								'https://horizon.mcgill.ca/pban1/bwckschd.p_disp_listcrse?term_in='+url.substr(-6,6)+
+								'&subj_in='+first_course.subject+'&crse_in='+first_course.course_code+'&crn_in='+first_course.CRN] //link
+							])
 
 						context.history['last_course'] = {
 							subject:first_course.subject, 
 							code:first_course.course_code
 						}
+
 						context.replies.push(bot_reply)
 					}//end query replies
 				}//end check for course lengths
+			} // end forloop
+
+			
+			for (var i = 0, bot_reply_builder = 'I found '; i < too_many_results.tuples.length; i++) {
+
+				var semester = too_many_results.tuples[i][0];
+				var num_results = too_many_results.tuples[i][1];
+				bot_reply_builder = bot_reply_builder + num_results+' in the '+semester+', '
+				
+				if(i === too_many_results.tuples.length-1){
+					bot_reply_builder = bot_reply_builder+'for "'+extracted.join(' ')+'".';
+					context.replies.push(bot_reply_builder);
+
+					// give examples of the search results.
+					bot_reply_builder = 'Some of them were ';
+
+					// select only the uniqe ones.
+					too_many_results.examples = array_utils.unique(too_many_results.examples);
+
+					for (var j = 0; j < too_many_results.examples.length; j++) {
+						bot_reply_builder = bot_reply_builder + '"' +too_many_results.examples[j]+'"';
+						
+						if(too_many_results.examples.length > 2 && j !== too_many_results.examples.length-2){
+							bot_reply_builder = bot_reply_builder+', ';
+						}else if(too_many_results.examples.length > 1){
+							bot_reply_builder += ' and ';
+						}
+					}
+					bot_reply_builder += '.';
+					context.replies.push(bot_reply_builder);
+					context.replies.push('Try something more specific?');
+				}
 			}
 
 			if(total_responses===0){
