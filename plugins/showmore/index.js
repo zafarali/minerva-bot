@@ -24,7 +24,11 @@ function show_more(context){
 		var course = false;
 		if(is_show_me_query){
 			// split the data
-			var data_split = context.postback.split('match@')[1].split(',')
+			// console.log(context.postback)
+			// console.log(context.postback.split('more@'))
+			// console.log(context.postback.split('more@')[1])
+			// console.log(context.postback.split('more@')[1].split(','))
+			var data_split = context.postback.split('more@')[1].split(',');
 			//create a holder object
 			course = { subject:data_split[0], code:data_split[1], CRN:data_split[2], year:data_split[3] };
 
@@ -60,10 +64,10 @@ function show_more(context){
 					var description = to_send_back[0];
 					context.replies.push(description)
 					to_send_back.forEach(function(element){
-						if(element.match('Prerequisites:')){
+						if(element.match('Prerequisite')){
 							context.replies.push('The prequisite are: '+element.split(':')[1])
 						}
-						if(element.match('Restrictions:')){
+						if(element.match('Restriction')){
 							context.replies.push('The restrictions are: '+element.split(':')[1])
 						}
 					});
