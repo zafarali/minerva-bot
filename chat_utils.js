@@ -9,8 +9,7 @@ function reply(sender, reply_data, test_token){
 	// [@param test_token - for testing purposes.] 
 	var token = typeof test_token !== 'undefined' ?  test_token : FBTOKEN;
 	var reply_data = typeof reply_data === 'string' ?  {text:reply_data} : reply_data;
-
-
+	
 	request({
 		url:'https://graph.facebook.com/v2.6/me/messages',
 		qs: {access_token:token},
@@ -20,6 +19,7 @@ function reply(sender, reply_data, test_token){
 			message:reply_data,
 		}
 	}, function(error, response, body){
+		console.log('sent:',reply_data)
 		if(error){
 			console.log('ERROR SENDING MESSAGE',error);
 		}else if (response.body.error){
