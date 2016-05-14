@@ -66,7 +66,7 @@ function show_more(context){
 							context.replies.push('The restrictions are: '+element.split(':')[1])
 						}
 					});
-				// }
+				}
 				deferred.resolve(context);
 			});
 
