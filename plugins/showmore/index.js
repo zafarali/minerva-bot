@@ -24,7 +24,7 @@ function show_more(context){
 		var course = false;
 		if(is_show_me_query){
 			// split the data
-			var data_split = context.postback.substr(5,8).split(',')
+			var data_split = context.postback.split('match@')[1]
 			//create a holder object
 			course = { subject:data_split[0], code:data_split[1], CRN:data_split[2], year:data_split[3] };
 
@@ -68,6 +68,7 @@ function show_more(context){
 						}
 					});
 				}catch(error){
+					console.log(error)
 					// error occured means this information did not exist.
 					context.replies.push('Unforunately, McGill has no more information available about this one...')
 				}
