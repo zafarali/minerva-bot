@@ -42,7 +42,7 @@ function build_structured_response(text,button_triples){
 	
 		// extract what kind of button it is and work accordingly.		
 		if(button_type === "web_url"){
-			to_save["web_url"] = button_payload;
+			to_save["url"] = button_payload;
 		}else if(button_type === "postback"){
 			to_save["payload"] = button_payload;
 		}else{
