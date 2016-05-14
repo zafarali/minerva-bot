@@ -50,6 +50,7 @@ function show_more(context){
 				}
 				context.history.last_course = null;
 				var $ = cheerio.load(body);
+				console.log($('.datadisplaytable td.dddefault').html());
 				if(!$('.datadisplaytable td.dddefault').html()){
 					context.replies.push('Unforunately, McGill has no more information available about this one...')
 				}else{
