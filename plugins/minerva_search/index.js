@@ -74,58 +74,34 @@ function minerva_search(context){
 
 				}else if(courses.length > 0){
 					total_responses+=1;
+					var year = url.substr(-6,6);
 					if( url.match('&sel_subj=&sel_crse=') ){
 						// generic search query, return everything
 						for (var i = 0; i < courses.length; i++) {
 							var first_course = courses[i];
 
-							bot_reply = "In " + year_to_season( url.substr(-6,6) ) + ", "
-							+ first_course.subject+ first_course.course_code + " is " +
-							first_course.title+" It takes place on "+first_course.days+
-							" at "+first_course.time+" in "+first_course.location+ 
-							" taught by "+first_course.instructor;
-							
-
-							bot_reply = chat_builders.structured_response(
-								bot_reply,
-								[
-									['postback', 'Give me a summary', 'more@'+first_course.subject+','+first_course.course_code], //summary request
-									['web_url', 'Open catalog entry', 
-									'https://horizon.mcgill.ca/pban1/bwckschd.p_disp_listcrse?term_in='+url.substr(-6,6)+
-									'&subj_in='+first_course.subject+'&crse_in='+first_course.course_code+'&crn_in='+first_course.CRN] //link
-								])
+							context.replies.push(create_bot_reply(first_course, year))
 
 							context.history['last_course'] = {
 								subject:first_course.subject, 
-								code:first_course.course_code
+								code:first_course.course_code,
+								CRN:first_course.CRN,
+								year:year
 							}
 
-							context.replies.push(bot_reply)
 						};
 					} else {
 						var first_course = courses[0]
-						bot_reply = "In " + year_to_season( url.substr(-6,6) ) + ", "
-						+ first_course.subject+ first_course.course_code + " is " +
-						first_course.title+" It takes place on "+first_course.days+
-						" at "+first_course.time+" in "+first_course.location+ 
-						" taught by "+first_course.instructor;
 						
-
-						bot_reply = chat_builders.structured_response(
-							bot_reply,
-							[
-								['postback', 'Give me a summary.', 'more@'+first_course.subject+','+first_course.course_code], //summary request
-								['web_url', 'Take me to the course page', 
-								'https://horizon.mcgill.ca/pban1/bwckschd.p_disp_listcrse?term_in='+url.substr(-6,6)+
-								'&subj_in='+first_course.subject+'&crse_in='+first_course.course_code+'&crn_in='+first_course.CRN] //link
-							])
+						context.replies.push(create_bot_reply(first_course, year))
 
 						context.history['last_course'] = {
 							subject:first_course.subject, 
-							code:first_course.course_code
+							code:first_course.course_code,
+							CRN:first_course.CRN,
+							year:year
 						}
 
-						context.replies.push(bot_reply)
 					}//end query replies
 				}//end check for course lengths
 			} // end forloop
@@ -196,5 +172,25 @@ function minerva_search(context){
 	// return deferred.promise;
 }
 
+
+function create_bot_reply(course, year){
+
+	var bot_reply = "In " + year_to_season( year ) + ", "
+	+ course.subject+ course.course_code + " is " +
+	course.title+" It takes place on "+course.days+
+	" at "+course.time+" in "+course.location+ 
+	" taught by "+course.instructor;
+	
+
+	bot_reply = chat_builders.structured_response(
+		bot_reply,
+		[
+			['postback', 'Give me a summary.', 'more@'+course.subject+','+course.course_code+','+course.CRN+','+year], //summary request
+			['web_url', 'Take me to the course page', 
+			'https://horizon.mcgill.ca/pban1/bwckschd.p_disp_listcrse?term_in='+year+
+			'&subj_in='+course.subject+'&crse_in='+course.course_code+'&crn_in='+course.CRN] //link
+		])
+	return bot_reply;
+}
 
 module.exports = minerva_search;

@@ -26,7 +26,7 @@ function show_more(context){
 			// split the data
 			var data_split = context.postback.substr(5,8).split(',')
 			//create a holder object
-			course = { subject:data_split[0], code:data_split[1] }
+			course = { subject:data_split[0], code:data_split[1], CRN:data_split[2] };
 
 		}else if(context.history['last_course']){
 			course = context.history.last_course;
@@ -38,21 +38,34 @@ function show_more(context){
 			var deferred = q.defer();
 
 			// @TODO: to more loose matching here
+			var url = 'https://horizon.mcgill.ca/pban1/bwckschd.p_disp_listcrse?term_in='+course.year+
+					  '&subj_in='+course.subject+'&crse_in='+course.code+'&crn_in='+course.CRN
 
-			var url = 'http://www.mcgill.ca/study/2016-2017/courses/'+course.subject+'-'+course.code;
+			// var url = 'http://www.mcgill.ca/study/2016-2017/courses/'+course.subject+'-'+course.code;
 			
 			request(url, function(error, response, body){
 				if(error){
 					context.replies.push('Something went wrong when I was looking... Sorry!');
-					throw Error(error)
+					throw Error(error);
 				}
 				context.history.last_course = null;
 				var $ = cheerio.load(body);
-				if(!$('.node-catalog > .content > p').eq(0).text().split(':')[1]){
+				if(!$('.datadisplaytable td.dddefault').eq(0).html().split('<br>')[0]){
 					context.replies.push('Unforunately, McGill has no more information available about this one...')
 				}else{
 					context.replies.push('Showing you more about '+course.subject+' '+course.code+':');
-					context.replies.push($('.node-catalog > .content > p').eq(0).text().split(':')[1]);
+					
+					var to_send_back = $('.datadisplaytable td.dddefault').eq(0).html().split('<br>');
+					var description = to_send_back[0];
+					context.replies.push(description)
+					to_send_back.forEach(function(element){
+						if(element.match('Prerequisites:')){
+							context.replies.push('The prequisite are: '+element.split(':')[1])
+						}
+						if(element.match('Restrictions:')){
+							context.replies.push('The restrictions are: '+element.split(':')[1])
+						}
+					})
 				}
 				deferred.resolve(context);
 			});
