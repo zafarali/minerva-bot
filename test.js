@@ -102,8 +102,6 @@ app.post('/testhook/', function(req, res){
 	for(var i=0; i < messaging_events.length; i++){
 		var event = messaging_events[i];
 		var sender = event.sender.id;
-		
-
 
 		// handle explicit text messaging events or postbacks
 		if( (event.message && event.message.text ) 
@@ -113,8 +111,10 @@ app.post('/testhook/', function(req, res){
 
 			if(event.postback){
 				query = '' // if postback is defined, then query must be blank
+				postback = event.postback.payload;
 			}else{
 				postback = '' // message is defined, then postback must be blank
+				query = event.message.text;
 			}
 
 			console.log('query recieved:', query);
