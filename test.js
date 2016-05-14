@@ -7,7 +7,7 @@ var path = require('path');
 var chat = require('./chat_utils.js')
 var app = express();
 app.set('port', ( process.env.PORT || 5000 ) );
-app.set('ip', '127.0.0.1');
+// app.set('ip', '127.0.0.1');
 
 
 // import plugins!
@@ -166,6 +166,6 @@ function internals(query, user, postback){
 	return to_execute.reduce(q.when, q(context));
 }
 
-app.listen( app.get('port'), app.get('ip'), function() {
-	console.log('listening on', app.get('ip'), ' on port ', app.get('port') );
+app.listen( app.get('port'), function() {
+	console.log('listening on', ' on port ', app.get('port') );
 });
