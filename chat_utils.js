@@ -27,6 +27,8 @@ function reply(sender, reply_data, test_token){
 			console.log('ERROR:', response.body.error);
 			throw Error(response.body.error);
 		}
+
+		return true;
 	});
 }
 

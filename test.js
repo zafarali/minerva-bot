@@ -122,20 +122,23 @@ app.post('/testhook/', function(req, res){
 
 			internals(query, sender, postback).then(function(ctx){
 				// ctx.history.past_queries.push(ctx.current_query);
-				console.log('response completed');
+				console.log('response computed.');
 
 				if(ctx.replies.length === 0){
 					ctx.replies.push('I don\'t understand what you\'re asking me :(. I\'m always improving. Until then, you can ask me to HELP you.');
 				}
 
-				var default_time = 0; // 0ms waiting time
-				for (var i = 0; i < ctx.replies.length; i++) {
-					// time out for realism
+				var reply_chain = []
 
-					// speak(sender, ctx.replies[i] ,default_time)
-					chat.reply(sender, ctx.replies[i], TESTTOKEN)
-					default_time += 5; // increment reply time by 5s
-				};
+				for (var i = 0; i < ctx.replies.length; i++) {
+					reply_chain.push(chat.reply.bind(undefined, sender, ctx.replies[i], TESTTOKEN));
+				}
+
+				return reply_chain.reduce(q.when, q())
+
+			}).then(function(){
+				
+				console.log('reply chain complete');
 
 			}).catch(function(err){
 				console.log('error occured:',err)
