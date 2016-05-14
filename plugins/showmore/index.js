@@ -24,7 +24,7 @@ function show_more(context){
 		var course = false;
 		if(is_show_me_query){
 			// split the data
-			var data_split = context.postback.split('match@')[1]
+			var data_split = context.postback.split('match@')[1].split(',')
 			//create a holder object
 			course = { subject:data_split[0], code:data_split[1], CRN:data_split[2], year:data_split[3] };
 
