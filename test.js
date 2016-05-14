@@ -11,7 +11,9 @@ app.set('port', ( process.env.PORT || 5000 ) );
 
 
 // import plugins!
-var TESTTOKEN = "EAAWEvzaBeiABAKzDCDGNASV4ZCCUruxhWbh9hiAR5VZAkxzJtXNsU7lCYvJpYZAzcxBJKZB3WCWnJ9OhJaMJZCEys0N0JTVbYTTm4nGAH2313pAZA3bZAG5cNTf7W1ZBYDP5DoFZCFRF3OBbu7ko3UHZBvtcbx9N9ZA2cy6KFtUcXYQ4gZDZD";
+// var TESTTOKEN = "";
+var TESTTOKEN = process.env.TESTTOKEN
+
 
 var minerva_search = require('./plugins').minerva_search;
 var help = require('./plugins').help;
