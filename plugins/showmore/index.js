@@ -50,7 +50,7 @@ function show_more(context){
 				}
 				context.history.last_course = null;
 				var $ = cheerio.load(body);
-				if(!$('.datadisplaytable td.dddefault').eq(0).html().split('<br>')[0]){
+				if(!$('.datadisplaytable td.dddefault').eq(0).html()){
 					context.replies.push('Unforunately, McGill has no more information available about this one...')
 				}else{
 					context.replies.push('Showing you more about '+course.subject+' '+course.code+':');
@@ -65,8 +65,8 @@ function show_more(context){
 						if(element.match('Restrictions:')){
 							context.replies.push('The restrictions are: '+element.split(':')[1])
 						}
-					})
-				}
+					});
+				// }
 				deferred.resolve(context);
 			});
 
