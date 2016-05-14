@@ -132,8 +132,8 @@ app.post('/testhook/', function(req, res){
 				for (var i = 0; i < ctx.replies.length; i++) {
 					// time out for realism
 
-					speak(sender, ctx.replies[i] ,default_time)
-
+					// speak(sender, ctx.replies[i] ,default_time)
+					chat.reply(sender, ctx.replies[i], TESTTOKEN)
 					default_time += 5; // increment reply time by 5s
 				};
 
@@ -148,13 +148,13 @@ app.post('/testhook/', function(req, res){
 	res.sendStatus(200);
 })
 
-function speak(sender, payload, default_time){
-	setTimeout(function(sender,payload){
-		console.log('sending:',payload)
-		console.log('to',sender)
-		chat.reply(sender, payload, TESTTOKEN);	
-		}, default_time);
-}
+// function speak(sender, payload, default_time){
+// 	setTimeout(function(sender,payload){
+// 		console.log('sending:',payload)
+// 		console.log('to',sender)
+// 		;	
+// 		}, default_time);
+// }
 
 function internals(query, user, postback){
 
