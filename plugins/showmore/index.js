@@ -26,7 +26,7 @@ function show_more(context){
 			// split the data
 			var data_split = context.postback.substr(5,8).split(',')
 			//create a holder object
-			course = { subject:data_split[0], code:data_split[1], CRN:data_split[2] };
+			course = { subject:data_split[0], code:data_split[1], CRN:data_split[2], year:data_split[3] };
 
 		}else if(context.history['last_course']){
 			course = context.history.last_course;
@@ -50,7 +50,7 @@ function show_more(context){
 				}
 				context.history.last_course = null;
 				var $ = cheerio.load(body);
-				console.log($('.datadisplaytable td.dddefault').html());
+				// console.log($('.datadisplaytable td.dddefault').html());
 
 				// if(!$('.datadisplaytable td.dddefault').html()){
 				// }else{
