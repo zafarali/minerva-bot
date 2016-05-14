@@ -60,7 +60,7 @@ function minerva_search(context){
 				var bot_reply;
 				var courses = parse_data(response.body);
 
-				if(courses.length > 5){
+				if(courses.length > 3){
 					
 					// handle the case with too many results!
 					too_many_results.condition = true;
@@ -89,8 +89,8 @@ function minerva_search(context){
 							bot_reply = chat_builders.structured_response(
 								bot_reply,
 								[
-									['postback', 'Give me a summary.', 'more@'+first_course.subject+','+first_course.course_code], //summary request
-									['web_url', 'Take me to the course page', 
+									['postback', 'Give me a summary', 'more@'+first_course.subject+','+first_course.course_code], //summary request
+									['web_url', 'Open catalog entry', 
 									'https://horizon.mcgill.ca/pban1/bwckschd.p_disp_listcrse?term_in='+url.substr(-6,6)+
 									'&subj_in='+first_course.subject+'&crse_in='+first_course.course_code+'&crn_in='+first_course.CRN] //link
 								])

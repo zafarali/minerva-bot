@@ -48,8 +48,12 @@ function show_more(context){
 				}
 				context.history.last_course = null;
 				var $ = cheerio.load(body);
-				context.replies.push('Showing you more about '+course.subject+' '+course.code+':');
-				context.replies.push($('.node-catalog > .content > p').eq(0).text().split(':')[1]);
+				if(!$('.node-catalog > .content > p').eq(0).text().split(':')[1]){
+					context.replies.push('Unforunately, McGill has no more information available about this one...')
+				}else{
+					context.replies.push('Showing you more about '+course.subject+' '+course.code+':');
+					context.replies.push($('.node-catalog > .content > p').eq(0).text().split(':')[1]);
+				}
 				deferred.resolve(context);
 			});
 

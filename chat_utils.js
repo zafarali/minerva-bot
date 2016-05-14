@@ -22,8 +22,10 @@ function reply(sender, reply_data, test_token){
 		console.log('sent:',reply_data)
 		if(error){
 			console.log('ERROR SENDING MESSAGE',error);
+			throw Error(error);
 		}else if (response.body.error){
 			console.log('ERROR:', response.body.error);
+			throw Error(response.body.error);
 		}
 	});
 }
