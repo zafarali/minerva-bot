@@ -62,13 +62,16 @@ function show_more(context){
 					context.replies.push('Showing you more about '+course.subject+' '+course.code+':');
 					var to_send_back = $('.datadisplaytable td.dddefault').html().split('<br>');
 					var description = to_send_back[0];
+					if(description.length > 300){
+						description = description.substr(0,300)+'...'
+					}
 					context.replies.push(description)
 					to_send_back.forEach(function(element){
 						if(element.match('Prerequisite')){
-							context.replies.push('The prequisite are: '+element.split(':')[1])
+							context.replies.push('The Prequisites: '+element.split(':')[1])
 						}
 						if(element.match('Restriction')){
-							context.replies.push('The restrictions are: '+element.split(':')[1])
+							context.replies.push('The Restrictions: '+element.split(':')[1])
 						}
 					});
 				}catch(error){
