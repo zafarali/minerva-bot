@@ -36,8 +36,12 @@ app.use( bodyParser.json() );
 
 
 // context management:
-
-var contexts = JSON.parse(fs.readFileSync(path.resolve( ( process.env.OPENSHIFT_DATA_DIR || './' ), 'history.json'), 'utf8')).contexts || {};
+var contexts;
+try{
+	contexts = JSON.parse(fs.readFileSync(path.resolve( ( process.env.OPENSHIFT_DATA_DIR || './' ), 'history.json'), 'utf8')).contexts || {};
+}catch(err){
+	contexts = {};
+}
 
 function get_or_create_context(user){
 	if(!contexts[user]){
@@ -150,11 +154,17 @@ app.get('/dump_history/', function(req, res){
 	if(req.query['token'] == process.env['VERIFYTOKEN']) {
 		// dumps all user contexts to the file system and out
 		var contexts_string = JSON.stringify({contexts:contexts});
-		
-		fs.writeFile( ( process.env.OPENSHIFT_DATA_DIR || './' )+'history.json', contexts_string, function (err) {
-			if (err) throw err;
-			// console.log('It\'s saved!');
-		});
+		try{
+			fs.writeFile( ( process.env.OPENSHIFT_DATA_DIR || './' )+'history.json', contexts_string, function (err) {
+				if (err) throw err;
+				console.log('Saved 1');
+			});
+		}catch(err){
+			fs.writeFile( ( process.env.OPENSHIFT_DATA_DIR +'/' || './' )+'history.json', contexts_string, function (err) {
+				if (err) throw err;
+				console.log('Saved 2');
+			});
+		}
 
 		res.send({contexts:contexts});
 	}
