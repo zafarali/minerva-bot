@@ -186,7 +186,7 @@ function create_bot_reply(course, year){
 		bot_reply,
 		[
 			['postback', 'Give me a summary.', 'more@'+course.subject+','+course.course_code+','+course.CRN+','+year], //summary request
-			['web_url', 'Take me to the course page', 
+			['web_url', 'Go to course page', 
 			'https://horizon.mcgill.ca/pban1/bwckschd.p_disp_listcrse?term_in='+year+
 			'&subj_in='+course.subject+'&crse_in='+course.course_code+'&crn_in='+course.CRN] //link
 		])
