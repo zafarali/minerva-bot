@@ -137,7 +137,7 @@ app.post('/testhook/', function(req, res){
 				// }
 
 				// return reply_chain.reduce(q.when, q())
-				reply2(sender,ctx.replies,TESTTOKEN)
+				chat.reply2(sender,ctx.replies,TESTTOKEN)
 				// var reply_f = reply2.bind(undefined, sender, ctx.replies, TESTTOKEN);
 				// return q.when(reply_f)
 

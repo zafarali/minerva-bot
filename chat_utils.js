@@ -142,5 +142,6 @@ function build_structured_response(text,button_triples){
 }
 
 exports.reply = reply;
+exports.reply2 = reply2;
 exports.welcome = welcome;
 exports.builders = { structured_response:build_structured_response }
