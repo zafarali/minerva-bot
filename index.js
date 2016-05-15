@@ -135,7 +135,7 @@ function internals(query, user, postback){
 	// obtain a context
 	var history = get_or_create_context(user);
 	
-	context = {
+	var context = {
 		history: history,
 		current_query: query,
 		postback:postback,
