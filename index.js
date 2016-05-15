@@ -37,7 +37,7 @@ app.use( bodyParser.json() );
 
 // context management:
 
-var contexts = JSON.parse(fs.readFileSync(path.resolve('./', 'history.json'), 'utf8')).contexts || {};
+var contexts = JSON.parse(fs.readFileSync(path.resolve( ( process.env.OPENSHIFT_DATA_DIR || './' ), 'history.json'), 'utf8')).contexts || {};
 
 function get_or_create_context(user){
 	if(!contexts[user]){
@@ -151,7 +151,7 @@ app.get('/dump_history/', function(req, res){
 		// dumps all user contexts to the file system and out
 		var contexts_string = JSON.stringify({contexts:contexts});
 		
-		fs.writeFile('./history.json', contexts_string, function (err) {
+		fs.writeFile( ( process.env.OPENSHIFT_DATA_DIR || './' )+'history.json', contexts_string, function (err) {
 			if (err) throw err;
 			// console.log('It\'s saved!');
 		});
