@@ -107,7 +107,7 @@ app.post('/testhook/', function(req, res){
 		if( (event.message && event.message.text ) 
 			|| (event.postback && event.postback.payload ) ){
 
-			chat.welcome();
+			// chat.welcome();
 
 			var query, postback;
 
