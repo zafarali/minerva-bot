@@ -32,6 +32,76 @@ function reply(sender, reply_data, test_token){
 	});
 }
 
+function reply2(sender, replies, test_token){
+	var token = typeof test_token !== 'undefined' ?  test_token : FBTOKEN;
+	var reply_data = replies.shift();
+
+	// do a converstion if it is not a string.
+	reply_data = typeof reply_data === 'string' ?  {text:reply_data} : reply_data;
+
+	request({
+		url:'https://graph.facebook.com/v2.6/me/messages',
+		qs: {access_token:token},
+		method: 'POST',
+		json: {
+			recipient: {id:sender},
+			message:reply_data,
+		}
+	}, function(error, response, body){
+		console.log('sent:',reply_data)
+		if(error){
+			console.log('ERROR SENDING MESSAGE',error);
+			throw Error(error);
+		}else if (response.body.error){
+			console.log('ERROR:', response.body.error);
+			throw Error(response.body.error);
+		}
+
+		if(replies.length){
+			setTimeout(function(){
+				reply2(sender,replies,token);
+			}, 200);
+		}
+	});
+}
+
+
+function welcome(test_token){
+	// A generic reply function
+	// @param: sender - recepient of this message
+	// @param: text - a string of the text
+	// [@param test_token - for testing purposes.] 
+	var token = typeof test_token !== 'undefined' ?  test_token : FBTOKEN;
+	// var reply_data = typeof reply_data === 'string' ?  {text:reply_data} : reply_data;
+	
+	request({
+		url:'https://graph.facebook.com/v2.6/1197984806888136/thread_settings',
+		qs: {access_token:token},
+		method: 'POST',
+		json: { "setting_type":"call_to_actions",
+          "thread_state":"new_thread",
+          "call_to_actions":[
+                {
+                  "message":{
+                    "text":"Hey there! How can I help you today? Ask me about specific courses, or courses you want to know about. At anytime you can ask me to HELP you!"
+                  }
+                }
+              ]
+        }
+	}, function(error, response, body){
+		// console.log('sent:',text)
+		if(error){
+			console.log('ERROR SENDING MESSAGE',error);
+			throw Error(error);
+		}else if (response.body.error){
+			console.log('ERROR:', response.body.error);
+			throw Error(response.body.error);
+		}
+
+		return true;
+	});
+}
+
 
 function build_structured_response(text,button_triples){
 
@@ -72,4 +142,5 @@ function build_structured_response(text,button_triples){
 }
 
 exports.reply = reply;
+exports.welcome = welcome;
 exports.builders = { structured_response:build_structured_response }

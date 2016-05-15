@@ -107,6 +107,8 @@ app.post('/testhook/', function(req, res){
 		if( (event.message && event.message.text ) 
 			|| (event.postback && event.postback.payload ) ){
 
+			chat.welcome();
+
 			var query, postback;
 
 			if(event.postback){
@@ -128,13 +130,16 @@ app.post('/testhook/', function(req, res){
 					ctx.replies.push('I don\'t understand what you\'re asking me :(. I\'m always improving. Until then, you can ask me to HELP you.');
 				}
 
-				var reply_chain = []
+				// var reply_chain = []
 
-				for (var i = 0; i < ctx.replies.length; i++) {
-					reply_chain.push(chat.reply.bind(undefined, sender, ctx.replies[i], TESTTOKEN));
-				}
+				// for (var i = 0; i < ctx.replies.length; i++) {
+				// 	reply_chain.push(chat.reply.bind(undefined, sender, ctx.replies[i], TESTTOKEN));
+				// }
 
-				return reply_chain.reduce(q.when, q())
+				// return reply_chain.reduce(q.when, q())
+				reply2(sender,ctx.replies,TESTTOKEN)
+				// var reply_f = reply2.bind(undefined, sender, ctx.replies, TESTTOKEN);
+				// return q.when(reply_f)
 
 			}).then(function(){
 				
