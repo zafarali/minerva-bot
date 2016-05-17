@@ -4,6 +4,7 @@ var utils = require('../../utils.js');
 natural.LancasterStemmer.attach();
 var NGrams = natural.NGrams;
 
+
 function help_me(context){
 	// checks if user input contains a greeting
 	
@@ -11,12 +12,10 @@ function help_me(context){
 	for (var i = 0; i < tokenized_input.length; i++) {
 	
 		if(tokenized_input[i] === 'help'){
-			context.replies = [
-			'I got you!',
-			'Ask me about courses at McGill! You can say things like "What time is COMP 202" or "What time is anthropology of development?"',
-			// 'After I respond, you can say "SHOW MORE". I\'ll send over the course description!'
-			]
+			context.replies.push(utils.arrays.random_choice(['I got you!', 'Of course', 'Everyone needs help sometimes!']))
+			context.replies.push('Here are some of the queries you can ask me: \n "What time is COMP 202" \n "Who teaches PHYS 230?" \n "Show me courses about anthropology of development".');
 			context.completed = true;
+			break;
 		}
 	}
 	return context;

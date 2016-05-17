@@ -1,4 +1,17 @@
 exports.WORDS = {
+	'helpwords': [
+		'help',
+		'capabilities'
+	],
+	'whathelp':[
+		'you do',
+		'you know'
+	],
+	'almosthelp':[
+		'do you know',
+		'do you like',
+	],
+	'thanks':['thank', 'thankyou', 'thanku', 'thnx', 'tnx', 'thnks', 'merc'],
 	'skip_words':[	'courses',
 	'about',
 	'about',
@@ -8,7 +21,13 @@ exports.WORDS = {
 	'yahoo',
 	'minerva',
 	'fuck'],
-	'greetings':['hoy', 'hi', 'hello', 'hey', 'sup', 'yo', 'whatsup', 'goodmorn', 'goodaft'],
+	'greetings':[
+		'hoy', 'hi', 'hello', 'hey', 
+		'sup', 'yo', 'whatsup', 'goodmorn', 'goodaft',
+		'whatsupp'],
+	'frenchgreeting':[
+		'bonjo', 'bonsoir', 'salut', 'allo'
+	],
 	'the_keep_list':[
 		'of',
 		'in',

@@ -43,9 +43,13 @@ function array_contains(arry, element){
     return arry.indexOf(element) > -1;
 };
 
+function array_random_element(arr){
+	return arr[Math.floor(Math.random() * arr.length)];
+}
 
 exports.arrays = {
 	contains:array_contains, 
-	unique:array_unique
+	unique:array_unique,
+	random_choice:array_random_element
 };
 exports.__request = __request;
