@@ -11,7 +11,7 @@ var NGrams = natural.NGrams;
 
 
 console.log('Non-queries');
-var stream = fs.createReadStream(path.resolve('./', 'conv_bot_db_augmented.csv'))
+var stream = fs.createReadStream(path.resolve('./plugins/training', 'conv_bot_db_augmented.csv'))
 	.pipe(csv.parse())
 	.on('readable', function(){
 		var row;
@@ -39,7 +39,7 @@ var stream = fs.createReadStream(path.resolve('./', 'conv_bot_db_augmented.csv')
 
 
 console.log('queries')
-var stream2 = fs.createReadStream(path.resolve('./', 'all_courses.csv'))
+var stream2 = fs.createReadStream(path.resolve('./plugins/training', 'all_courses.csv'))
 	.pipe(csv.parse({headers:true}))
 	.on('readable', function(){
 		var row2;
@@ -162,7 +162,7 @@ for (var i = 0; i < example_queries.length; i++) {
 	}
 };   
 
-jsonfile.writeFile('./query_classify.json',query_classify, function(err){
+jsonfile.writeFile('./plugins/training/query_classify.json',query_classify, function(err){
 	console.log('error occured',err)
 })
 });
