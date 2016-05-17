@@ -13,7 +13,7 @@ function contains_hello(context){
 
 			context['completed'] = true;
 			context.replies.push(utils.arrays.random_choice(['Hi!', 'Hello!', 'Hey there!', 'Hey!', 'Minerva Bot reporting for duty.']));
-			context.replies.push(['Ask me about courses at McGill! You can say things like "What time is COMP 202" or "What time is anthropology of development?"']);
+			context.replies.push('Ask me about courses at McGill! You can say things like "What time is COMP 202" or "What time is anthropology of development?"');
 			break;
 		}
 
@@ -24,7 +24,7 @@ function contains_hello(context){
 
 		if( i < WORDS['thanks'].length && utils.arrays.contains(tokenized_input, WORDS['thanks'][i])){
 			context['completed'] = true;
-			context.replies = utils.arrays.random_choice(['Any time!', 'My pleasure!', 'You\'re welcome. Have a good day.', 'At your service.']);
+			context.replies.push(utils.arrays.random_choice(['Any time!', 'My pleasure!', 'You\'re welcome. Have a good day.', 'At your service.']));
 		}
 	}
 
