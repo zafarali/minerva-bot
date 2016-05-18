@@ -72,6 +72,13 @@ exports.BUILDINGS = {
 		link:'https://www.mcgill.ca/maps/bronfman-building',
 		image:'https://www.mcgill.ca/maps/files/maps/styles/mcgill_maps_thumb_170x140/public/locations/102_bronfman.JPG?itok=Avux3tr2'
 	},
+	'BROWNS':{
+		full_name:'Brown Student Services',
+		other_names:['brown building', 'CAPS', 'student services', 'mcgill clinic', 'clinic'],
+		address:'3600 rue McTavish, Montreal, QC H3A 0G3, Canada',
+		link:'https://www.mcgill.ca/maps/brown-student-services'
+		image:'https://www.mcgill.ca/maps/files/maps/styles/medium/public/locations/236_brown.JPG?itok=GMEYXZ3v'
+	}
 	'BISHOP':{
 		full_name:'Bishop Mountain Hall',
 		other_names:['bishop', 'bmh'],
@@ -96,7 +103,9 @@ exports.BUILDINGS = {
 	'CENTEN':{
 		full_name:'Centennial Centre',
 		other_names:[],
-		address:''
+		link:'https://www.mcgill.ca/maps/centennial-centre',
+		address:'21111 Lakeshore Road, St Anne de Bellevue, QC H9X 3V9, Canada',
+		image:'https://www.mcgill.ca/maps/files/maps/styles/medium/public/locations/411_centennial_centre.jpg?itok=vra3Y9vJ'
 	},
 	'C4':{
 		full_name:'Carrefour Sherbrooke',
@@ -203,8 +212,10 @@ exports.BUILDINGS = {
 	},
 	'FARM':{
 		full_name:'Farm Centre',
-		other_names:[],
-		address:''
+		other_names:['R. Howard Webster Centre'],
+		link:'https://www.mcgill.ca/macdonaldfarm/rhwcentre',
+		address:'21,111 Lakeshore Rd. Ste-Anne-de-Bellevue, Qc H9X 3V9',
+		image:'https://www.mcgill.ca/macdonaldfarm/files/macdonaldfarm/farm-overview-web.jpg'
 	},
 	'FERR':{
 		full_name:'Ferrier Building',
