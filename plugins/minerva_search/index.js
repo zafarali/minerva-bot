@@ -13,8 +13,15 @@ function minerva_search(context){
 	if(context.completed){
 		return context;
 	}
+
 	var deferred = q.defer();
 	var current_query = context.current_query
+	if(context.postback){
+		// we have receieved a deep link from somewhere else.
+		if(context.postback.substr(0,7) === 'search@'){
+			current_query = context.postback.split('search@')[1];
+		}
+	}
 	var parsed = parser.parse(current_query);
 	var extracted = parsed[0];
 	if(!extracted){
@@ -61,7 +68,7 @@ function minerva_search(context){
 				var courses = parse_data(response.body);
 
 				if(courses.length > 3){
-					
+					context.completed=true;
 					// handle the case with too many results!
 					too_many_results.condition = true;
 					too_many_results.tuples.push([year_to_season( url.substr(-6,6) ), courses.length])
@@ -73,6 +80,7 @@ function minerva_search(context){
 					total_responses+=1;
 
 				}else if(courses.length > 0){
+					context.completed=true;
 					total_responses+=1;
 					var year = url.substr(-6,6);
 					if( url.match('&sel_subj=&sel_crse=') ){
@@ -139,6 +147,8 @@ function minerva_search(context){
 			}
 
 			if(total_responses===0){
+				context.completed=false;
+				context.extracted = extracted;
 				context.replies.push('I couldn\'t find any results for "'+extracted.join(' ')+'" :( Try another query?');
 			}
 			deferred.resolve(context)
@@ -186,6 +196,7 @@ function create_bot_reply(course, year){
 		bot_reply,
 		[
 			['postback', 'Give me a summary.', 'more@'+course.subject+','+course.course_code+','+course.CRN+','+year], //summary request
+			// ['postback', 'Where is that?', 'loc@'+course.location],
 			['web_url', 'Go to course page', 
 			'https://horizon.mcgill.ca/pban1/bwckschd.p_disp_listcrse?term_in='+year+
 			'&subj_in='+course.subject+'&crse_in='+course.course_code+'&crn_in='+course.CRN] //link

@@ -1,0 +1,1 @@
+// search majors and all courses.
