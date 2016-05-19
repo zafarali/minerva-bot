@@ -9,6 +9,27 @@ exports.cafeterias = ['BISHOP','DOUGLAS','C4','SSMU','REDLIB','BRONF','EDUC','EN
 
 // Building codes according to: http://www.is.mcgill.ca/whelp/sis_help/building_codes.pdf
 exports.BUILDINGS = {
+	'MOUNTAIN':{
+		full_name:'Mountain 3605',
+		other_names:['Martlet House'],
+		address:'3605 rue de la Montagne Montreal, QC H3G 2M1',
+		image:'https://www.mcgill.ca/maps/files/maps/styles/mcgill_maps_thumb_170x140/public/locations/156_mountain_3605.JPG?itok=kLaZZKNZ',
+		link:'https://www.mcgill.ca/maps/mountain-3605'
+	},
+	'MARTLET':{
+		full_name:'Martlet House',
+		other_names:[],
+		address:'1430 rue Peel, Montreal, QC H3A 3T3, Canada',
+		link:'http://www.mcgill.ca/maps/martlet-house',
+		image:'http://www.mcgill.ca/maps/files/maps/styles/medium/public/locations/242_martlet_house.JPG?itok=NluSAA8z'
+	}
+	'BOOKSTORE':{
+		full_name:'Bookstore',
+		other_names:[],
+		address:'3420 rue McTavish, Montreal, QC H3A 3L1',
+		link:'https://www.mcgill.ca/maps/bookstore',
+		image:'https://www.mcgill.ca/maps/files/maps/styles/mcgill_maps_thumb_170x140/public/locations/185_bookstore.JPG?itok=mRd94WGT'
+	}
 	'ADAMS':{
 		full_name:'Adams Building',
 		other_names:['fda', 'adams aud'],
@@ -78,7 +99,14 @@ exports.BUILDINGS = {
 		address:'3600 rue McTavish, Montreal, QC H3A 0G3, Canada',
 		link:'https://www.mcgill.ca/maps/brown-student-services'
 		image:'https://www.mcgill.ca/maps/files/maps/styles/medium/public/locations/236_brown.JPG?itok=GMEYXZ3v'
-	}
+	},
+	'LIFE':{
+		full_name:'Life Sciences Complex',
+		other_names:['Bellini', 'goodman', 'cancer centre'],
+		address:'3649 promenade Sir William Osler, Montreal, QC H3G 0B1',
+		link:'https://www.mcgill.ca/maps/life-sciences-complex',
+		image:'https://www.mcgill.ca/maps/files/maps/styles/mcgill_maps_thumb_170x140/public/locations/241_life_sciences_complex.jpg?itok=AWvdaJCf'
+	},
 	'BISHOP':{
 		full_name:'Bishop Mountain Hall',
 		other_names:['bishop', 'bmh'],
@@ -87,11 +115,13 @@ exports.BUILDINGS = {
 		link:'https://www.mcgill.ca/maps/bishop-mountain-hall',
 		image:'https://www.mcgill.ca/maps/files/maps/styles/mcgill_maps_thumb_170x140/public/locations/134_bishop_mountain_hall.JPG?itok=-2hKAFb5'
 	},
-	// 'BMDH':{
-	// 	full_name:'Bishop Mountain Dining Hall',
-	// 	other_names:['bishop'],
-	// 	address:'3935 University Street, Montreal, Quebec, H3A 2B4',
-	// },
+	'CMH':{
+		full_name:'Charles Meredith House',
+		other_names:[],
+		address:'1130 avenue des Pins Ouest, Montreal, QC H3A 1A3',
+		link:'https://www.mcgill.ca/maps/charles-meredith-house',
+		image:'https://www.mcgill.ca/maps/files/maps/styles/mcgill_maps_thumb_170x140/public/locations/173_charles_merideth_house.jpg?itok=SglnFWad'
+	},
 	'CDH':{
 		full_name:'Chancellor Day Hall',
 		other_names:['avvacato', 'cdh'],
@@ -175,7 +205,9 @@ exports.BUILDINGS = {
 	'DUGGAN':{
 		full_name:'Duggan House',
 		other_names:[],
-		address:''
+		address:'3724 rue McTavish, Montreal, QC H3A 1Y2',
+		image:'https://www.mcgill.ca/maps/files/maps/styles/mcgill_maps_thumb_170x140/public/locations/127_duggan_house.jpg?itok=0IB71aZJ',
+		link:'https://www.mcgill.ca/maps/duggan-house'
 	},
 	'EDUC':{
 		full_name:'Education Building',
@@ -271,7 +303,9 @@ exports.BUILDINGS = {
 	'HOSMER':{
 		full_name:'Hosmer House',
 		other_names:[],
-		address:''
+		image:'https://www.mcgill.ca/maps/files/maps/styles/mcgill_maps_thumb_170x140/public/locations/149_hosmer_house.jpg?itok=vdhQGF0x',
+		address:'3630 Sir William Osler, Montreal, QC H3G 1Y5',
+		link:'https://www.mcgill.ca/maps/hosmer-house'
 	},
 	'JGH':{
 		full_name:'Jewish General Hospital',
@@ -346,13 +380,23 @@ exports.BUILDINGS = {
 	},
 	'MDHAR':{
 		full_name:'Macdonald Harrington Building',
-		other_names:[],
-		address:''
+		other_names:['architecture building'],
+		address:'815 rue Sherbrooke Ouest, Montreal, QC H3A 0C2'
+		link:'https://www.mcgill.ca/maps/macdonald-harrington-building',
+		image:'https://www.mcgill.ca/maps/files/maps/styles/mcgill_maps_thumb_170x140/public/locations/118_macdonald_harrington.jpg?itok=q0kwVnkR'
+
 	},
 	'MGH':{
 		full_name:'Montreal General Hospital',
 		other_names:[],
 		address:''
+	},
+	'HUGESSEN':{
+		full_name:'Hugessen House',
+		link:'https://www.mcgill.ca/maps/hugessen-house',
+		image:'https://www.mcgill.ca/maps/files/maps/styles/mcgill_maps_thumb_170x140/public/locations/167_huggensen_house.jpg?itok=GqYunTgE',
+		other_names:[],
+		address:'3666 rue McTavish, Montreal, QC H3A 1Y2, Canada'
 	},
 	'MNI':{
 		full_name:'Montreal Neurological Institute',
