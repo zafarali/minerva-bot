@@ -19,13 +19,15 @@ function reply(sender, reply_data, test_token){
 			message:reply_data,
 		}
 	}, function(error, response, body){
-		console.log('sent:',reply_data)
+		// console.log('sent:',reply_data)
 		if(error){
 			console.log('ERROR SENDING MESSAGE',error);
-			throw Error(error);
+			reply(sender, 'Something went wrong sending you a Facebook message. Try again!', token);
+			// throw Error(error);
 		}else if (response.body.error){
 			console.log('ERROR:', response.body.error);
-			throw Error(response.body.error);
+			reply(sender, 'Something went wrong sending you a Facebook message. Try again!', token);
+			// throw Error(response.body.error);
 		}
 
 		return true;
@@ -48,13 +50,15 @@ function reply2(sender, replies, test_token){
 			message:reply_data,
 		}
 	}, function(error, response, body){
-		console.log('sent:',reply_data)
+		// console.log('sent:',reply_data)
 		if(error){
 			console.log('ERROR SENDING MESSAGE',error);
-			throw Error(error);
+			reply2(sender, ['Something went wrong sending you a Facebook message. Try again!'], token)
+			// throw Error(error);
 		}else if (response.body.error){
 			console.log('ERROR:', response.body.error);
-			throw Error(response.body.error);
+			reply2(sender, ['Something went wrong sending you a Facebook message. Try again!'], token)
+			// throw Error(response.body.error);
 		}
 
 		if(replies.length){
