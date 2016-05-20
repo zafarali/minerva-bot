@@ -111,24 +111,7 @@ function build_structured_response(text,button_triples){
 
 	var buttons = [];
 	for (var i = 0; i < button_triples.length; i++) {
-		var button_type = button_triples[i][0]; // the "type": "web_url" or "postback"
-		var button_title = button_triples[i][1]; // "title" to display
-		var button_payload = button_triples[i][2]; // the payload, either the "url" or "payload"
-
-		// temporary object
-		var to_save = {type:button_type, title:button_title}
-	
-		// extract what kind of button it is and work accordingly.		
-		if(button_type === "web_url"){
-			to_save["url"] = button_payload;
-		}else if(button_type === "postback"){
-			to_save["payload"] = button_payload;
-		}else{
-			throw Error("Button type was not web_url nor payload. Other types not supported.");
-		}
-
-		buttons.push(to_save)
-
+		buttons.push(build_buttons(button_triples[i]))
 	}
 
 	var to_return = {
@@ -145,7 +128,75 @@ function build_structured_response(text,button_triples){
 	return to_return
 }
 
+function build_buttons(button_triple){
+	var button_type = button_triple[0]; // the "type": "web_url" or "postback"
+	var button_title = button_triple[1]; // "title" to display
+	var button_payload = button_triple[2]; // the payload, either the "url" or "payload"
+
+	// temporary object
+	var to_save = {type:button_type, title:button_title}
+
+	// extract what kind of button it is and work accordingly.		
+	if(button_type === "web_url"){
+		to_save["url"] = button_payload;
+	}else if(button_type === "postback"){
+		to_save["payload"] = button_payload;
+	}else{
+		throw Error("Button type was not web_url nor payload. Other types not supported.");
+	}
+
+	return to_save;
+}
+
+
+function build_generic_structure(elements_data){
+	// elements_data is an array of the following:
+	/*
+		{
+			title: // title of the card
+			subtitle: // subtitle of the card
+			image_url: [optional] //an image for the card
+			buttons: [array of button triples.] //buttons to click
+		}
+
+	*/
+	var to_return = {
+    "attachment": {
+      "type": "template",
+      "payload": {
+        "template_type": "generic",
+        "elements": []
+     		}
+    	}
+  	};
+
+
+  for (var i = 0; i < elements_data.length; i++) {
+  	var element = elements_data[i];
+  	var to_save = {
+  		title: element.title,
+  		subtitle: element.subtitle,
+  		buttons:[]
+  	}
+  	if(element.image_url){
+  		to_save['image_url'] = element.image_url
+  	}
+
+  	for (var i = 0; i < element.button_triples.length; i++) {
+		to_save.buttons.push(build_buttons(element.button_triples[i]))
+	}
+
+  }
+
+  return to_return;
+
+
+}
 exports.reply = reply;
 exports.reply2 = reply2;
 exports.welcome = welcome;
-exports.builders = { structured_response:build_structured_response }
+exports.builders = { 
+	structured_response:build_structured_response,
+	generic_response:build_generic_structure,
+	button:build_buttons 
+}
