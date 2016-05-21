@@ -85,7 +85,7 @@ function minerva_search(context){
 
 					for(var course_name in courses) {
 						var course = courses[course_name];
-						var number_of_sections = courses.length;
+						var number_of_sections = course.length;
 						
 						if(number_of_sections === 1){
 							// if only one section do the usual:...
@@ -186,13 +186,12 @@ function create_multi_section_reply(sections, year){
 			['postback', 'Give me a summary.', 'more@'+sections[0].subject+','+sections[0].course_code+','+sections[0].CRN+','+year]//summary request
 		];
 
-	var section_count = 1
-	for(var section in sections){
+	for (var i = 0; i < sections.length; i++) {
+		var section = sections[i];
 		bot_reply = bot_reply + "\n - "+section.instructor+" on "+section.days+" at "+section.time+" in "+section.location;
 		buttons.push(
-			['web_url', 'Section '+section_count, 'https://horizon.mcgill.ca/pban1/bwckschd.p_disp_listcrse?term_in='+year+
-			'&subj_in='+section.subject+'&crse_in='+section.course_code+'&crn_in='+section.CRN]);
-		section_count = section_count+1;
+			['web_url', 'Section '+(i+1), 'https://horizon.mcgill.ca/pban1/bwckschd.p_disp_listcrse?term_in='+year+
+			'&subj_in='+section.subject+'&crse_in='+section.course_code+'&crn_in='+section.CRN]);		
 	}
 
 	return chat_builders.structured_response(bot_reply,buttons);
