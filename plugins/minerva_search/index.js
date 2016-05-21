@@ -181,20 +181,25 @@ function minerva_search(context){
 }
 
 function create_multi_section_reply(sections, year){
-	var bot_reply = "I found "+sections.length+" sections for "+sections[0].subject+sections[0].course_code+", "+sections[0].title+", in the "+year_to_season(year)+", taught by:";
+	var bot_reply = "I found "+sections.length+" sections for "+sections[0].subject+sections[0].course_code+", "+sections[0].title+", in the "+year_to_season(year)+":";
 	var buttons = [
 			['postback', 'Give me a summary.', 'more@'+sections[0].subject+','+sections[0].course_code+','+sections[0].CRN+','+year]//summary request
 		];
 
+
+	var elements = [];
+	
 	for (var i = 0; i < sections.length; i++) {
 		var section = sections[i];
-		bot_reply = bot_reply + "\n - "+section.instructor+" on "+section.days+" at "+section.time+" in "+section.location;
-		buttons.push(
-			['web_url', 'Section '+(i+1), 'https://horizon.mcgill.ca/pban1/bwckschd.p_disp_listcrse?term_in='+year+
-			'&subj_in='+section.subject+'&crse_in='+section.course_code+'&crn_in='+section.CRN]);		
+		elements.push({
+			title:'Section '+(i+1),
+			subtitle: section.instructor+" on "+section.days+" at "+section.time+" in "+section.location,
+			buttons:['web_url', 'Section '+(i+1), 'https://horizon.mcgill.ca/pban1/bwckschd.p_disp_listcrse?term_in='+year+
+			'&subj_in='+section.subject+'&crse_in='+section.course_code+'&crn_in='+section.CRN]
+		});
 	}
 
-	return chat_builders.structured_response(bot_reply,buttons);
+	return chat_builders.build_generic_structure(elements);
 }
 
 function create_bot_reply(course, year){
