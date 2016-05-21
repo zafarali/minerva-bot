@@ -92,7 +92,7 @@ function minerva_search(context){
 							context.replies.push(create_bot_reply(course[0], year));
 						}else{
 							// if more than one section we give some more details about each.
-							context.replies.push(create_multi_section_reply(course, year));
+							context.replies = context.replies.concat(create_multi_section_reply(course, year));
 						}
 
 					}// end multi section reply
@@ -182,24 +182,38 @@ function minerva_search(context){
 
 function create_multi_section_reply(sections, year){
 	var bot_reply = "I found "+sections.length+" sections for "+sections[0].subject+sections[0].course_code+", "+sections[0].title+", in the "+year_to_season(year)+":";
-	var buttons = [
-			['postback', 'Give me a summary.', 'more@'+sections[0].subject+','+sections[0].course_code+','+sections[0].CRN+','+year]//summary request
-		];
-
 
 	var elements = [];
 	
 	for (var i = 0; i < sections.length; i++) {
 		var section = sections[i];
+		var capacity_response = '';
+
+		if(parseInt(section.WLcapacity) > 0 ){
+			// no space in this...
+			capacity_response = array_utils.random_choice([" I think it is full :(", " It might be full..."]);
+
+		}else if(parseInt(section.WLcapacity) > 0 && parseInt(section.WLremain) > 0 ){
+
+			capacity_response = array_utils.random_choice(
+				[" There are spots on the waitlist!", 
+				" There is space on the waitlist!"]);
+		}
+
 		elements.push({
-			title:'Section '+(i+1),
-			subtitle: section.instructor+" on "+section.days+" at "+section.time+" in "+section.location,
-			buttons:['web_url', 'Section '+(i+1), 'https://horizon.mcgill.ca/pban1/bwckschd.p_disp_listcrse?term_in='+year+
-			'&subj_in='+section.subject+'&crse_in='+section.course_code+'&crn_in='+section.CRN]
+			title:'Section '+(i+1)+ (section.instructor !== 'TBA' ? ' with '+section.instructor : ''),
+			subtitle: "On "+section.days+" at "+section.time+" in "+section.location+capacity_response,
+			buttons:[
+				['postback', 'Give me a summary.', 'more@'+section.subject+','+section.course_code+','+section.CRN+','+year],
+				['web_url', 
+				'Section page', 
+				'https://horizon.mcgill.ca/pban1/bwckschd.p_disp_listcrse?term_in='+year+'&subj_in='+section.subject+'&crse_in='+section.course_code+'&crn_in='+section.CRN
+				]
+			]
 		});
 	}
 
-	return chat_builders.build_generic_structure(elements);
+	return [ bot_reply, chat_builders.generic_response(elements) ];
 }
 
 function create_bot_reply(course, year){
@@ -216,8 +230,8 @@ function create_bot_reply(course, year){
 	}else if(parseInt(course.WLcapacity) > 0 && parseInt(course.WLremain) > 0 ){
 
 		bot_reply = bot_reply + array_utils.random_choice(
-			[" There might be spots in the class! The waitlist has space :D", 
-			"There is space on the waitlist! There might be space in the class"])
+			[" There are spots in the waitlist!", 
+			" The waitlist is not full!"])
 	}
 
 	bot_reply = chat_builders.structured_response(

@@ -135,6 +135,7 @@ function build_buttons(button_triple){
 
 	// temporary object
 	var to_save = {type:button_type, title:button_title}
+	// console.log(button_triple)
 
 	// extract what kind of button it is and work accordingly.		
 	if(button_type === "web_url"){
@@ -182,9 +183,11 @@ function build_generic_structure(elements_data){
   		to_save['image_url'] = element.image_url
   	}
 
-  	for (var i = 0; i < element.button_triples.length; i++) {
-		to_save.buttons.push(build_buttons(element.button_triples[i]))
+  	for (var j = 0; j < element.buttons.length; j++) {
+		to_save.buttons.push(build_buttons(element.buttons[j]))
 	}
+
+	to_return.attachment.payload.elements.push(to_save);
 
   }
 
