@@ -3,6 +3,7 @@ var help = require('./help/');
 var conversation = require('./conversation/');
 var showmore = require('./showmore/');
 var catalog_search = require('./catalog_search/');
+var major_search = require('./major_search/');
 
 
 module.exports = {
@@ -10,5 +11,6 @@ module.exports = {
 	help:help,
 	conversation:conversation,
 	showmore:showmore,
-	catalog_search:catalog_search
+	catalog_search:catalog_search,
+	major_search:major_search
 };
