@@ -69,8 +69,8 @@ function minerva_search(context){
 				var course_names = Object.keys(courses)
 				var number_of_courses = course_names.length;
 
-
-				if(courses.length > 3){
+				// console.log(courses);
+				if(number_of_courses > 3){
 					context.completed=true;
 
 					// handle the case with too many results!
@@ -84,7 +84,7 @@ function minerva_search(context){
 
 					total_responses+=1;
 
-				}else if(courses.length > 0){
+				}else if(number_of_courses > 0){
 					context.completed=true;
 
 					total_responses+=1;
@@ -95,7 +95,7 @@ function minerva_search(context){
 					for(var course_name in courses) {
 						var course = courses[course_name];
 						var number_of_sections = course.length;
-						
+						total_responses += number_of_sections;
 						if(number_of_sections === 1){
 							// if only one section do the usual:...
 							context.replies.push(create_bot_reply(course[0], year));
@@ -103,6 +103,7 @@ function minerva_search(context){
 							// if more than one section we give some more details about each.
 							context.replies = context.replies.concat(create_multi_section_reply(course, year));
 						}
+						
 
 					}// end multi section reply
 
@@ -153,9 +154,10 @@ function minerva_search(context){
 					context.replies.push(bot_reply_builder);
 					context.replies.push('Try something more specific?');
 				}
-			}
-
+				total_responses += 1;
+			}			
 			if(total_responses===0){
+
 				context.completed=false;
 				context.extracted = extracted;
 				context.replies.push('I couldn\'t find any results for "'+extracted.join(' ')+'" :( Try another query?');

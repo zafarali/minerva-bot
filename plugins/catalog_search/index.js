@@ -17,26 +17,26 @@ function catalog_search(context){
 		return context;
 	}
 
-	var current_query = context.current_query;
-
-	var cleaned = clean(current_query);
-	if(!cleaned.level){
-		// this is not a search for a XXX-level course...
-		return context;
-	}
-
 	var deferred = q.defer();
-
 
 	if(context.postback){
 		context.replies = [];
 		// we have receieved a deep link from somewhere else.
-		console.log(context.postback.substr(0,7))
-		if(context.postback.substr(0,7) === 'cc@more'){
+		// console.log(context.postback.substr(0,7))
+
+		if(context.postback.substr(0,2) === 'cc'){
+			context.replies = ['Here\' a few more:'];
 			course_release(context, deferred);
 		}
 
 	}else{
+		var current_query = context.current_query;
+
+		var cleaned = clean(current_query);
+		if(!cleaned.level){
+			// this is not a search for a XXX-level course...
+			return context;
+		}
 		context.history['catalog_search'] = [];
 
 		var result = subject_index.search(cleaned.query);
