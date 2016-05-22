@@ -66,55 +66,64 @@ function minerva_search(context){
 
 				var bot_reply;
 				var courses = parse_data(response.body);
+				var course_names = Object.keys(courses)
+				var number_of_courses = course_names.length;
+
 
 				if(courses.length > 3){
 					context.completed=true;
+
 					// handle the case with too many results!
 					too_many_results.condition = true;
-					too_many_results.tuples.push([year_to_season( url.substr(-6,6) ), courses.length])
+					too_many_results.tuples.push([year_to_season( url.substr(-6,6) ), number_of_courses])
 					// add some examples of the search results to display later.
+
 					for (var i = 0; i < 3; i++) {
-						too_many_results.examples.push(courses[i].title);
+						too_many_results.examples.push( courses[course_names[i]][0].title );
 					}
 
 					total_responses+=1;
 
 				}else if(courses.length > 0){
 					context.completed=true;
+
 					total_responses+=1;
 					var year = url.substr(-6,6);
-					if( url.match('&sel_subj=&sel_crse=') ){
-						// generic search query, return everything
-						for (var i = 0; i < courses.length; i++) {
-							var first_course = courses[i];
 
-							context.replies.push(create_bot_reply(first_course, year))
+					// if( url.match('&sel_subj=&sel_crse=') ){
 
-							context.history['last_course'] = {
-								subject:first_course.subject, 
-								code:first_course.course_code,
-								CRN:first_course.CRN,
-								year:year
-							}
-
-						};
-					} else {
-						var first_course = courses[0]
+					for(var course_name in courses) {
+						var course = courses[course_name];
+						var number_of_sections = course.length;
 						
-						context.replies.push(create_bot_reply(first_course, year))
-
-						context.history['last_course'] = {
-							subject:first_course.subject, 
-							code:first_course.course_code,
-							CRN:first_course.CRN,
-							year:year
+						if(number_of_sections === 1){
+							// if only one section do the usual:...
+							context.replies.push(create_bot_reply(course[0], year));
+						}else{
+							// if more than one section we give some more details about each.
+							context.replies = context.replies.concat(create_multi_section_reply(course, year));
 						}
 
-					}//end query replies
+					}// end multi section reply
+
+					// } else {
+					// 	var first_course = courses[0]
+						
+					// 	context.replies.push(create_bot_reply(first_course, year))
+
+					// 	context.history['last_course'] = {
+					// 		subject:first_course.subject, 
+					// 		code:first_course.course_code,
+					// 		CRN:first_course.CRN,
+					// 		year:year
+					// 	}
+
+					// }//end query replies
 				}//end check for course lengths
 			} // end forloop
 
-			
+	
+			// here we deal with having too many courses returned...			
 			for (var i = 0, bot_reply_builder = 'I found '; i < too_many_results.tuples.length; i++) {
 
 				var semester = too_many_results.tuples[i][0];
@@ -182,6 +191,41 @@ function minerva_search(context){
 	// return deferred.promise;
 }
 
+function create_multi_section_reply(sections, year){
+	var bot_reply = "I found "+sections.length+" sections for "+sections[0].subject+sections[0].course_code+", "+sections[0].title+", in the "+year_to_season(year)+":";
+
+	var elements = [];
+	
+	for (var i = 0; i < sections.length; i++) {
+		var section = sections[i];
+		var capacity_response = '';
+
+		if(parseInt(section.WLcapacity) > 0 ){
+			// no space in this...
+			capacity_response = array_utils.random_choice([" I think it is full :(", " It might be full..."]);
+
+		}else if(parseInt(section.WLcapacity) > 0 && parseInt(section.WLremain) > 0 ){
+
+			capacity_response = array_utils.random_choice(
+				[" There are spots on the waitlist!", 
+				" There is space on the waitlist!"]);
+		}
+
+		elements.push({
+			title:'Section '+(i+1)+ (section.instructor !== 'TBA' ? ' with '+section.instructor : ''),
+			subtitle: "On "+section.days+" at "+section.time+" in "+section.location+capacity_response,
+			buttons:[
+				['postback', 'Give me a summary.', 'more@'+section.subject+','+section.course_code+','+section.CRN+','+year],
+				['web_url', 
+				'Section page', 
+				'https://horizon.mcgill.ca/pban1/bwckschd.p_disp_listcrse?term_in='+year+'&subj_in='+section.subject+'&crse_in='+section.course_code+'&crn_in='+section.CRN
+				]
+			]
+		});
+	}
+
+	return [ bot_reply, chat_builders.generic_response(elements) ];
+}
 
 function create_bot_reply(course, year){
 
@@ -189,8 +233,17 @@ function create_bot_reply(course, year){
 	+ course.subject+ course.course_code + " is " +
 	course.title+" It takes place on "+course.days+
 	" at "+course.time+" in "+course.location+ 
-	" taught by "+course.instructor;
+	" taught by "+course.instructor+".";
 	
+	if(parseInt(course.WLcapacity) > 0 && parseInt(course.WLremain) === 0){
+		// no space in this...
+		bot_reply = bot_reply+array_utils.random_choice([" I think it is full :(", " It might be full..."]);
+	}else if(parseInt(course.WLcapacity) > 0 && parseInt(course.WLremain) > 0 ){
+
+		bot_reply = bot_reply + array_utils.random_choice(
+			[" There are spots in the waitlist!", 
+			" The waitlist is not full!"])
+	}
 
 	bot_reply = chat_builders.structured_response(
 		bot_reply,

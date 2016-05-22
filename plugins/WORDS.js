@@ -1,7 +1,6 @@
 exports.WORDS = {
 	'helpwords': [
 		'help',
-		'capabilities'
 	],
 	'whathelp':[
 		'you do',

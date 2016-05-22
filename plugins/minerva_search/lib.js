@@ -32,15 +32,15 @@ function information_map(index){
 		case 10:
 			return 'capacity';
 		case 11:
-			return 'enrolled';
-		case 12:
-			return 'available';
-		case 13:
 			return 'WLcapacity';
+		case 12:
+			return 'WLactual';
+		case 13:
+			return 'WLremain';
 		case 14:
 			return 'instructor';
 		case 15:
-			return 'WLremain';
+			return 'dates';
 		case 16:
 			return 'location';
 		case 17:
@@ -62,7 +62,7 @@ function parse_data(body){
 	});
 
 
-	var courses = [];
+	var courses = {};
 	// map all the TRs:
 	$relevant_tables.map( function (index, element) {
 		// this loop has the TRs as elements
@@ -84,7 +84,16 @@ function parse_data(body){
 			$(e).children().each(function (i_index, information) {
 				to_be_saved[information_map(i_index)] = $(information).text();
 			});
-			courses.push(to_be_saved);
+
+			// check if it already exists in our return:
+			if(courses[to_be_saved['subject'] + to_be_saved['course_code']]){
+				// already exists!
+				courses[to_be_saved['subject'] + to_be_saved['course_code']].push(to_be_saved);
+			}else{
+				// doesn't exist, make a new array!
+				courses[to_be_saved['subject'] + to_be_saved['course_code']] = [to_be_saved];
+			}
+			
 		});
 	});
 
