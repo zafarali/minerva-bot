@@ -19,6 +19,7 @@ var minerva_search = require('./plugins').minerva_search;
 var help = require('./plugins').help;
 var conversation = require('./plugins').conversation;
 var showmore = require('./plugins').showmore;
+var catalog_search = require('./plugins').catalog_search;
 
 
 app.use(function(req,res,next){
@@ -167,7 +168,7 @@ app.post('/testhook/', function(req, res){
 function internals(query, user, postback){
 
 	// plugins to be executed
-	var to_execute = [ conversation, help, showmore, minerva_search ];
+	var to_execute = [ conversation, help, showmore, minerva_search, catalog_search ];
 
 	// obtain a context
 	var history = get_or_create_context(user);

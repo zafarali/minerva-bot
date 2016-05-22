@@ -4,7 +4,7 @@ var natural = require('natural');
 var cheerio = require('cheerio');
 var request = require('request');
 
-var course_mappings = jsonfile.readFileSync('./course_mapping.js').subject_mappings;
+var course_mappings = jsonfile.readFileSync('./course_mapping.json').subject_mappings;
 natural.PorterStemmer.attach();
 
 var index = lunr(function(){
@@ -37,9 +37,7 @@ function clean(query){
 }
 
 var queries = [
-	'500 level computer science course in fall 2015',
-	// '300-level linguistics courses',
-	// 'biology 300 level'
+	'200 level computer science course in fall 2015'
 ];
 
 
@@ -48,7 +46,9 @@ for (var i = 0; i < queries.length; i++) {
 	console.log('cleaned:',cleaned);
 	var result = index.search(cleaned.query);
 	console.log(result);
-	var canonical_url = 'http://www.mcgill.ca/study/2016-2017/courses/search?sort_by=field_course_title&f[0]=field_subject_code%3A'+result[0].ref+'&f[1]=course_level%3A'+cleaned.level;
+	var canonical_url = 'http://www.mcgill.ca/study/2016-2017/courses/search?'+
+			'sort_by=field_course_title&f[0]=field_subject_code%3A'+
+			result[0].ref+'&f[1]=course_level%3A'+cleaned.level;
 	console.log(canonical_url);
 	request(canonical_url, function(error, response, body){
 		var $ = cheerio.load(body);
@@ -64,11 +64,5 @@ for (var i = 0; i < queries.length; i++) {
 		});
 	})
 }
-// console.log()
-// console.log(index.search(query));
-// console.log(index.search('comp sci'));
-// console.log(index.search('linguistics'));
-// console.log(index.search('physics'));
-// console.log(index.search('math'));
-// console.log(index.search('anthropology'));
-// console.log(index.search('anthro'));
+
+jsonfile.writeFileSync('./subject_index.json',index)
