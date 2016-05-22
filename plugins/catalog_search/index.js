@@ -6,7 +6,7 @@ var cheerio = require('cheerio');
 var request = require('request');
 var q = require('q');
 var path = require('path');
-
+var utils = require('../../utils.js');
 var chat_builders = require('../../chat_utils.js').builders;
 
 var subject_index = lunr.Index.load(jsonfile.readFileSync(path.resolve('./plugins/catalog_search', 'subject_index.json')));
@@ -14,19 +14,25 @@ var subject_index = lunr.Index.load(jsonfile.readFileSync(path.resolve('./plugin
 
 function catalog_search(context){
 	if(context.completed){
+		context.history['catalog_search'] = [];
 		return context;
 	}
 
 	var deferred = q.defer();
 
 	if(context.postback){
-		context.replies = [];
 		// we have receieved a deep link from somewhere else.
 		// console.log(context.postback.substr(0,7))
 
 		if(context.postback.substr(0,2) === 'cc'){
-			context.replies = ['Here\' a few more:'];
-			course_release(context, deferred);
+			if(context.history['catalog_search'] && context.history['catalog_search'].length > 0){
+				context.replies = ['Here\'s a few more:'];
+				course_release(context, deferred);	
+			}else{
+				context.replies = ['I can\'t remember all those courses anymore... :(']
+				deferred.resolve(context);
+			}
+			
 		}
 
 	}else{
@@ -122,9 +128,9 @@ function course_release(context, deferred){
 
 	var elements = [];
 	
-
+	var number_to_release = Math.min(to_be_released.length, 10);
 	// release courses 10 at a time:
-	for (var i = 0; i < Math.min(to_be_released.length, 10); i++) {
+	for (var i = 0; i < number_to_release; i++) {
 
 		var current_element = to_be_released.shift();
 
@@ -145,7 +151,7 @@ function course_release(context, deferred){
 
 		context.replies.push(
 			chat_builders.structured_response(
-				'Would you like to see more?', 
+				'I have '+to_be_released.length+' more courses. '+utils.arrays.random_choice(['Would you like to see more?', 'A few more?', 'Would you like to see them?']), 
 				[ ['postback', 'Yes', 'cc@more'] ]
 			)
 		);
