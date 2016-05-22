@@ -56,6 +56,8 @@ function catalog_search(context){
 			var courses = [];
 
 			scrape(context, deferred, result[0].ref, cleaned.level, 0, courses)
+		}else{
+			return context;
 		}
 	}
 
