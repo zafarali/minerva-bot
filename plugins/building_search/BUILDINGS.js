@@ -2,13 +2,12 @@
 exports.common_buildings = ['ADAMS','MCLIB', 'REDLIB', 'ENGMC', 'SCHULICH', 'ARTS', 'LEA', 'BURN', 'BRONF', 'STBIO', 'LAW', 'RPHYS', 'MAASS', 'MUSIC','FERR', 'MCMED', 'ENGTR', 'JAMES', 'EDUC' ,'ENGMD', 'WONG', 'REDMUS'];
 
 // list of buildings to help narrow down results.
-exports.all_buildings = [ 'ADAMS', 'ARTS', 'BARTON', 'BURN', 'BEATTY', 'BIRKS', 'BRONF', 'BISHOP', 'CDH', 'CENTEN', 'C4', 'LACIT', 'LAW', 'CURRIE', 'JAMES', 'DAVIS', 'DAWSON', 'DUFF', 'DOUGLAS', 'DUGGAN', 'EDUC', 'ENGMC', 'ENGMD', 'ENGTR', 'FARM', 'FERR', 'SSMU', 'FIELD', 'FPHR', 'GARDNER', 'GREENBRIAR', 'GENOME', 'HOSMCH', 'HOSMER', 'JGH', 'LEA', 'MAASS', 'MACSTW', 'MOLSON', 'MOLSTADIUM', 'MCCH', 'MCLIB', 'MCLIB2', 'MCMED', 'MDHAR', 'MGH', 'MNI', 'MOR', 'MOYSE', 'MT3434', 'MT3438', 'MUSIC', 'ELIZ', 'NRH', 'PARA', 'PE1085', 'PETH', 'PILOT', 'PL3465', 'PL3475', 'PL3487', 'PL3647', 'PL3690', 'PL3715', 'PN1033', 'POLY', 'PURVIS', 'RAYMND', 'REDLIB', 'REDMUS', 'REDMPTH', 'RPHYS', 'RVH', 'LMR', 'RVC', 'SADB', 'SCHOOL', 'SOLIN', 'SH550', 'SH688', 'SCHULICH', 'STBIO', 'STHALL', 'UNIH', 'WILSON', 'WONG' ];
 exports.libraries = ['REDLIB', 'MCLIB', 'SCHULICH', 'LAW', 'ELIZ', 'BURN', 'EDUC', 'MOR', 'BARTON','MCMED', 'MCLIB2'];
 exports.residences = [ 'NRH','C4','SOLIN', 'UNIH','GREENBRIAR', 'RVC', 'LACIT', 'DOUGLAS', 'BISHOP', 'GARDNER', 'MCCH', 'MOLSON'];
 exports.cafeterias = ['BISHOP','DOUGLAS','C4','SSMU','REDLIB','BRONF','EDUC','ENGMC','ARTS','GENOME','ENGTR','RVC','MCMED','CDH','CURRIE', 'DOUGLAS','STBIO','NRH','BISHOP'];
 
 // Building codes according to: http://www.is.mcgill.ca/whelp/sis_help/building_codes.pdf
-exports.BUILDINGS = {
+BUILDINGS = {
 	'MOUNTAIN':{
 		full_name:'Mountain 3605',
 		other_names:['Martlet House'],
@@ -22,17 +21,17 @@ exports.BUILDINGS = {
 		address:'1430 rue Peel, Montreal, QC H3A 3T3, Canada',
 		link:'http://www.mcgill.ca/maps/martlet-house',
 		image:'http://www.mcgill.ca/maps/files/maps/styles/medium/public/locations/242_martlet_house.JPG?itok=NluSAA8z'
-	}
+	},
 	'BOOKSTORE':{
 		full_name:'Bookstore',
 		other_names:[],
 		address:'3420 rue McTavish, Montreal, QC H3A 3L1',
 		link:'https://www.mcgill.ca/maps/bookstore',
 		image:'https://www.mcgill.ca/maps/files/maps/styles/mcgill_maps_thumb_170x140/public/locations/185_bookstore.JPG?itok=mRd94WGT'
-	}
+	},
 	'ADAMS':{
 		full_name:'Adams Building',
-		other_names:['fda', 'adams aud'],
+		other_names:['fda', 'adams aud', 'frank dawson adams'],
 		address:'3450 rue University, Montreal, QC H3A 0E8',
 		link:'https://www.mcgill.ca/maps/adams-building',
 		image:'https://www.mcgill.ca/maps/files/maps/styles/mcgill_maps_thumb_170x140/public/locations/177_adams.jpg?itok=hQlCK616'
@@ -77,7 +76,7 @@ exports.BUILDINGS = {
 	},
 	'BIRKS':{
 		full_name:'Birks Building',
-		other_names:['birks'],
+		other_names:['birks', 'reading room'],
 		address:'3520 University Street, Montreal, Quebec H3A 2A7',
 		library:['birks reading room'],
 		library_link:'http://www.mcgill.ca/library/branches/birks',
@@ -95,9 +94,9 @@ exports.BUILDINGS = {
 	},
 	'BROWNS':{
 		full_name:'Brown Student Services',
-		other_names:['brown building', 'CAPS', 'student services', 'mcgill clinic', 'clinic'],
+		other_names:['brown building', 'CAPS', 'student services', 'mcgill clinic', 'clinic', 'career planning services'],
 		address:'3600 rue McTavish, Montreal, QC H3A 0G3, Canada',
-		link:'https://www.mcgill.ca/maps/brown-student-services'
+		link:'https://www.mcgill.ca/maps/brown-student-services',
 		image:'https://www.mcgill.ca/maps/files/maps/styles/medium/public/locations/236_brown.JPG?itok=GMEYXZ3v'
 	},
 	'LIFE':{
@@ -381,7 +380,7 @@ exports.BUILDINGS = {
 	'MDHAR':{
 		full_name:'Macdonald Harrington Building',
 		other_names:['architecture building'],
-		address:'815 rue Sherbrooke Ouest, Montreal, QC H3A 0C2'
+		address:'815 rue Sherbrooke Ouest, Montreal, QC H3A 0C2',
 		link:'https://www.mcgill.ca/maps/macdonald-harrington-building',
 		image:'https://www.mcgill.ca/maps/files/maps/styles/mcgill_maps_thumb_170x140/public/locations/118_macdonald_harrington.jpg?itok=q0kwVnkR'
 
@@ -651,3 +650,6 @@ exports.BUILDINGS = {
 		image:'https://www.mcgill.ca/maps/files/maps/styles/mcgill_maps_thumb_170x140/public/locations/229_wong.JPG?itok=pD2JWN5z'
 	}
 }
+
+exports.BUILDINGS = BUILDINGS;
+exports.all_buildings = Object.keys(BUILDINGS);
