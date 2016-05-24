@@ -1,4 +1,3 @@
-BUILDING,LOCATION,DEPT,BW,COLOR
 ADAMS,237,Earth & Planetary Sciences,1,0
 ADAMS,22D,Engineering Careeer Centre,0,1
 ADAMS,23-A,Faculty of Sciences,1,0
@@ -230,15 +229,15 @@ MDHAR,Outside room 512,Public Use,0,1
 MDHAR,103,Public Use,0,1
 MDHAR,201,School of Architecture,0,1
 MDHAR,400,School of Urban Planning,1,0
-SCHULICH,201,McGill Library,0,1
-SCHULICH,4th Floor Hallway,Public Use,0,1
-SCHULICH,5th Floor hallway,Public Use,0,1
-SCHULICH,Main Floor Hallway,Public Use,0,1
-SCHULICH,3rd Floor Hallway,Public Use,0,1
-SCHULICH,3rd floor Hallway,Public Use,0,1
-SCHULICH,Main Floor Hallway,Public Use,0,1
-SCHULICH,6th floor Hallway,Public Use,0,1
-SCHULICH,115,Public Use,1,0
+MACSTW,201,McGill Library,0,1
+MACSTW,4th Floor Hallway,Public Use,0,1
+MACSTW,5th Floor hallway,Public Use,0,1
+MACSTW,Main Floor Hallway,Public Use,0,1
+MACSTW,3rd Floor Hallway,Public Use,0,1
+MACSTW,3rd floor Hallway,Public Use,0,1
+MACSTW,Main Floor Hallway,Public Use,0,1
+MACSTW,6th floor Hallway,Public Use,0,1
+MACSTW,115,Public Use,1,0
 MARTLET,Outsside room 412,Development & Alumni Relations,1,0
 MARTLET,Basement,Development & Alumni Relations,1,0
 MARTLET,513,Development & Alumni Relations,1,0

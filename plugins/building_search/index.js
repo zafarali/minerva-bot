@@ -19,9 +19,17 @@ function building_search(context){
 	if(context.completed){
 		return context;
 	}
-	
+
 	var query = context.location_search ? context.location_search : context.current_query.tokenizeAndStem().join(' ');
 	
+	if(context.postback){
+		// we have receieved a deep link from somewhere else.
+		if(context.postback.substr(0,6) === 'where@'){
+			query = context.postback.split('where@')[1];
+			context.completed = true;
+		}
+
+	}	
 
 	var search_results = building_index.search(query);
 
@@ -64,7 +72,10 @@ function building_search(context){
 
 		for (var i = 0; i < shortlist.length; i++) {
 			var building_result = buildings[shortlist[i].ref];
-
+			if(!building_result){
+				continue;
+			}
+			console.log(shortlist);
 			var subtitle = '';
 			subtitle += building_result.cafeteria ? 'Cafeterias: '+building_result.cafeteria.join(', ')+'. ' : '';
 			subtitle +=	building_result.library ? 'Libraries: '+building_result.library.join(', ')+'. ' : '';

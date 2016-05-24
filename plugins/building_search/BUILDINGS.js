@@ -326,11 +326,6 @@ BUILDINGS = {
 		link:'https://www.mcgill.ca/maps/maass-chemistry-building',
 		image:'https://www.mcgill.ca/maps/files/maps/styles/mcgill_maps_thumb_170x140/public/locations/119_otto_maass.jpg?itok=yRITXBlN'
 	},
-	'MACSTW':{
-		full_name:'Macdonald Stewart Building',
-		other_names:[],
-		address:''
-	},
 	'MOLSON':{
 		full_name:'Molson Hall',
 		other_names:['molson'],
@@ -609,7 +604,7 @@ BUILDINGS = {
 		link:'https://www.mcgill.ca/maps/sherbrooke-688',
 		image:'https://www.mcgill.ca/maps/files/maps/styles/mcgill_maps_thumb_170x140/public/locations/233_sherbrooke_688.JPG?itok=nN59GXtY'
 	},
-	'SCHULICH':{
+	'MACSTW':{
 		full_name:'Macdonald-Stewart Library Building',
 		other_names:['Schulich', 'engineering library'],
 		address:'809 Sherbrooke Street West, Montreal, Quebec H3A 0C1',
