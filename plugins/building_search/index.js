@@ -68,17 +68,19 @@ function building_search(context){
 			var subtitle = '';
 			subtitle += building_result.cafeteria ? 'Cafeterias: '+building_result.cafeteria.join(', ')+'. ' : '';
 			subtitle +=	building_result.library ? 'Libraries: '+building_result.library.join(', ')+'. ' : '';
-
+			subtitle += '\n'+ (building_result.address ? building_result.address : '')
 			var prepared = {
 				title: building_result.full_name,
 				subtitle: subtitle,
-				buttons:[
-					['web_url', 'Building Information', building_result.link ],
-				]
+				buttons:[]
 			};
 
 			if(building_result.image){
 				prepared['image_url'] = building_result.image;
+			}
+
+			if(building_result.link){
+				prepared.buttons.push(['web_url', 'Building Information', building_result.link ])
 			}
 			if(building_result.address){
 				prepared.buttons.push(['web_url', 'Get Directions', 'https://www.google.com/maps?saddr=My+Location&daddr='+building_result.address])

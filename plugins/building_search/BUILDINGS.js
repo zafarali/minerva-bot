@@ -157,7 +157,8 @@ BUILDINGS = {
 		address:'3660 Peel Street, Montreal, Quebec H3A 1W9',
 		library:['Nahum Gelber Law Library'],
 		library_link:'http://www.mcgill.ca/library/branches/law',
-		image:'http://www.mcgill.ca/library/files/library/med-law_180w.jpg'
+		image:'http://www.mcgill.ca/library/files/library/med-law_180w.jpg',
+		link:'https://www.mcgill.ca/maps/gelber-law-library'
 	},
 	'CURRIE':{
 		full_name:'Currie Gymnasium',
@@ -554,7 +555,7 @@ BUILDINGS = {
 	},
 	'RPHYS':{
 		full_name:'Rutherford Physics Building',
-		other_names:[],
+		other_names:['physics building', 'rutherford physics', 'rphys'],
 		address:'3600 rue University, Montreal, QC H3A 2T8, Canada',
 		link:'https://www.mcgill.ca/maps/rutherford-physics-building',
 		image:'https://www.mcgill.ca/maps/files/maps/styles/mcgill_maps_thumb_170x140/public/locations/189_rutherford_physics.jpg?itok=AbePkkbR'
@@ -612,6 +613,7 @@ BUILDINGS = {
 		full_name:'Macdonald-Stewart Library Building',
 		other_names:['Schulich', 'engineering library'],
 		address:'809 Sherbrooke Street West, Montreal, Quebec H3A 0C1',
+		link: 'https://www.mcgill.ca/maps/macdonald-stewart-library-building',
 		library:['Schulich Library of Science and Engineering'],
 		library_link:'http://www.mcgill.ca/library/branches/schulich'
 	},

@@ -10,6 +10,7 @@ var index = lunr(function(){
 	this.field('library', {boost:90});
 	this.field('caferia', {boost:90});
 	this.field('address', {boost:90});
+	this.field('code', {boost:100});
 	this.ref('code');
 })
 
