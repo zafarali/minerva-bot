@@ -17,7 +17,13 @@ for (var i = 0; i < building_codes.length; i++) {
 	var building = buildings[building_codes[i]];
 	building['code'] = building_codes[i];
 	if(building.other_names){
-		building['other_names'] = building['other_names'].join(' ')
+		building['other_names'] = building['other_names'].join(' ');
+	}
+	if(building.library){
+		building['library'] = building['library'].join(' ');
+	}
+	if(building.cafeteria){
+		building['cafeteria'] = building['cafeteria'].join(' ');
 	}
 
 	index.add(building);

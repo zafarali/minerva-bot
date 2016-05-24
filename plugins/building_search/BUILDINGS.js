@@ -155,7 +155,7 @@ BUILDINGS = {
 		full_name:'Nahum Gelber Law Library',
 		other_names:['law library'],
 		address:'3660 Peel Street, Montreal, Quebec H3A 1W9',
-		library:'Nahum Gelber Law Library',
+		library:['Nahum Gelber Law Library'],
 		library_link:'http://www.mcgill.ca/library/branches/law',
 		image:'http://www.mcgill.ca/library/files/library/med-law_180w.jpg'
 	},
