@@ -58,12 +58,12 @@ function uprint_search(context){
 				// for each building result we search the uprint index:
 				// context.replies.push('I found some printers in '
 				// 	+ (building_result.length > 1 ? 'multiple buildings.' : buildings[building_result[0]].full_name))+'.';
-				building_result.forEach((building)=>{
+				building_result.forEach(function(building){
 					var results = uprint_index.search(building.ref);
 					var full_name = buildings[building.ref].full_name;
 
 					if(results.length > 0){
-						results.forEach((result)=>{
+						results.forEach(function(result){
 							uprint_result = uprints[result.ref];
 							uprint_results.push({
 								title: uprint_result.location +' in '+full_name,
