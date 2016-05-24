@@ -20,7 +20,7 @@ function building_search(context){
 		return context;
 	}
 
-	var query = context.location_search ? context.location_search : context.current_query.tokenizeAndStem().join(' ');
+	var query = context.location_search ? context.location_search : context.current_query;
 	
 	if(context.postback){
 		// we have receieved a deep link from somewhere else.

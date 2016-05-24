@@ -31,16 +31,17 @@ for (var i = 0; i < building_codes.length; i++) {
 }
 
 var queries = [
-	'subway',
-	'twigs',
-	'schulich',
-	'library',
-	'GIC',
-	'Birks',
-	'reading room',
-	'student services',
-	'CAPS',
-	'career planning'
+	// 'subway',
+	// 'twigs',
+	// 'schulich',
+	// 'library',
+	// 'GIC',
+	// 'Birks',
+	// 'reading room',
+	// 'student services',
+	// 'CAPS',
+	// 'career planning',
+	'rutherford physics building'
 ]
 
 queries.forEach(function(query){
