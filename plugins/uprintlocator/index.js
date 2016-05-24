@@ -67,7 +67,7 @@ function uprint_search(context){
 							uprint_result = uprints[result.ref];
 							uprint_results.push({
 								title: uprint_result.location +' in '+full_name,
-								subtitle: (parseInt(uprint_result.color) ? 'Color Printing ' : 'Black and White Printing ')+'\n'+uprint_result.department,
+								subtitle: (parseInt(uprint_result.color) ? 'Color Printing ' : 'Black and White Printing ')+'. '+uprint_result.department,
 								buttons:[
 									['postback','Where is it?','where@'+building.ref]
 								]

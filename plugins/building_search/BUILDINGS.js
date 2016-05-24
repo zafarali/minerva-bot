@@ -221,9 +221,9 @@ BUILDINGS = {
 	},
 	'ENGMC':{
 		full_name:'McConnel Engineering Building',
-		other_names:['dispatch', 'ecaf', 'mcconnel', 'engineering building', 'mcconnel caf'],
+		other_names:['dispatch', 'ecaf', 'mcconnel', 'engineering building', 'mcconnel caf', 'dispatch cafe', 'frostbite', 'ice cream'],
 		address:'',
-		cafeteria:['Dispatch', 'E-cafe'],
+		cafeteria:['Dispatch', 'E-cafe', 'FrostBite'],
 		link:'https://www.mcgill.ca/maps/mcconnell-engineering-building',
 		image:'https://www.mcgill.ca/maps/files/maps/styles/mcgill_maps_thumb_170x140/public/locations/131_mcconnell_engineering.JPG?itok=vU9Lm4f2'
 	},

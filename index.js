@@ -14,7 +14,8 @@ var conversation = require('./plugins').conversation;
 var showmore = require('./plugins').showmore;
 var catalog_search = require('./plugins').catalog_search;
 var major_search = require('./plugins').major_search;
-
+var building_search = require('./plugins').building_search;
+var uprint_search = require('./plugins').uprint_search;
 
 // set up web server
 var app = express();
@@ -132,7 +133,7 @@ app.post('/webhook/', function (req, res) {
 function internals(query, user, postback){
 
 	// plugins to be executed
-	var to_execute = [ conversation, help, showmore, minerva_search, catalog_search, major_search ];
+	var to_execute = [ conversation, help, uprint_search, building_search, showmore, minerva_search, catalog_search, major_search ];
 
 	// obtain a context
 	var history = get_or_create_context(user);
