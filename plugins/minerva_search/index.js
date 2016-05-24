@@ -218,7 +218,7 @@ function create_multi_section_reply(sections, year){
 			subtitle: "On "+section.days+" at "+section.time+" in "+section.location+capacity_response,
 			buttons:[
 				['postback', 'Give me a summary.', 'more@'+section.subject+','+section.course_code+','+section.CRN+','+year],
-				['postback', 'Where is it?', 'where@'+section.location],
+				['postback', 'Where is it?', 'where@'+section.location.split(' ')[0]],
 				['web_url', 
 				'Section page', 
 				'https://horizon.mcgill.ca/pban1/bwckschd.p_disp_listcrse?term_in='+year+'&subj_in='+section.subject+'&crse_in='+section.course_code+'&crn_in='+section.CRN
@@ -252,7 +252,7 @@ function create_bot_reply(course, year){
 		bot_reply,
 		[
 			['postback', 'Give me a summary.', 'more@'+course.subject+','+course.course_code+','+course.CRN+','+year], //summary request
-			['postback', 'Where is it?', 'where@'+course.location],
+			['postback', 'Where is it?', 'where@'+course.location.split(' ')[0]],
 			['web_url', 'Go to course page', 
 			'https://horizon.mcgill.ca/pban1/bwckschd.p_disp_listcrse?term_in='+year+
 			'&subj_in='+course.subject+'&crse_in='+course.course_code+'&crn_in='+course.CRN] //link
