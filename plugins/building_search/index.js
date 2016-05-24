@@ -69,24 +69,31 @@ function building_search(context){
 			subtitle += building_result.cafeteria ? 'Cafeterias: '+building_result.cafeteria.join(', ')+'. ' : '';
 			subtitle +=	building_result.library ? 'Libraries: '+building_result.library.join(', ')+'. ' : '';
 			subtitle += '\n'+ (building_result.address ? building_result.address : '')
+			subtitle += subtitle === '' ? 'No information available right now.' : ''
 			var prepared = {
 				title: building_result.full_name,
 				subtitle: subtitle,
-				buttons:[]
 			};
+
+			var buttons = []; //holder for buttons so we don't return empty buttons array
 
 			if(building_result.image){
 				prepared['image_url'] = building_result.image;
 			}
 
 			if(building_result.link){
-				prepared.buttons.push(['web_url', 'Building Information', building_result.link ])
+				buttons.push(['web_url', 'Building Information', building_result.link ])
 			}
 			if(building_result.address){
-				prepared.buttons.push(['web_url', 'Get Directions', 'https://www.google.com/maps?saddr=My+Location&daddr='+building_result.address])
+				buttons.push(['web_url', 'Get Directions', 'https://www.google.com/maps?saddr=My+Location&daddr='+building_result.address])
 			}
 			if(building_result.library_link){
-				prepared.buttons.push(['web_url', 'Library Page', building_result.library_link]);
+				buttons.push(['web_url', 'Library Page', building_result.library_link]);
+			}
+
+			// add the buttons to the prepared element only if it contains more than one link
+			if(buttons.length > 0){
+				prepared['buttons'] = buttons;
 			}
 			elements.push(prepared);
 		}
