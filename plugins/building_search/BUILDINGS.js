@@ -162,8 +162,8 @@ BUILDINGS = {
 	},
 	'CURRIE':{
 		full_name:'Currie Gymnasium',
-		other_names:['athletics cafe', 'gym'],
-		cafeteria:['athletics cafe'],
+		other_names:['athletics cafe', 'gym', 'athletics caf'],
+		cafeteria:['Athletics Cafe'],
 		address:'475 avenue des Pins Ouest, Montreal, QC H2W 1S4, Canada',
 		link:'https://www.mcgill.ca/maps/currie-gymnasium',
 		image:'https://www.mcgill.ca/maps/files/maps/styles/mcgill_maps_thumb_170x140/public/locations/139_currie_gym.jpg?itok=dpSL1PdU'
@@ -213,7 +213,7 @@ BUILDINGS = {
 		full_name:'Education Building',
 		other_names:[],
 		address:'3700 McTavish Street, Montreal, Quebec H3A 1Y2',
-		cafeteria:['education cafe'],
+		cafeteria:['Education cafe'],
 		library:['Education Curriculum Resources Centre'],
 		library_link:'http://www.mcgill.ca/library/branches/education',
 		image:'https://www.mcgill.ca/maps/files/maps/styles/mcgill_maps_thumb_170x140/public/locations/168_education.jpg?itok=43k54Hhe',
@@ -221,9 +221,9 @@ BUILDINGS = {
 	},
 	'ENGMC':{
 		full_name:'McConnel Engineering Building',
-		other_names:['dispatch', 'ecaf', 'mcconnel', 'engineering building'],
+		other_names:['dispatch', 'ecaf', 'mcconnel', 'engineering building', 'mcconnel caf'],
 		address:'',
-		cafeteria:['dispatch', 'e-cafe'],
+		cafeteria:['Dispatch', 'E-cafe'],
 		link:'https://www.mcgill.ca/maps/mcconnell-engineering-building',
 		image:'https://www.mcgill.ca/maps/files/maps/styles/mcgill_maps_thumb_170x140/public/locations/131_mcconnell_engineering.JPG?itok=vU9Lm4f2'
 	},
@@ -526,9 +526,9 @@ BUILDINGS = {
 	},
 	'REDLIB':{
 		full_name:'Redpath Library',
-		other_names:['premiere moisson', 'redpath', 'blackadder'],
+		other_names:['premiere moisson', 'redpath', 'blackadder', 'redpath caf'],
 		address:'3459 rue McTavish, Montreal, QC H3A 0C9, Canada',
-		cafeteria:['premiere moisson'],
+		cafeteria:['Premiere Moisson'],
 		library:['Blackadder-Lauterman'],
 		library_link:'https://www.mcgill.ca/architecture/facilities/library',
 		link:'https://www.mcgill.ca/maps/redpath-library-building',
@@ -570,7 +570,7 @@ BUILDINGS = {
 		full_name:'Royal Victoria College',
 		other_names:['rvc'],
 		address:'3425 University Street, Montreal, Quebec, H3A 2A8',
-		cafeteria:['rvc'],
+		cafeteria:['RVC Dining Hall'],
 		image:'http://www.mcgill.ca/students/housing/files/students.housing/styles/slider_full_size/public/exterior_rvc2_0.jpg?itok=yi70nfny'
 	},
 	'SADB':{

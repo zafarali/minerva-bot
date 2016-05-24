@@ -8,7 +8,7 @@ var index = lunr(function(){
 	this.field('other_names', {boost:100});
 	this.field('full_name', {boost:100});
 	this.field('library', {boost:90});
-	this.field('caferia', {boost:90});
+	this.field('cafeteria', {boost:90});
 	this.field('address', {boost:90});
 	this.field('code', {boost:100});
 	this.ref('code');
@@ -41,7 +41,7 @@ var queries = [
 	// 'student services',
 	// 'CAPS',
 	// 'career planning',
-	'rutherford physics building'
+	'vinhs cafe'
 ]
 
 queries.forEach(function(query){
