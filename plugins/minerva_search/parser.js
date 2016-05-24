@@ -43,7 +43,7 @@ function parse_phrase(user_text){
 	var queries = [];
 	user_text = user_text.toLowerCase();
 
-	if(user_text.length<=5){
+	if(user_text.length<=5 || user_text.match(/\d{3}(\s|\-)(level)/i)){
 		return [false, []]
 	}
 	var parsed = [];
