@@ -16,7 +16,8 @@ Currently it takes 10 clicks to get to a search box that lets you search McGill 
 - Ask for courses by code "COMP 202", "Where is PHYS 232 in the Fall"
 - Ask for courses by title "Courses about machine learning in the fall", "Courses about quantum mechanics"
  
-![13282873_10153545370282478_1576196803_o](https://cloud.githubusercontent.com/assets/6295292/15525873/85069e08-21fb-11e6-8cb7-3c8605515ecc.jpg)
+
+<img width="435" src="https://cloud.githubusercontent.com/assets/6295292/15525873/85069e08-21fb-11e6-8cb7-3c8605515ecc.jpg" />
 ![image](https://cloud.githubusercontent.com/assets/6295292/15525886/a9430c70-21fb-11e6-88e4-0f31e50c8560.png)
 
 
@@ -26,7 +27,8 @@ You will get a response with times, professors, buildings and sections!
 #### Freeform Queries
 - Ask for courses by level: "500 level biology courses"
 - Ask for programs: "Honours physics", "Culturual Studies Major"
-![13288254_10153545374617478_852883794_o](https://cloud.githubusercontent.com/assets/6295292/15525936/0a10626e-21fc-11e6-861b-bd14ad2baf93.jpg)
+
+<img width="435" src="https://cloud.githubusercontent.com/assets/6295292/15525936/0a10626e-21fc-11e6-861b-bd14ad2baf93.jpg"/>
 ![image](https://cloud.githubusercontent.com/assets/6295292/15525971/549e4e54-21fc-11e6-82a9-8df1418821d1.png)
 
 
