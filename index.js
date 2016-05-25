@@ -119,7 +119,7 @@ app.post('/webhook/', function (req, res) {
 			}).catch(function(err){
 				console.log('error occured:',err)
 				chat.reply(sender, "Something went wrong... Try again!", TESTTOKEN);
-				res.send({error:err});
+				// res.send({error:err});
 			});
 		}
 	}

@@ -32,8 +32,8 @@ function contains_hello(context){
 	// @TODO
 	// do some preprocessing to remove certains words
 
-	contex.current_query = context.current_query.toLowerCase().replace('show', '')
-	
+	context.current_query = context.current_query.toLowerCase().replace('show', '')
+
 	return context;
 }
 
