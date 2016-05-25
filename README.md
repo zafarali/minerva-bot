@@ -40,6 +40,8 @@ You will get a response with times, professors, buildings and sections!
  
 ![image](https://cloud.githubusercontent.com/assets/6295292/15525851/5377b76e-21fb-11e6-90bf-cdbf0fb972a1.png)
 ![image](https://cloud.githubusercontent.com/assets/6295292/15525865/6d9b68a2-21fb-11e6-99e4-5c099175bef8.png)
+<img width="435" src="https://cloud.githubusercontent.com/assets/6295292/15526051/f478ae7e-21fc-11e6-855f-508c8a436242.jpg"/>
+
 
 
 ## Tech
