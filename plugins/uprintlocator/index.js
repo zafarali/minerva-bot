@@ -91,9 +91,9 @@ function uprint_search(context){
 			}else{
 				context.replies.push(
 					utils.arrays.random_choice(
-						['I\'m not sure which building you are referring to... :(', 
-						'Not sure where on campus that is!',
-						'I couldn\'t find that building.']));
+						['Which building are you looking for printers in?', 
+						'To look for printers I need to know where on campus you want me to search!',
+						'I couldn\'t find that building, let alone any printers there... :(']));
 			}
 		}		
 	}

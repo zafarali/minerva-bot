@@ -31,6 +31,8 @@ function building_search(context){
 
 	}	
 
+	query = clean_query(query);
+
 	var search_results = building_index.search(query);
 
 	if(search_results.length > 0){
@@ -69,6 +71,7 @@ function building_search(context){
 
 
 		var elements = [];
+		var contains_caf = false;
 
 		for (var i = 0; i < shortlist.length; i++) {
 			var building_result = buildings[shortlist[i].ref];
@@ -81,6 +84,10 @@ function building_search(context){
 			subtitle +=	building_result.library ? 'Libraries: '+building_result.library.join(', ')+'. ' : '';
 			subtitle += '\n'+ (building_result.address ? building_result.address : '')
 			subtitle += subtitle === '' ? 'No information available right now.' : ''
+
+			if(building_result.cafeteria){
+				contains_caf = true;
+			}
 			var prepared = {
 				title: building_result.full_name,
 				subtitle: subtitle,
@@ -111,11 +118,19 @@ function building_search(context){
 
 		context.replies.push(chat_builders.generic_response(elements));
 
+		if(contains_caf){
+			context.replies.push(chat_builders.structured_response('It seems I found some cafeterias too.', ['web_url', 'Show hours', 'https://www.mcgill.ca/foodservices/locations/hours-service']))
+		}
+
 	}
 
 
 	return context;
 
+}
+
+function clean_query(query){
+	return query.replace(/(food|open|close|time|hour|day|week)[^\s]*/gi, '');
 }
 
 module.exports = building_search;
