@@ -32,8 +32,12 @@ function building_search(context){
 	}	
 
 	query = clean_query(query);
+	console.log('building search query:',query);
 
 	var search_results = building_index.search(query);
+
+	console.log(search_results);
+
 
 	if(search_results.length > 0){
 		context.completed = true;
@@ -119,7 +123,16 @@ function building_search(context){
 		context.replies.push(chat_builders.generic_response(elements));
 
 		if(contains_caf){
-			context.replies.push(chat_builders.structured_response(utils.arrays.random_choice('It seems I found some cafeterias too.', 'Want to see cafeteria hours?', 'There are cafeterias too, want to see their timings?'], [['web_url', 'Show hours', 'https://www.mcgill.ca/foodservices/locations/hours-service']]))
+			context.replies.push(
+				chat_builders.structured_response(
+					utils.arrays.random_choice(
+						['It seems I found some cafeterias too.', 
+						'Want to see cafeteria hours?', 
+						'There are cafeterias too, want to see their timings?']
+						), 
+					[['web_url', 'Show hours', 'https://www.mcgill.ca/foodservices/locations/hours-service']]
+					)
+				)
 		}
 
 	}
@@ -130,7 +143,7 @@ function building_search(context){
 }
 
 function clean_query(query){
-	return query.replace(/(food|open|close|time|hour|day|week)[^\s]*/gi, '');
+	return query.replace(/(food|open|close|time|hour|day|week|until)[^\s]*/gi, '');
 }
 
 module.exports = building_search;

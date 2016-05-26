@@ -163,7 +163,7 @@ function minerva_search(context){
 			}else{
 				var opinion = context.current_query.match(/(hard|easy|ez|difficult|bad|good)[^\s]*/g);
 				if(opinion && opinion.length > 0){
-					context.current_query.replies.push(opinion[0]+'? '+utils.arrays.random_choice(['Unforunately I wouldn\'t know that...', 'I have not taken the course myself!', 'I\'ll take it soon. Ask me then?']))
+					context.replies.push(opinion[0]+'? '+array_utils.random_choice(['Unforunately I wouldn\'t know that...', 'I have not taken the course myself!', 'I\'ll take it soon. Ask me then?']))
 				}
 
 			}

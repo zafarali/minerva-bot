@@ -16,6 +16,8 @@ exports.WORDS = {
 	'open',
 	'shit',
 	'bitch',
+	'until',
+	'when',
 	'fucking',
 	'fucker',
 	'show',	

@@ -96,7 +96,7 @@ function parse_phrase(user_text){
 function bigram_contains_skip_word(bigram) {
 	var contains_stop_word = false;
 	for (var i = 0; i < WORDS['skip_words'].length; i++) {
-		contains_stop_word = WORDS['skip_words'][i] == bigram[0] || WORDS['skip_words'][i] == bigram[1]
+		contains_stop_word = WORDS['skip_words'][i] === bigram[0] || WORDS['skip_words'][i] === bigram[1]
 	};
 	return contains_stop_word;
 }
@@ -146,8 +146,14 @@ function refine_query_extract(key_words){
 	var refined = [];
 	var meta = {'when':false};
 	for (var i = 0; i < key_words.length; i++) {
+
+		if(WORDS['skip_words'].contains(key_words[i])){
+			continue;
+		}
+
 		if(key_words[i] === 'intro'){
 			refined.push('introduction');
+			continue;
 		}
 		// certain words can be skipped right off the bat
 		if(key_words[i] !== '[end]' && 
