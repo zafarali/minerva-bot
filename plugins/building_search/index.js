@@ -119,7 +119,7 @@ function building_search(context){
 		context.replies.push(chat_builders.generic_response(elements));
 
 		if(contains_caf){
-			context.replies.push(chat_builders.structured_response('It seems I found some cafeterias too.', ['web_url', 'Show hours', 'https://www.mcgill.ca/foodservices/locations/hours-service']))
+			context.replies.push(chat_builders.structured_response(utils.arrays.random_choice('It seems I found some cafeterias too.', 'Want to see cafeteria hours?', 'There are cafeterias too, want to see their timings?'], [['web_url', 'Show hours', 'https://www.mcgill.ca/foodservices/locations/hours-service']]))
 		}
 
 	}

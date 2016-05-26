@@ -157,10 +157,15 @@ function minerva_search(context){
 				total_responses += 1;
 			}			
 			if(total_responses===0){
-
 				context.completed=false;
 				context.extracted = extracted;
 				context.replies.push('I couldn\'t find any results for "'+extracted.join(' ')+'" :( Try another query?');
+			}else{
+				var opinion = context.current_query.match(/(hard|easy|ez|difficult|bad|good)[^\s]*/g);
+				if(opinion && opinion.length > 0){
+					context.current_query.replies.push(opinion[0]+'? '+utils.arrays.random_choice(['Unforunately I wouldn\'t know that...', 'I have not taken the course myself!', 'I\'ll take it soon. Ask me then?']))
+				}
+
 			}
 			deferred.resolve(context)
 		});

@@ -170,6 +170,9 @@ function scrape_handle(context, deferred, courses){
 		context.replies = [ 'I found '+courses.length+' results. Here\'s '+ Math.min(courses.length, 10)+' of them:' ];
 		context.history['catalog_search'] = courses;
 		course_release(context, deferred);
+	}else{
+		context.replies = ['I could\'t find anything...'];
+		deferred.resolve(context);
 	}
 }
 
