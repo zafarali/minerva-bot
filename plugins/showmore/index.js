@@ -8,7 +8,13 @@ var q = require('q');
 
 function show_more(context){
 	// tokenize
+
 	var tokenized_input = context.current_query.toLowerCase().split(' ');
+	
+	if(context.completed){
+		return context;
+	}
+
 	if(context.postback){
 		var is_show_me_query = context.postback.substr(0,5) === 'more@'
 	}
