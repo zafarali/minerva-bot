@@ -28,6 +28,34 @@ function contains_hello(context){
 		}
 	}
 
+	if(context.current_query.match(/(how|hw){1}.*(is|are|r|you|u){1}.*(you|u|goin|doin)?/gi)){
+		context['completed'] = true;
+		context.replies.push(
+			utils.arrays.random_choice([
+				'I\'m fantastic today! :D',
+				'Doing superb! Thanks for asking :)',
+				'Very well, thank you for asking!',
+				'Doing good as always!'
+				]));
+	}
+
+	if(context.current_query.match(/(who){1}.*(you|u|is|mak|mad|creat){1}.*(creat|mast|make|kin|quee|boss|own|you|u)+/gi)){
+		context['completed'] = true;
+		context.replies.push('I was made by this guy: http://www.zafarali.me My code is open source too, find it here: https://github.com/zafarali/minerva-bot');
+	}
+
+	if(context.current_query.match(/(are|r|you|u){1}/gi) && 
+		context.current_query.match(/(intel|smart|artif|AI|cool|good|male|awe|bad|scar|ware|self)/gi)){
+		context['completed'] = true;
+		context.replies.push(
+			utils.arrays.random_choice([
+				'I consider myself pseudointelligent! I am gender-neutral. I\'m here ready to help you navigate McGill!',
+				'I am pseudointelligent.',
+				'I\'m not super smart. Only beta. Pseudointelligent',
+				'We all know there\'s no such thing right...'
+				]))
+	}
+
 	// @TODO
 	// do some preprocessing to remove certains words
 
