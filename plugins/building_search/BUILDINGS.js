@@ -236,7 +236,7 @@ BUILDINGS = {
 	},
 	'ENGTR':{
 		full_name:'Trottier Building',
-		other_names:['trottier', 'paramount'],
+		other_names:['trottier', 'paramount','trottier cafe'],
 		address:'3630 rue University, Montreal, QC H3A 0C6',
 		cafeteria:['Paramount Fine Foods'],
 		image:'https://www.mcgill.ca/maps/files/maps/styles/mcgill_maps_thumb_170x140/public/locations/240_trottier.JPG?itok=r1vQpyZ4',

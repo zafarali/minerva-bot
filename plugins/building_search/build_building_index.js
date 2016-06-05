@@ -41,7 +41,7 @@ var queries = [
 	// 'student services',
 	// 'CAPS',
 	// 'career planning',
-	'vinhs cafe'
+	'trottier cafe'
 ]
 
 queries.forEach(function(query){

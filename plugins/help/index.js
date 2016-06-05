@@ -17,7 +17,7 @@ function help_me(context){
 		}
 	}
 
-	if( context.current_query.match(/(what|wut){1}.*(capabi|abil|do|purpo){1}/gi) ){
+	if( context.current_query.match(/(what|wut|you|ur){1}.*(capabi|abil|do|purpo){1}/gi) ){
 		set_user_needs_help(context);
 	}
 
