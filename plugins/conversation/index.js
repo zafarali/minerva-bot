@@ -44,7 +44,7 @@ function contains_hello(context){
 		context.replies.push('I was made by this guy: http://www.zafarali.me My code is open source too, find it here: https://github.com/zafarali/minerva-bot');
 	}
 
-	if(context.current_query.match(/(are|r|you|u){1}/gi) && 
+	if(context.current_query.match(/(are|r|you|u)\b/gi) && 
 		context.current_query.match(/(intel|smart|artif|AI|cool|good|male|awe|bad|scar|ware|self)/gi)){
 		context['completed'] = true;
 		context.replies.push(
