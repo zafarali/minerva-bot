@@ -41,32 +41,36 @@ function reply2(sender, replies, test_token){
 	// do a converstion if it is not a string.
 	reply_data = typeof reply_data === 'string' ?  {text:reply_data} : reply_data;
 
-	request({
-		url:'https://graph.facebook.com/v2.6/me/messages',
-		qs: {access_token:token},
-		method: 'POST',
-		json: {
-			recipient: {id:sender},
-			message:reply_data,
-		}
-	}, function(error, response, body){
-		// console.log('sent:',reply_data)
-		if(error){
-			console.log('ERROR SENDING MESSAGE',error);
-			reply2(sender, ['Something went wrong sending you a Facebook message. Try again!'], token)
-			// throw Error(error);
-		}else if (response.body.error){
-			console.log('ERROR:', response.body.error);
-			reply2(sender, ['Something went wrong sending you a Facebook message. Try again!'], token)
-			// throw Error(response.body.error);
-		}
+	try{
+		request({
+			url:'https://graph.facebook.com/v2.6/me/messages',
+			qs: {access_token:token},
+			method: 'POST',
+			json: {
+				recipient: {id:sender},
+				message:reply_data,
+			}
+		}, function(error, response, body){
+			// console.log('sent:',reply_data)
+			if(error){
+				console.log('ERROR SENDING MESSAGE',error);
+				reply2(sender, ['Something went wrong sending you a Facebook message. Try again!'], token)
+				// throw Error(error);
+			}else if (response.body.error){
+				console.log('ERROR:', response.body.error);
+				reply2(sender, ['Something went wrong sending you a Facebook message. Try again!'], token)
+				// throw Error(response.body.error);
+			}
 
-		if(replies.length){
-			setTimeout(function(){
-				reply2(sender,replies,token);
-			}, 200);
-		}
-	});
+			if(replies.length){
+				setTimeout(function(){
+					reply2(sender,replies,token);
+				}, 200);
+			}
+		});
+	}catch(e){
+		reply2(sender, ['Wow this is embarrasing :/ An error occured while trying to send you a Facebook message.'], token)
+	}
 }
 
 
@@ -183,8 +187,10 @@ function build_generic_structure(elements_data){
   		to_save['image_url'] = element.image_url
   	}
 
-  	for (var j = 0; j < element.buttons.length; j++) {
-		to_save.buttons.push(build_buttons(element.buttons[j]))
+  	if(element.buttons){
+	  	for (var j = 0; j < element.buttons.length; j++) {
+			to_save.buttons.push(build_buttons(element.buttons[j]))
+		}
 	}
 
 	to_return.attachment.payload.elements.push(to_save);

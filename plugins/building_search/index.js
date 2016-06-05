@@ -117,11 +117,12 @@ function building_search(context){
 			if(buttons.length > 0){
 				prepared['buttons'] = buttons;
 			}
+
 			elements.push(prepared);
 		}
 
 		context.replies.push(chat_builders.generic_response(elements));
-
+		
 		if(contains_caf){
 			context.replies.push(
 				chat_builders.structured_response(
