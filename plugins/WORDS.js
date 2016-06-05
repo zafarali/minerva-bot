@@ -12,6 +12,9 @@ exports.WORDS = {
 	],
 	'thanks':['thank', 'thankyou', 'thanku', 'thnx', 'tnx', 'thnks', 'merc'],
 	'skip_words':[
+	'porn',
+	'pornography',
+	'horny',
 	'close',
 	'open',
 	'shit',
