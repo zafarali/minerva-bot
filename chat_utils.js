@@ -54,11 +54,11 @@ function reply2(sender, replies, test_token){
 			// console.log('sent:',reply_data)
 			if(error){
 				console.log('ERROR SENDING MESSAGE',error);
-				reply2(sender, ['Something went wrong sending you a Facebook message. Try again!'], token)
+				reply2(sender, ['Wow this is embarassing! :( Something went wrong sending you a Facebook message. Try again!'], token)
 				// throw Error(error);
 			}else if (response.body.error){
 				console.log('ERROR:', response.body.error);
-				reply2(sender, ['Something went wrong sending you a Facebook message. Try again!'], token)
+				reply2(sender, ['Wow this is embarassing... :/ Something went wrong sending you a Facebook message. Try again!'], token)
 				// throw Error(response.body.error);
 			}
 
@@ -181,16 +181,20 @@ function build_generic_structure(elements_data){
   	var to_save = {
   		title: element.title,
   		subtitle: element.subtitle,
-  		buttons:[]
   	}
+
+  	
+
   	if(element.image_url){
   		to_save['image_url'] = element.image_url
   	}
 
   	if(element.buttons){
+  		var buttons = [];
 	  	for (var j = 0; j < element.buttons.length; j++) {
-			to_save.buttons.push(build_buttons(element.buttons[j]))
+			buttons.push(build_buttons(element.buttons[j]))
 		}
+		to_save['buttons'] = buttons;
 	}
 
 	to_return.attachment.payload.elements.push(to_save);
