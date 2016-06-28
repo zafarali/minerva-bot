@@ -85,7 +85,11 @@ app.post('/webhook/', function (req, res) {
 			|| (event.postback && event.postback.payload ) ){
 
 			// set a welcome message
-			chat.welcome();
+			try{
+				chat.welcome();
+			}catch(e){
+				console.log('Error setting welcome message.')
+			}
 
 			var query, postback;
 

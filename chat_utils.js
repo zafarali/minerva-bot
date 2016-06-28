@@ -39,7 +39,7 @@ function reply2(sender, replies, test_token){
 	var reply_data = replies.shift();
 
 	// do a converstion if it is not a string.
-	reply_data = typeof reply_data === 'string' ?  {text:reply_data} : reply_data;
+	reply_data = typeof reply_data === 'string' ?  {text:reply_data.substr(0,319)} : reply_data;
 
 	try{
 		request({
@@ -53,12 +53,14 @@ function reply2(sender, replies, test_token){
 		}, function(error, response, body){
 			// console.log('sent:',reply_data)
 			if(error){
-				console.log('ERROR SENDING MESSAGE',error);
+				console.log(reply_data)
 				reply2(sender, ['Wow this is embarassing! :( Something went wrong sending you a Facebook message. Try again!'], token)
+				console.log('ERROR SENDING MESSAGE',error);				
 				// throw Error(error);
 			}else if (response.body.error){
-				console.log('ERROR:', response.body.error);
+				console.log(reply_data)
 				reply2(sender, ['Wow this is embarassing... :/ Something went wrong sending you a Facebook message. Try again!'], token)
+				console.log('ERROR:', response.body.error);
 				// throw Error(response.body.error);
 			}
 
@@ -69,6 +71,7 @@ function reply2(sender, replies, test_token){
 			}
 		});
 	}catch(e){
+		console.log(reply_data)
 		reply2(sender, ['Wow this is embarrasing :/ An error occured while trying to send you a Facebook message.'], token)
 	}
 }
@@ -99,11 +102,11 @@ function welcome(test_token){
 	}, function(error, response, body){
 		// console.log('sent:',text)
 		if(error){
-			console.log('ERROR SENDING MESSAGE',error);
-			throw Error(error);
+			console.log('Error setting welcome message',error);
+			// throw Error(error);
 		}else if (response.body.error){
-			console.log('ERROR:', response.body.error);
-			throw Error(response.body.error);
+			console.log('Error setting welcome message:', response.body.error);
+			// throw Error(response.body.error);
 		}
 
 		return true;
