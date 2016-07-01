@@ -8,6 +8,14 @@ var WORDS = require('../WORDS.js').WORDS
 function help_me(context){
 	// checks if user input contains a greeting
 	
+	if(context.postback){
+		// we have receieved a deep link from somewhere else.
+		if(context.postback.substr(0,7) === 'help@'){
+			set_user_needs_help(context)
+			return context
+		}
+	}
+
 	var tokenized_input = context.current_query.tokenizeAndStem();
 	for (var i = 0; i < tokenized_input.length; i++) {
 	

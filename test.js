@@ -51,6 +51,11 @@ function get_or_create_context(user){
 	return contexts[user];
 }
 
+chat.menu([
+	['postback', 'Help', 'help@'],
+	['web_url', 'Source Code', 'https://github.com/zafarali/minerva-bot/']
+	], TESTTOKEN)
+
 app.get('/', function(req, res){
 	if( !( req.query['query'] || req.query['postback'] ) || !req.query['user']){
 		res.send({error:'query or user not supplied'});

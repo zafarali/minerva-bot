@@ -108,7 +108,61 @@ function set_state(sender, state, test_token){
 
 }
 
+function menu(options, test_token){
+	/*
+		Creates a menu for the chat,
+		options must be of the form:
+		[ [ type, title, payload/url ],...]
+	*/
+	var token = typeof test_token !== 'undefined' ?  test_token : FBTOKEN;
+	if(options.length > 5){
+		throw Error('Cant have more than 5 options in the men')
+	}
+	var menu = {
+		"setting_type": "call_to_actions",
+		"thread_state": "existing_thread",
+		"call_to_actions":[]
+	}
+	for (var i = 0; i < options.length; i++) {
+		var button_type = options[i][0];
+		var button_title = options[i][1];
+		var button_payload = options[i][2];
 
+		var to_save = {
+			type: button_type,
+			title: button_title
+		}
+
+		if(button_type === "web_url"){
+			to_save["url"] = button_payload;
+		}else if(button_type === "postback"){
+			to_save["payload"] = button_payload;
+		}else{
+			throw Error("Button type was not web_url nor payload. Other types not supported.");
+		}
+		
+		menu["call_to_actions"].push(to_save)
+	}
+
+	request({
+		url:'https://graph.facebook.com/v2.6/me/thread_settings',
+		qs: {access_token:token},
+		method: 'POST',
+		json: menu
+	}, function(error, response, body){
+		// console.log('sent:',text)
+		if(error){
+			console.log('Error creating menu',error);
+			// throw Error(error);
+		}else if (response.body.error){
+			console.log('Error creating menu:', response.body.error);
+			// throw Error(response.body.error);
+		}
+
+		return true;
+	})
+
+}
 function welcome(test_token){
 	// A generic reply function
 	// @param: sender - recepient of this message
@@ -296,6 +350,7 @@ function build_generic_structure(elements_data){
 exports.reply = reply;
 exports.reply2 = reply2;
 exports.welcome = welcome;
+exports.menu = menu;
 exports.set_state = set_state;
 exports.builders = { 
 	quick_reply: build_quick_reply,
