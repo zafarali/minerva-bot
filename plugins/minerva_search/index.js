@@ -70,21 +70,56 @@ function minerva_search(context){
 				var number_of_courses = course_names.length;
 
 				// console.log(courses);
+
+				var too_many_results_local = false;
+				var close_matches = [];
+
 				if(number_of_courses > 3){
 					context.completed=true;
 
 					// handle the case with too many results!
-					too_many_results.condition = true;
-					too_many_results.tuples.push([year_to_season( url.substr(-6,6) ), number_of_courses])
-					// add some examples of the search results to display later.
+					// first we need to check if this is in fact EXACTLY what we are looking for...
+					var matched = false;
 
-					for (var i = 0; i < 3; i++) {
-						too_many_results.examples.push( courses[course_names[i]][0].title );
+					for (var i = 0; i < course_names.length; i++) {
+						var potential_name = courses[course_names[i]][0].title;
+						potential_name = potential_name.toLowerCase().replace('.', '');
+						var to_be_matched = extracted[0].toLowerCase().replace('.', '');
+						// console.log('potential:',potential_name)
+						// console.log('to_be_matched:',to_be_matched)
+						// console.log('partial match:',potential_name.match(to_be_matched));
+						if( to_be_matched === potential_name ){
+							// this is an exact match, thus we must return it!
+							course_names = [ course_names[i] ];
+							matched = true;
+						}else if(potential_name.match(to_be_matched)){
+							// we had a pretty good match, give the user an alternative choice..
+
+							close_matches.push(potential_name)
+						}
+
+						if( i === course_names.length-1 && !matched){
+							too_many_results_local = true;
+							too_many_results.condition = true;
+						}
 					}
 
-					total_responses+=1;
+					if(too_many_results_local){
 
-				}else if(number_of_courses > 0){
+						too_many_results.tuples.push([year_to_season( url.substr(-6,6) ), number_of_courses])
+						// add some examples of the search results to display later.
+
+						for (var i = 0; i < 3; i++) {
+							too_many_results.examples.push( courses[course_names[i]][0].title );
+						}
+
+						total_responses+=1;
+					}
+				}
+
+				// console.log('matched:',course_names)
+				// console.log('closematches:',close_matches)
+				if(number_of_courses > 0 && !too_many_results_local){
 					context.completed=true;
 
 					total_responses+=1;
@@ -92,8 +127,11 @@ function minerva_search(context){
 
 					// if( url.match('&sel_subj=&sel_crse=') ){
 
-					for(var course_name in courses) {
+					for(var id in course_names) {
+						// added this extra abstraction for showing multiple courses.
+						var course_name = course_names[id];
 						var course = courses[course_name];
+						if(!course){ continue; }
 						var number_of_sections = course.length;
 						total_responses += number_of_sections;
 						if(number_of_sections === 1){
@@ -102,6 +140,19 @@ function minerva_search(context){
 						}else{
 							// if more than one section we give some more details about each.
 							context.replies = context.replies.concat(create_multi_section_reply(course, year));
+						}
+
+						if(close_matches.length){
+							// more than 1 close match.
+							var bot_reply = 'I also found: '
+							for (var j = 0; j < close_matches.length; j++) {
+								bot_reply += close_matches[j];
+								if(j+1 < close_matches.length){
+									// there is a next element:
+									bot_reply+=', ';
+								}
+							}
+							context.replies.push(bot_reply)
 						}
 						
 
