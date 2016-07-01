@@ -48,19 +48,25 @@ function catalog_search(context){
 	}else{
 		
 
-		if(current_query.match(/(year.?\d)|(\d(st|nd|rd|th).?year)/gi) || current_query.match(/(u\d)\b/gi)){
-			context.replies = chat_builders.quick_reply(
-				'Seems like you\'re asking me about courses for a certain year?', 
+		if(current_query.match('level') || current_query.match(/(year.?\d)|(\d(st|nd|rd|th).?year)/gi) || current_query.match(/(u\d)\b/gi)){
+
+			var minor_clean = context.current_query.replace(/(course|courses)/gi, '');
+			minor_clean = minor_clean.replace(/(year.?\d)|(\d(st|nd|rd|th).?year)/gi, '');
+			minor_clean = minor_clean.replace(/(u\d)\b/gi, '');			
+			minor_clean = minor_clean.tokenizeAndStem().join(' ')
+			context.replies = [ chat_builders.quick_reply(
+				'Seems like you\'re asking me about courses for a certain level?', 
 				[
-					['100-level', 'catsearch@100|'+context.current_query],
-					['200-level', 'catsearch@200|'+context.current_query]
-					['300-level', 'catsearch@300|'+context.current_query]
-					['400-level', 'catsearch@400|'+context.current_query]
-					['500-level', 'catsearch@500|'+context.current_query]
-					['600-level', 'catsearch@600|'+context.current_query]
+					['100-level', 'catsearch@100|'+minor_clean],
+					['200-level', 'catsearch@200|'+minor_clean],
+					['300-level', 'catsearch@300|'+minor_clean],
+					['400-level', 'catsearch@400|'+minor_clean],
+					['500-level', 'catsearch@500|'+minor_clean],
+					['600-level', 'catsearch@600|'+minor_clean]
 				]
-				)
+				) ]
 		}
+
 		var cleaned = clean(current_query);
 		if(!cleaned.level){
 			// this is not a search for a XXX-level course...
