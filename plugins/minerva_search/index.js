@@ -196,8 +196,14 @@ function minerva_search(context){
 
 					for (var j = 0; j < too_many_results.examples.length; j++) {
 						bot_reply_builder = bot_reply_builder + '"' +too_many_results.examples[j]+'"';
-						if(too_many_results.examples[j].length < 20)
+						
+						if(too_many_results.examples[j].length < 20){
 							easy_click_options.push([ too_many_results.examples[j], '@'] )
+						}else{
+							easy_click_options.push([ too_many_results.examples[j].substr(0,17)+'...', 'search@'+too_many_results.examples[j] ])
+						}
+
+
 						if(too_many_results.examples.length > 2 && j !== too_many_results.examples.length-2){
 							bot_reply_builder = bot_reply_builder+', ';
 						}else if(too_many_results.examples.length > 1){
