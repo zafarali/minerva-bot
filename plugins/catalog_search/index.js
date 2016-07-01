@@ -19,8 +19,18 @@ function catalog_search(context){
 	}
 
 	var deferred = q.defer();
-
+	
+	var current_query = context.current_query;
+	var skip_postback = false;
 	if(context.postback){
+		// if(context.postback.split()))
+		if(context.postback.substr(0,10) === 'catsearch@'){
+			extracted = context.postback.split('catsearch@')[1].split('|')
+			current_query = extracted[0]+' level '+ extracted[1]
+			skip_postback = true;
+		}
+	}
+	if(context.postback && !skip_postback){
 		// we have receieved a deep link from somewhere else.
 		// console.log(context.postback.substr(0,7))
 
@@ -36,8 +46,21 @@ function catalog_search(context){
 		}
 
 	}else{
-		var current_query = context.current_query;
+		
 
+		if(current_query.match(/(year.?\d)|(\d(st|nd|rd|th).?year)/gi) || current_query.match(/(u\d)\b/gi)){
+			context.replies = chat_builders.quick_reply(
+				'Seems like you\'re asking me about courses for a certain year?', 
+				[
+					['100-level', 'catsearch@100|'+context.current_query],
+					['200-level', 'catsearch@200|'+context.current_query]
+					['300-level', 'catsearch@300|'+context.current_query]
+					['400-level', 'catsearch@400|'+context.current_query]
+					['500-level', 'catsearch@500|'+context.current_query]
+					['600-level', 'catsearch@600|'+context.current_query]
+				]
+				)
+		}
 		var cleaned = clean(current_query);
 		if(!cleaned.level){
 			// this is not a search for a XXX-level course...
