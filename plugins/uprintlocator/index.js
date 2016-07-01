@@ -115,9 +115,9 @@ function uprint_release(context){
 
 	if(to_be_released.length > 0){
 		context.replies.push(
-			chat_builders.structured_response(
+			chat_builders.quick_reply(
 				'I have '+to_be_released.length+' more printers. '+utils.arrays.random_choice(['Would you like to see more?', 'A few more?', 'Would you like to see them?']), 
-				[ ['postback', 'Yes', 'moreuprint@'] ]
+				[ ['Yes', 'moreuprint@'] ]
 			)
 		);
 	}

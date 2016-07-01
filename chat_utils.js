@@ -83,8 +83,8 @@ function welcome(test_token){
 	// @param: text - a string of the text
 	// [@param test_token - for testing purposes.] 
 	var token = typeof test_token !== 'undefined' ?  test_token : FBTOKEN;
-	// var reply_data = typeof reply_data === 'string' ?  {text:reply_data} : reply_data;
 	
+	// Add user text when user selects "get started"
 	request({
 		url:'https://graph.facebook.com/v2.6/1197984806888136/thread_settings',
 		qs: {access_token:token},
@@ -93,11 +93,32 @@ function welcome(test_token){
           "thread_state":"new_thread",
           "call_to_actions":[
                 {
-                  "message":{
-                    "text":"Hey there! How can I help you today? Ask me about specific courses, or courses you want to know about. At anytime you can ask me to HELP you!"
-                  }
+                  "payload":"NEWUSER"
                 }
               ]
+        }
+	}, function(error, response, body){
+		// console.log('sent:',text)
+		if(error){
+			console.log('Error setting welcome message',error);
+			// throw Error(error);
+		}else if (response.body.error){
+			console.log('Error setting welcome message:', response.body.error);
+			// throw Error(response.body.error);
+		}
+
+		return true;
+	});
+
+	// add greeting.
+	request({
+		url:'https://graph.facebook.com/v2.6/1197984806888136/thread_settings',
+		qs: {access_token:token},
+		method: 'POST',
+		json: { "setting_type":"greeting",
+          "greeting":{
+          	"text":"Minerva Bot here to help you with all things McGill!"
+          }
         }
 	}, function(error, response, body){
 		// console.log('sent:',text)
@@ -114,8 +135,40 @@ function welcome(test_token){
 }
 
 
-function build_structured_response(text,button_triples){
+function build_quick_reply(text, button_doubles){
+	/*
+		text: Text to dispaly
+		button_doubles: array of the form
+			[ [ text, payload ], ... ]
+	*/
 
+	if(button_doubles.length === 0){
+		throw Error('No quick reply options supplied.')
+	}
+
+	var quick_replies = []
+	for (var i = 0; i < button_doubles.length; i++) {
+
+		quick_replies.push({
+			content_type: "text",
+			title: button_doubles[i][0],
+			payload: button_doubles[i][1]
+		})
+	}
+	
+	return {
+		text: text,
+		quick_replies: quick_replies
+	}
+
+}
+
+function build_structured_response(text,button_triples){
+	/*
+		text: Text to display
+		button_triples: array of the form
+			[ [ type, title, payload ], ... ]
+	*/
 	var buttons = [];
 	for (var i = 0; i < button_triples.length; i++) {
 		buttons.push(build_buttons(button_triples[i]))
@@ -212,6 +265,7 @@ exports.reply = reply;
 exports.reply2 = reply2;
 exports.welcome = welcome;
 exports.builders = { 
+	quick_reply: build_quick_reply,
 	structured_response:build_structured_response,
 	generic_response:build_generic_structure,
 	button:build_buttons 

@@ -119,8 +119,11 @@ app.post('/testhook/', function(req, res){
 				query = '' // if postback is defined, then query must be blank
 				postback = event.postback.payload;
 			}else{
-				postback = '' // message is defined, then postback must be blank
 				query = event.message.text;
+				postback = '' // message is defined, then postback must be blank
+				if(event.message.quick_reply){
+					postback = event.message.quick_reply.payload // handle new payload type
+				}
 			}
 
 			console.log('query recieved:', query);
