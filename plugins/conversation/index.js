@@ -7,7 +7,29 @@ var NGrams = natural.NGrams;
 function contains_hello(context){
 	// checks if user input contains a greeting
 
+	// first do some basic cleaning
+	context.current_query = context.current_query.toLowerCase().replace(/(show|see|display|view|tell)[^\s]*/g, '');
+
+
 	var tokenized_input = context.current_query.tokenizeAndStem();
+
+	if(tokenized_input[0] === 'cours'){
+
+		// person looked for something like 'all courses' or 'show courses' or 'see courses'
+		context.replies.push(
+			utils.arrays.random_choice(
+				[
+					'Asking for too much... I\'m just a bot :(',
+					'I don\'t want to spam you. It\'s for your own good. Ask me something else.',
+					'Hold on there, I can\'t show you all 8000 courses at McGill...',
+					'That\'s too many courses! Try something more specific please!'
+				])
+			)
+		context.history.fails = context.history.fails + 2;
+		context.completed = true;
+		return context;
+	}
+
 	for (var i = 0; i < WORDS['greetings'].length; i++) {
 		if(utils.arrays.contains(tokenized_input, WORDS['greetings'][i])){
 
@@ -41,7 +63,7 @@ function contains_hello(context){
 		}
 	}
 
-	if(context.current_query.match(/(how|hw){1}.*(is|are|r|you|u){1}.*(you|u|goin|doin)?/gi)){
+	if(context.current_query.match(/(how|hw){1}\b.*(is|are|r|you|u){1}\b.*(you|u|goin|doin)?/gi)){
 		context['completed'] = true;
 		context.replies.push(
 			utils.arrays.random_choice([
@@ -57,8 +79,7 @@ function contains_hello(context){
 		context.replies.push('I was made by this guy: http://www.zafarali.me My code is open source too, find it here: https://github.com/zafarali/minerva-bot');
 	}
 
-	if(context.current_query.match(/(are|r|you|u)\b/gi) && 
-		context.current_query.match(/(intel|smart|artif|AI|cool|good|male|awe|bad|scar|ware|self)/gi)){
+	if(context.current_query.match(/(are|r|you|u)\b.*(intel|man|smart|artif|AI|cool|good|male|awe|bad|scar|ware|self|bot)/gi)){
 		context['completed'] = true;
 		context.replies.push(
 			utils.arrays.random_choice([
@@ -72,7 +93,6 @@ function contains_hello(context){
 	// @TODO
 	// do some preprocessing to remove certains words
 
-	context.current_query = context.current_query.toLowerCase().replace(/(show|display|view|tell)[^\s]*/g, '');
 
 	return context;
 }

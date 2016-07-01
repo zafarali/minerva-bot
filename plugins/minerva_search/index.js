@@ -14,6 +14,7 @@ function minerva_search(context){
 		return context;
 	}
 
+
 	var deferred = q.defer();
 	var current_query = context.current_query
 	if(context.postback){
@@ -22,6 +23,7 @@ function minerva_search(context){
 			current_query = context.postback.split('search@')[1];
 		}
 	}
+
 	var parsed = parser.parse(current_query);
 	var extracted = parsed[0];
 	if(!extracted){
@@ -29,6 +31,12 @@ function minerva_search(context){
 	}
 	var url_queries = parsed[1];
 	console.log('extracted:',extracted)
+
+	if(context.current_query.match('program')){
+		context.extracted = extracted;
+		return context;
+	}
+
 	context.history['extracted'] = context.history['extracted'].concat(extracted);
 
 

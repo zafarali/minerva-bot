@@ -21,7 +21,9 @@ function major_search(context){
 		return context;
 	}
 
-	var search_results = major_index.search(context.extracted.join(' '));
+	var to_search = context.extracted.join(' ')
+	to_search = to_search.replace('program', '')
+	var search_results = major_index.search(to_search);
 
 	var number_to_return = Math.min(search_results.length, 10);
 
