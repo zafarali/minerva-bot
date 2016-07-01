@@ -140,10 +140,13 @@ function minerva_search(context){
 
 					// select only the uniqe ones.
 					too_many_results.examples = array_utils.unique(too_many_results.examples);
+					
+					var easy_click_options = [];
 
 					for (var j = 0; j < too_many_results.examples.length; j++) {
 						bot_reply_builder = bot_reply_builder + '"' +too_many_results.examples[j]+'"';
-						
+						if(too_many_results.examples[j].length < 20)
+							easy_click_options.push([ too_many_results.examples[j], '@'] )
 						if(too_many_results.examples.length > 2 && j !== too_many_results.examples.length-2){
 							bot_reply_builder = bot_reply_builder+', ';
 						}else if(too_many_results.examples.length > 1){
@@ -152,7 +155,16 @@ function minerva_search(context){
 					}
 					bot_reply_builder += '.';
 					context.replies.push(bot_reply_builder);
-					context.replies.push('Try something more specific?');
+					if(easy_click_options.length === 0){
+						context.replies.push('Try something more specific?');
+					}else{
+						context.replies.push(
+							chat_builders.quick_reply(
+								array_utils.random_choice(['Any of these look like what you were looking for?', 'One of these perhaps?']),
+								easy_click_options
+								)
+							)
+					}
 				}
 				total_responses += 1;
 			}			

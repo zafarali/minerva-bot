@@ -151,7 +151,7 @@ function build_quick_reply(text, button_doubles){
 
 		quick_replies.push({
 			content_type: "text",
-			title: button_doubles[i][0],
+			title: button_doubles[i][0].substr(0,20),
 			payload: button_doubles[i][1]
 		})
 	}
