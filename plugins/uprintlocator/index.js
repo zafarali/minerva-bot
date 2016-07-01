@@ -48,8 +48,9 @@ function uprint_search(context){
 			context.completed = true;
 
 			query = query.replace(printer_regex, '');
+			color_filter = Boolean(query.match(/(color|colour)/gi))
+			query = query.replace(query.match(/(color|colour)/gi), '')
 			query = query.tokenizeAndStem().join(' ');
-
 			// search the building index first
 			var building_result = building_index.search(query);
 
@@ -64,14 +65,17 @@ function uprint_search(context){
 
 					if(results.length > 0){
 						results.forEach(function(result){
+
 							uprint_result = uprints[result.ref];
-							uprint_results.push({
-								title: uprint_result.location +' in '+full_name,
-								subtitle: (parseInt(uprint_result.color) ? 'Color Printing ' : 'Black and White Printing ')+'. '+uprint_result.department,
-								buttons:[
-									['postback','Where is it?','where@'+building.ref]
-								]
-							})
+							if( (color_filter && parseInt(uprint_result.color)) || !color_filter){
+								uprint_results.push({
+									title: uprint_result.location +' in '+full_name,
+									subtitle: (parseInt(uprint_result.color) ? 'Color Printing ' : 'Black and White Printing ')+'. '+uprint_result.department,
+									buttons:[
+										['postback','Where is it?','where@'+building.ref]
+									]
+								})
+							}
 						});
 					}
 				});
