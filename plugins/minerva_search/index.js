@@ -25,7 +25,6 @@ function minerva_search(context){
 	var parsed = parser.parse(current_query);
 	var extracted = parsed[0];
 	if(!extracted){
-		context.replies.push('I work better if you ask me something more descriptive... Let me know if you need HELP!');
 		return context;
 	}
 	var url_queries = parsed[1];

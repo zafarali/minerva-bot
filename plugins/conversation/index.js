@@ -12,8 +12,21 @@ function contains_hello(context){
 		if(utils.arrays.contains(tokenized_input, WORDS['greetings'][i])){
 
 			context['completed'] = true;
-			context.replies.push(utils.arrays.random_choice(['Hi!', 'Hello!', 'Hey there!', 'Hey!', 'Minerva Bot reporting for duty.']));
-			context.replies.push('Ask me about courses at McGill! You can say things like "What time is COMP 202" or "What time is anthropology of development?"');
+			context.replies.push(utils.arrays.random_choice(['Hi!', 'Hello!', 'Hey there!', 'Hey!', 'Minerva Bot reporting for duty.', 'Minerva Bot at your service.']));
+			var prompt_help = false;
+			if(context.history.last_hello){
+				if( new Date() - context.history.last_hello > 30*60*1000 ){
+					prompt_help = true;
+				}
+			}else{
+				prompt_help = true;
+			}
+
+			if(prompt_help){
+				context.history['last_hello'] = new Date();
+				context.replies.push('Ask me about courses at McGill! You can say things like "What time is COMP 202" or "What time is anthropology of development?"');
+			}
+
 			break;
 		}
 
@@ -39,7 +52,7 @@ function contains_hello(context){
 				]));
 	}
 
-	if(context.current_query.match(/(who){1}.*(you|u|is|mak|mad|creat){1}.*(creat|mast|make|kin|quee|boss|own|you|u)+/gi)){
+	if(context.current_query.match(/(who){1}.*(you|u|is|mak|mad|creat|buil){1}.*(creat|mast|make|kin|quee|boss|own|you|u)+/gi)){
 		context['completed'] = true;
 		context.replies.push('I was made by this guy: http://www.zafarali.me My code is open source too, find it here: https://github.com/zafarali/minerva-bot');
 	}
@@ -49,9 +62,9 @@ function contains_hello(context){
 		context['completed'] = true;
 		context.replies.push(
 			utils.arrays.random_choice([
-				'I consider myself pseudointelligent! I am gender-neutral. I\'m here ready to help you navigate McGill!',
+				'I consider myself pseudointelligent! I\'m here ready to help you navigate McGill!',
 				'I am pseudointelligent.',
-				'I\'m not super smart. Only beta. Pseudointelligent',
+				'I\'m not super smart. Only beta right now. Pseudointelligent',
 				'We all know there\'s no such thing right...'
 				]))
 	}

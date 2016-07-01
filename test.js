@@ -8,6 +8,7 @@ var chat = require('./chat_utils.js')
 var app = express();
 app.set('port', ( process.env.PORT || 5000 ) );
 // app.set('ip', '127.0.0.1');
+var array_utils = require('./utils.js').arrays;
 
 
 // import plugins!
@@ -45,7 +46,7 @@ var contexts = JSON.parse(fs.readFileSync(path.resolve('./', 'history.json'), 'u
 
 function get_or_create_context(user){
 	if(!contexts[user]){
-		contexts[user] = {extracted:[]};
+		contexts[user] = {extracted:[],fails:0};
 	} 
 	return contexts[user];
 }
@@ -65,9 +66,31 @@ app.get('/', function(req, res){
 
 	internals(query, user, postback).then(function(ctx){
 		// ctx.history.past_queries.push(ctx.current_query);
-		if(ctx.replies.length === 0){
-			ctx.replies.push('I don\'t understand what you\'re asking me :(. I\'m always improving. Until then, you can ask me to HELP you.');
-		}
+			if(ctx.replies.length === 0){
+					ctx.history.fails = ctx.history.fails + 1;					
+					ctx.replies.push(
+						array_utils.random_choice(
+							[
+							'I don\'t understand what you\'re asking me :(. I\'m always improving.', 
+							'Didn\'t get that.', 
+							'What was that?', 
+							'Hmm.. not sure what you are asking me about...',
+							'Ask me something more descriptive?' ]
+							)
+						);
+				}else{
+					ctx.history.fails = 0;
+				}
+
+				if(ctx.history.fails>5){
+					console.log('Person needs help!!')
+					ctx.replies.push(
+						array_utils.random_choice(
+							['You seem confused. Try asking me for HELP?', 'Need some HELP?', 'Do you need HELP?']
+							)
+						);
+				}
+				console.log(ctx)
 		res.send({global_context:contexts,local_context:ctx});
 	}).catch(function(err){
 		console.log('error occured:',err)
@@ -133,10 +156,32 @@ app.post('/testhook/', function(req, res){
 				// ctx.history.past_queries.push(ctx.current_query);
 				console.log('response computed.');
 				chat.set_state(sender, 'typing_on', TESTTOKEN)
+				
 				if(ctx.replies.length === 0){
-					ctx.replies.push('I don\'t understand what you\'re asking me :(. I\'m always improving. Until then, you can ask me to HELP you.');
+					ctx.history.fails = ctx.history.fails + 1;					
+					ctx.replies.push(
+						array_utils.random_choice(
+							[
+							'I don\'t understand what you\'re asking me :(. I\'m always improving.', 
+							'Didn\'t get that.', 
+							'What was that?', 
+							'Hmm.. not sure what you are asking me about...',
+							'Ask me something more descriptive?' ]
+							)
+						);
+				}else{
+					ctx.history.fails = 0;
 				}
 
+				if(ctx.history.fails>5){
+					console.log('Person needs help!!')
+					ctx.replies.push(
+						array_utils.random_choice(
+							['You seem confused. Try asking me for HELP?', 'Need some HELP?', 'Do you need HELP?']
+							)
+						);
+				}
+				console.log(ctx)
 				// var reply_chain = []
 
 				// for (var i = 0; i < ctx.replies.length; i++) {
