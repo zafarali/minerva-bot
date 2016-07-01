@@ -112,7 +112,7 @@ app.post('/testhook/', function(req, res){
 			|| (event.postback && event.postback.payload ) ){
 
 			// chat.welcome();
-
+			chat.set_state(sender, 'mark_seen', TESTTOKEN)
 			var query, postback;
 
 			if(event.postback){
@@ -132,7 +132,7 @@ app.post('/testhook/', function(req, res){
 			internals(query, sender, postback).then(function(ctx){
 				// ctx.history.past_queries.push(ctx.current_query);
 				console.log('response computed.');
-
+				chat.set_state(sender, 'typing_on', TESTTOKEN)
 				if(ctx.replies.length === 0){
 					ctx.replies.push('I don\'t understand what you\'re asking me :(. I\'m always improving. Until then, you can ask me to HELP you.');
 				}
@@ -149,11 +149,12 @@ app.post('/testhook/', function(req, res){
 				// return q.when(reply_f)
 
 			}).then(function(){
-				
+				chat.set_state(sender, 'typing_off', TESTTOKEN)
 				console.log('reply chain complete');
 
 			}).catch(function(err){
 				console.log('error occured:',err)
+				chat.set_state(sender, 'typing_off', TESTTOKEN)
 				chat.reply(sender, "Something went wrong... Try again!", TESTTOKEN);
 				res.send({error:err});
 			});

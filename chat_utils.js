@@ -76,6 +76,38 @@ function reply2(sender, replies, test_token){
 	}
 }
 
+function set_state(sender, state, test_token){
+	// sets the state of the chat to either "seen" or "typing on"
+
+	var token = typeof test_token !== 'undefined' ?  test_token : FBTOKEN;
+	if(state !== 'mark_seen' && state !== 'typing_on' && state !== 'typing_off'){
+		throw Error('Unknown thread state')
+	}
+	
+	request({
+		url:'https://graph.facebook.com/v2.6/me/messages',
+		qs: {access_token:token},
+		method: 'POST',
+		json: {
+				recipient: {id:sender},
+				sender_action:state,
+			}
+	}, function(error, response, body){
+
+		if(error){
+			console.log('Error setting state',error);
+
+		}else if (response.body.error){
+			console.log('Error setting state:', response.body.error);
+
+		}
+
+		return true;
+	});
+
+
+}
+
 
 function welcome(test_token){
 	// A generic reply function
@@ -86,7 +118,7 @@ function welcome(test_token){
 	
 	// Add user text when user selects "get started"
 	request({
-		url:'https://graph.facebook.com/v2.6/1197984806888136/thread_settings',
+		url:'https://graph.facebook.com/v2.6/me/thread_settings',
 		qs: {access_token:token},
 		method: 'POST',
 		json: { "setting_type":"call_to_actions",
@@ -112,7 +144,7 @@ function welcome(test_token){
 
 	// add greeting.
 	request({
-		url:'https://graph.facebook.com/v2.6/1197984806888136/thread_settings',
+		url:'https://graph.facebook.com/v2.6/me/thread_settings',
 		qs: {access_token:token},
 		method: 'POST',
 		json: { "setting_type":"greeting",
@@ -264,6 +296,7 @@ function build_generic_structure(elements_data){
 exports.reply = reply;
 exports.reply2 = reply2;
 exports.welcome = welcome;
+exports.set_state = set_state;
 exports.builders = { 
 	quick_reply: build_quick_reply,
 	structured_response:build_structured_response,

@@ -91,14 +91,19 @@ app.post('/webhook/', function (req, res) {
 				console.log('Error setting welcome message.')
 			}
 
+			chat.set_state(sender, 'mark_seen');
+
 			var query, postback;
 
 			if(event.postback){
 				query = '' // if postback is defined, then query must be blank
 				postback = event.postback.payload;
 			}else{
-				postback = '' // message is defined, then postback must be blank
 				query = event.message.text;
+				postback = '' // message is defined, then postback must be blank
+				if(event.message.quick_reply){
+					postback = event.message.quick_reply.payload // handle new payload type
+				}
 			}
 
 			console.log('query recieved:', query);
@@ -107,6 +112,8 @@ app.post('/webhook/', function (req, res) {
 			internals(query, sender, postback).then(function(ctx){
 
 				console.log('response computed.');
+				
+				chat.set_state(sender, 'typing_on')
 
 				if(ctx.replies.length === 0){
 					ctx.replies.push('I don\'t understand what you\'re asking me :(. I\'m always improving. Until then, you can ask me to HELP you.');
@@ -117,10 +124,11 @@ app.post('/webhook/', function (req, res) {
 
 
 			}).then(function(){
-				
+				chat.set_state(sender, 'typing_off')
 				console.log('reply chain complete');
 
 			}).catch(function(err){
+				chat.set_state(sender, 'typing_off')
 				console.log('error occured:',err)
 				chat.reply2(sender, ["Something went wrong... Try again!"]);
 				// res.send({error:err});
