@@ -183,7 +183,7 @@ function course_release(context, deferred){
 		context.replies.push(
 			chat_builders.quick_reply(
 				'I have '+to_be_released.length+' more courses. '+utils.arrays.random_choice(['Would you like to see more?', 'A few more?', 'Would you like to see them?']), 
-				[ [ 'Yes', 'cc@more'] ]
+				[ [ 'Yes', 'cc@more'], ['No', 'negative@'] ]
 			)
 		);
 	}

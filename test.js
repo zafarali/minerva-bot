@@ -90,13 +90,15 @@ app.get('/', function(req, res){
 				if(ctx.history.fails>1){
 					console.log('Person needs help!!')
 					ctx.replies.push(
-						array_utils.random_choice(
-							['You seem confused. ', 'Are you confused? ', 'Seems like we aren\'t on the same page.']
-							) + 
-						array_utils.random_choice(
-							['Try asking me for HELP?', 'Ask me to HELP you?', 'Would you like me to HELP you?', 'Type HELP to see what I can do!']
-							)
-						);
+						chat.builders.quick_reply(
+							array_utils.random_choice(
+								['You seem confused. ', 'Are you confused? ', 'Seems like we aren\'t on the same page. ']
+								) + 
+							array_utils.random_choice(
+								['Try asking me for HELP?', 'Ask me to HELP you?', 'Would you like me to HELP you?', 'Type HELP to see what I can do!']
+								),
+							[['Help', 'help@'],['Nah', 'negative@']]
+						));
 				}
 				console.log(ctx)
 		res.send({global_context:contexts,local_context:ctx});
@@ -184,13 +186,15 @@ app.post('/testhook/', function(req, res){
 				if(ctx.history.fails>1){
 					console.log('Person needs help!!')
 					ctx.replies.push(
-						array_utils.random_choice(
-							['You seem confused. ', 'Are you confused? ', 'Seems like we aren\'t on the same page.']
-							) + 
-						array_utils.random_choice(
-							['Try asking me for HELP?', 'Ask me to HELP you?', 'Would you like me to HELP you?', 'Type HELP to see what I can do!']
-							)
-						);
+						chat.builders.quick_reply(
+							array_utils.random_choice(
+								['You seem confused. ', 'Are you confused? ', 'Seems like we aren\'t on the same page. ']
+								) + 
+							array_utils.random_choice(
+								['Try asking me for HELP?', 'Ask me to HELP you?', 'Would you like me to HELP you?', 'Type HELP to see what I can do!']
+								),
+							[['Help', 'help@'],['Nah', 'negative@']]
+						));
 				}
 				console.log(ctx)
 				// var reply_chain = []

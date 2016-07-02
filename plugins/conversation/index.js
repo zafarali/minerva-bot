@@ -90,6 +90,15 @@ function contains_hello(context){
 				]))
 	}
 
+	if(context.postback && !context['completed']){
+		if(context.postback.substr(0,9) === 'negative@'){
+			context['completed'] = true;
+			context.replies.push(
+				utils.arrays.random_choice([
+					'Got it.', 'Ok!', 'Not a problem.', 'Alright.', '(Y)'
+					]))
+		}
+	}
 	// @TODO
 	// do some preprocessing to remove certains words
 
