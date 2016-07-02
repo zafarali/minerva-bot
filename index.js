@@ -54,7 +54,10 @@ function get_or_create_context(user){
 	return contexts[user];
 }
 
-
+chat.menu([
+	['postback', 'Help', 'help@'],
+	['web_url', 'Source Code (V0.2)', 'https://github.com/zafarali/minerva-bot/']
+	])
 app.get('/', function (req, res) { 
 
 		// storage.push(req.query['to_push']);
