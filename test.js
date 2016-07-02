@@ -87,11 +87,14 @@ app.get('/', function(req, res){
 					ctx.history.fails = 0;
 				}
 
-				if(ctx.history.fails>5){
+				if(ctx.history.fails>1){
 					console.log('Person needs help!!')
 					ctx.replies.push(
 						array_utils.random_choice(
-							['You seem confused. Try asking me for HELP?', 'Need some HELP?', 'Do you need HELP?']
+							['You seem confused. ', 'Are you confused? ', 'Seems like we aren\'t on the same page.']
+							) + 
+						array_utils.random_choice(
+							['Try asking me for HELP?', 'Ask me to HELP you?', 'Would you like me to HELP you?', 'Type HELP to see what I can do!']
 							)
 						);
 				}
@@ -178,11 +181,14 @@ app.post('/testhook/', function(req, res){
 					ctx.history.fails = 0;
 				}
 
-				if(ctx.history.fails>5){
+				if(ctx.history.fails>1){
 					console.log('Person needs help!!')
 					ctx.replies.push(
 						array_utils.random_choice(
-							['You seem confused. Try asking me for HELP?', 'Need some HELP?', 'Do you need HELP?']
+							['You seem confused. ', 'Are you confused? ', 'Seems like we aren\'t on the same page.']
+							) + 
+						array_utils.random_choice(
+							['Try asking me for HELP?', 'Ask me to HELP you?', 'Would you like me to HELP you?', 'Type HELP to see what I can do!']
 							)
 						);
 				}

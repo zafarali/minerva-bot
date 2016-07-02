@@ -6,6 +6,7 @@ var request = require('request');
 var fs = require('fs');
 var path = require('path');
 var chat = require('./chat_utils.js')
+var array_utils = require('./utils.js').arrays;
 
 /// import relevant plugins
 var minerva_search = require('./plugins').minerva_search;
@@ -48,7 +49,7 @@ try{
 
 function get_or_create_context(user){
 	if(!contexts[user]){
-		contexts[user] = {extracted:[]};
+		contexts[user] = {extracted:[], fails:0};
 	} 
 	return contexts[user];
 }
@@ -116,7 +117,31 @@ app.post('/webhook/', function (req, res) {
 				chat.set_state(sender, 'typing_on')
 
 				if(ctx.replies.length === 0){
-					ctx.replies.push('I don\'t understand what you\'re asking me :(. I\'m always improving. Until then, you can ask me to HELP you.');
+					ctx.history.fails = ctx.history.fails + 1;					
+					ctx.replies.push(
+						array_utils.random_choice(
+							[
+							'I don\'t understand what you\'re asking me :(. I\'m always improving.', 
+							'Didn\'t get that.', 
+							'What was that?', 
+							'Hmm.. not sure what you are asking me about...',
+							'Ask me something more descriptive?' ]
+							)
+						);
+				}else{
+					ctx.history.fails = 0;
+				}
+
+				if(ctx.history.fails>1){
+					console.log('Person needs help!!')
+					ctx.replies.push(
+						array_utils.random_choice(
+							['You seem confused. ', 'Are you confused? ', 'Seems like we aren\'t on the same page.']
+							) + 
+						array_utils.random_choice(
+							['Try asking me for HELP?', 'Ask me to HELP you?', 'Would you like me to HELP you?', 'Type HELP to see what I can do!']
+							)
+						);
 				}
 
 				// schedule replies every 200ms
