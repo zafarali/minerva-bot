@@ -13,7 +13,7 @@ function contains_hello(context){
 
 	var tokenized_input = context.current_query.tokenizeAndStem();
 
-	if(tokenized_input[0] === 'cours'){
+	if(tokenized_input[0] === 'cours' && tokenized_input.length === 1){
 
 		// person looked for something like 'all courses' or 'show courses' or 'see courses'
 		context.replies.push(
