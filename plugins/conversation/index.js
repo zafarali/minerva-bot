@@ -1,6 +1,8 @@
 var natural = require('natural')
 var WORDS = require('../WORDS.js').WORDS;
 var utils = require('../../utils.js');
+var chat_builders = require('../../chat_utils.js').builders;
+
 natural.LancasterStemmer.attach();
 var NGrams = natural.NGrams;
 
@@ -91,6 +93,15 @@ function contains_hello(context){
 	}
 
 	if(context.postback && !context['completed']){
+		if(context.postback === 'NEWUSER'){
+			context['completed'] = true;
+			context.replies.push('Hello there! Thanks for giving me a shot :)');
+			context.replies.push(
+				chat_builders.quick_reply('Would you like to see all my capabilities?',
+					[ ['Yep', 'help@'], ['Nah, I got it.', 'negative@'] ])
+				);
+
+		}
 		if(context.postback.substr(0,9) === 'negative@'){
 			context['completed'] = true;
 			context.replies.push(
