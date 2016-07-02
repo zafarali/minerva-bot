@@ -48,7 +48,11 @@ function catalog_search(context){
 	}else{
 		
 
-		if(current_query.match('level') || current_query.match(/(year.?\d)|(\d(st|nd|rd|th).?year)/gi) || current_query.match(/(u\d)\b/gi)){
+		if(
+			current_query.match('level') || 
+			current_query.match(/(year.?\d)|(\d(st|nd|rd|th).?year)/gi) || 
+			current_query.match(/(u\d)\b/gi)
+			){
 
 			var minor_clean = context.current_query.replace(/(course|courses)/gi, '');
 			minor_clean = minor_clean.replace(/(year.?\d)|(\d(st|nd|rd|th).?year)/gi, '');
@@ -68,12 +72,16 @@ function catalog_search(context){
 		}
 
 		var cleaned = clean(current_query);
+		
 		if(!cleaned.level){
 			// this is not a search for a XXX-level course...
 			return context;
 		}
 		context.history['catalog_search'] = [];
-
+		//hard code this for now...
+		if(cleaned.query==='cs'){
+			cleaned.query = 'computer science'
+		}
 		var result = subject_index.search(cleaned.query);
 
 		if(result.length > 0){
@@ -83,7 +91,8 @@ function catalog_search(context){
 				'field_course_title&f[0]=field_subject_code%3A'+result[0].ref+'&f[1]=course_level%3A'+cleaned.level;
 			
 			var courses = [];
-
+			console.log('subject:',result[0].ref)
+			console.log('level:',cleaned.level)
 			scrape(context, deferred, result[0].ref, cleaned.level, 0, courses)
 		}else{
 			return context;

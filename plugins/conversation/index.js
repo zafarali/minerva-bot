@@ -65,7 +65,7 @@ function contains_hello(context){
 		}
 	}
 
-	if(context.current_query.match(/(how|hw){1}\b.*(is|are|r|you|u){1}\b.*(you|u|goin|doin)?/gi)){
+	if(context.current_query.match(/(how|hw){1}\b.*(is|are|r|you|u){1}\b.*(you|u\b|goin|doin)?/gi)){
 		context['completed'] = true;
 		context.replies.push(
 			utils.arrays.random_choice([
@@ -76,12 +76,14 @@ function contains_hello(context){
 				]));
 	}
 
-	if(context.current_query.match(/(who){1}.*(you|u|is|mak|mad|creat|buil){1}.*(creat|mast|make|kin|quee|boss|own|you|u)+/gi)){
+	if(context.current_query.match(/(who){1}.*(you|u\b|is|mak|mad|creat|buil){1}.*(creat|mast|make|kin|quee|boss|own|you|u\b)+/gi)){
 		context['completed'] = true;
 		context.replies.push('I was made by this guy: http://www.zafarali.me My code is open source too, find it here: https://github.com/zafarali/minerva-bot');
 	}
 
-	if(context.current_query.match(/(are|r|you|u)\b.*(intel|man|smart|artif|AI|cool|good|male|awe|bad|scar|ware|self|bot)/gi)){
+	if(
+		context.current_query.match(/(are|r|you|u)\b.*(intel|man\b|smart|artif|AI|cool\b|good|male\b|awe|bad\b|scar|ware\b|self|bot\b)/gi)
+		|| context.current_query.match(/(who|what){1}\b\s?(are|r\b)?\b\s?(you|u\b)/gi)){
 		context['completed'] = true;
 		context.replies.push(
 			utils.arrays.random_choice([
@@ -92,6 +94,23 @@ function contains_hello(context){
 				]))
 	}
 
+	// match a haha or lol 
+	// commented out because of weird generality bug... it even matched 'hillary'
+	// if(context.current_query.match(/((ha)*|lol.*|hehe|lmao)\b/gi) && !context.completed){
+	// 	context['completed'] = true;
+	// 	context.replies.push(
+	// 		utils.arrays.random_choice([
+	// 			'Glad you found it funny ^_^',
+	// 			':D',
+	// 			'LOL!',
+	// 			'^_^',
+	// 			':)'
+	// 			]))
+	// }
+
+
+
+	// match certain postbacks
 	if(context.postback && !context['completed']){
 		if(context.postback === 'NEWUSER'){
 			context['completed'] = true;
@@ -106,7 +125,7 @@ function contains_hello(context){
 			context['completed'] = true;
 			context.replies.push(
 				utils.arrays.random_choice([
-					'Got it.', 'Ok!', 'Not a problem.', 'Alright.', '(Y)'
+					'Got it.', 'Ok!', 'Cool.', 'Alright.', '(Y)'
 					]))
 		}
 	}
