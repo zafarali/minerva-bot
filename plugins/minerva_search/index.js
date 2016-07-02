@@ -32,7 +32,7 @@ function minerva_search(context){
 	var url_queries = parsed[1];
 	console.log('extracted:',extracted)
 
-	if(context.current_query.match('program')){
+	if(context.current_query.match('program') && !context.current_query.match('programming')){
 		context.extracted = extracted;
 		return context;
 	}
