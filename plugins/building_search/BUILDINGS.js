@@ -61,7 +61,7 @@ BUILDINGS = {
 	},
 	'BURN':{
 		full_name:'Burnside Building',
-		other_names:['burnside', 'soupe cafe', 'gic', 'geography library', 'burnside hall', 'geography information centre'],
+		other_names:['burnside', 'burnside basement', 'soupe cafe', 'gic', 'geography library', 'burnside hall', 'geography information centre'],
 		address:'805 Sherbrooke Street West, Montreal, Quebec,Canada H3A 0B9',
 		cafeteria:['Soupe Cafe'],
 		library:['Geographic Information Centre'],
