@@ -14,6 +14,13 @@ BUILDINGS = {
 		address:'845 Sherbrooke St. West, Montreal, QC H3A 2T5, Canada',
 		image:'https://upload.wikimedia.org/wikipedia/commons/2/2d/McGill_University_Montr%C3%A9al.jpeg'
 	},
+	'SERVICEPOINT':{
+		full_name:'Service Point',
+		other_names:['Reception', 'campus tour'],
+		address:'3415 McTavish Street, Montréal, QC, H3A 0C8',
+		link:'https://www.mcgill.ca/students/servicepoint/',
+		image:'http://www.mcgill.ca/library/files/library/med-mclennan_180w.jpg'
+	},
 	'MILTONGATES':{
 		full_name:'Milton Gates',
 		address:'3500 Rue University, Montréal, QC H3A 2A7',
