@@ -1,5 +1,5 @@
 // Building codes ordered by most common (this is to speed up searches in loops)
-exports.common_buildings = ['ADAMS','MCLIB', 'REDLIB', 'ENGMC', 'SCHULICH', 'ARTS', 'LEA', 'BURN', 'BRONF', 'STBIO', 'LAW', 'RPHYS', 'MAASS', 'MUSIC','FERR', 'MCMED', 'ENGTR', 'JAMES', 'EDUC' ,'ENGMD', 'WONG', 'REDMUS'];
+exports.common_buildings = ['ADAMS','MCLIB', 'REDLIB', 'ENGMC', 'SCHULICH', 'ARTS', 'LEA', 'BURN', 'BRONF', 'STBIO', 'LAW', 'RPHYS', 'MAASS', 'MUSIC','FERR', 'MCMED', 'ENGTR', 'JAMES', 'EDUC' ,'ENGMD', 'WONG', 'YINTERSECTION', 'REDMUS', 'LOWERFIELD'];
 
 // list of buildings to help narrow down results.
 exports.libraries = ['REDLIB', 'MCLIB', 'SCHULICH', 'LAW', 'ELIZ', 'BURN', 'EDUC', 'MOR', 'BARTON','MCMED', 'MCLIB2'];
@@ -8,6 +8,33 @@ exports.cafeterias = ['BISHOP','DOUGLAS','C4','SSMU','REDLIB','BRONF','EDUC','EN
 
 // Building codes according to: http://www.is.mcgill.ca/whelp/sis_help/building_codes.pdf
 BUILDINGS = {
+	'RODDICKGATES':{
+		full_name:'Roddick Gates',
+		other_names:['main gate', 'entrance gates'],
+		address:'845 Sherbrooke St. West, Montreal, QC H3A 2T5, Canada',
+		image:'https://upload.wikimedia.org/wikipedia/commons/2/2d/McGill_University_Montr%C3%A9al.jpeg'
+	},
+	'MILTONGATES':{
+		full_name:'Milton Gates',
+		address:'3500 Rue University, Montréal, QC H3A 2A7',
+		image:'https://upload.wikimedia.org/wikipedia/commons/d/da/Milton_Gates_(McGill_University)_(2),_Montreal_2005-08-30.jpg'
+	},
+	'YINTERSECTION':{
+		full_name: 'Y-Intersection',
+		address: '45.504679, -73.576446',
+		image:'http://i.imgur.com/Wdv4eQO.jpg'
+	},
+	'3BARES':{
+		full_name: 'Three Bares Park',
+		other_names:['OAP', 'OAP park', 'outdoor air pub', 'open air pub'],
+		address:'45.504803, -73.577028',
+		image:'http://publications.mcgill.ca/reporter/files/2010/11/4305-MEMORIES-3Bares-SMITH.jpg'
+	},
+	'LOWERFIELD':{
+		full_name: 'Lower Field',
+		address:'45.504209, -73.576487',
+		image:'https://c1.staticflickr.com/1/180/485457780_a805b12096_b.jpg'
+	},
 	'MOUNTAIN':{
 		full_name:'Mountain 3605',
 		other_names:['Martlet House'],
@@ -23,11 +50,17 @@ BUILDINGS = {
 		image:'http://www.mcgill.ca/maps/files/maps/styles/medium/public/locations/242_martlet_house.JPG?itok=NluSAA8z'
 	},
 	'BOOKSTORE':{
-		full_name:'Bookstore',
-		other_names:[],
-		address:'3420 rue McTavish, Montreal, QC H3A 3L1',
-		link:'https://www.mcgill.ca/maps/bookstore',
-		image:'https://www.mcgill.ca/maps/files/maps/styles/mcgill_maps_thumb_170x140/public/locations/185_bookstore.JPG?itok=mRd94WGT'
+		full_name:'Le James (Course Materials)',
+		other_names:['bookstore'],
+		address:'3544 Ave du Parc, Montreal Canada',
+		link:'https://www.bookstore.mcgill.ca/',
+		image:'https://www.bookstore.mcgill.ca/sites/default/files/news/image/parc_opening.jpg'
+	},
+	'BOOKSTORE2':{
+		full_name:'Le James (Clothing and Insignia)',
+		other_names:['bookstore'],
+		address:'680 Sherbrooke W, Montreal Canada',
+		link:'https://www.bookstore.mcgill.ca/'
 	},
 	'ADAMS':{
 		full_name:'Adams Building',
