@@ -54,21 +54,30 @@ function catalog_search(context){
 			current_query.match(/(u\d)\b/gi)
 			){
 
-			var minor_clean = context.current_query.replace(/(course|courses)/gi, '');
-			minor_clean = minor_clean.replace(/(year.?\d)|(\d(st|nd|rd|th).?year)/gi, '');
-			minor_clean = minor_clean.replace(/(u\d)\b/gi, '');			
-			minor_clean = minor_clean.tokenizeAndStem().join(' ')
-			context.replies = [ chat_builders.quick_reply(
-				'Seems like you\'re asking me about courses for a certain level?', 
-				[
-					['100-level', 'catsearch@100|'+minor_clean],
-					['200-level', 'catsearch@200|'+minor_clean],
-					['300-level', 'catsearch@300|'+minor_clean],
-					['400-level', 'catsearch@400|'+minor_clean],
-					['500-level', 'catsearch@500|'+minor_clean],
-					['600-level', 'catsearch@600|'+minor_clean]
-				]
-				) ]
+			if(context.postback.substr(0,10) !== 'catsearch@'){
+
+				var minor_clean = context.current_query.replace(/(course|courses)/gi, '');
+				minor_clean = minor_clean.replace(/(year.?\d)|(\d(st|nd|rd|th).?year)/gi, '');
+				minor_clean = minor_clean.replace(/(u\d)\b/gi, '');
+				minor_clean = minor_clean.tokenizeAndStem().join(' ')
+				minor_clean = minor_clean.replace(/\b(wint|sum|fal)\b/gi,''); // replace semester
+				minor_clean = minor_clean.replace(/(level|lvl)/gi, ''); // replace level
+				minor_clean = minor_clean.replace(/\d+/gi, ''); // replace digits
+				context.replies = [ chat_builders.quick_reply(
+					'Seems like you\'re asking me about courses for a certain level?', 
+					[
+						['100-level', 'catsearch@100|'+minor_clean],
+						['200-level', 'catsearch@200|'+minor_clean],
+						['300-level', 'catsearch@300|'+minor_clean],
+						['400-level', 'catsearch@400|'+minor_clean],
+						['500-level', 'catsearch@500|'+minor_clean],
+						['600-level', 'catsearch@600|'+minor_clean]
+					]
+					) ]
+			}else{
+				context.replies = [ 'Seems like I\'m going in a loop. Something is wrong with my internals... :O'];
+				context.completed = true;
+			}
 		}
 
 		var cleaned = clean(current_query);
