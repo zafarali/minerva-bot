@@ -295,6 +295,18 @@ function build_buttons(button_triple){
 	return to_save;
 }
 
+function build_attachment(url, type){
+	var to_save = {
+		"attachment": { 
+			"type": type, 
+			"payload": {
+				"url": url
+			}
+		}
+	}
+	return to_save;
+}
+
 
 function build_generic_structure(elements_data){
 	// elements_data is an array of the following:
@@ -356,5 +368,6 @@ exports.builders = {
 	quick_reply: build_quick_reply,
 	structured_response:build_structured_response,
 	generic_response:build_generic_structure,
-	button:build_buttons 
+	button:build_buttons,
+	attachment: build_attachment
 }
