@@ -30,7 +30,17 @@ function help_me(context){
 		set_user_needs_help(context);
 	}
 
-	return oweek(context);
+	return samosa(context);
+}
+
+function samosa(context){
+	if ( context.current_query.match(/future|samosa|next/gi) ) {
+		context.replies.push(chat_builders.attachment('https://upload.wikimedia.org/wikipedia/commons/c/cb/Samosachutney.jpg', 'image'));
+		context.completed = true;
+	}
+
+	return context;
+
 }
 
 function oweek(context){
