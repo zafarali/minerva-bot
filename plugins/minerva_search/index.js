@@ -328,11 +328,13 @@ function create_bot_reply(course, year){
 	// 		[" There are spots in the waitlist!", 
 	// 		" The waitlist is not full!"])
 	// }
-	var reply_title = year_to_season( year )+' '+course.subject+course.course_code+': ' + course.title;
+	var reply_title = course.subject+course.course_code+': ' + course.title;
 	var reply_subtitle = '⏰: '+course.days+' at '+course.time+'\n🏛: '+course.location+'\n👥: '+course.instructor;
 
-	if(reply_title.length > 80){
-		reply_title = reply_title.substr(0,77)+'...';
+	if(reply_title.length > 70){
+		reply_title = reply_title.substr(0,70)+' ('+year_to_season( year )+')...';
+	}else{
+		reply_title = reply_title+' ('+year_to_season( year )+')'
 	}
 	
 	if(reply_subtitle.length > 80){
