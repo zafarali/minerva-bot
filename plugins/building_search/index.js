@@ -131,7 +131,7 @@ function building_search(context){
 						'Want to see cafeteria hours?', 
 						'There are cafeterias too, want to see their timings?']
 						), 
-					[['web_url', 'Show hours', 'https://www.mcgill.ca/foodservices/locations/hours-service']]
+					[['web_url', 'Show hours', 'https://www.mcgill.ca/foodservices/locations/hours-service', 'tall']]
 					)
 				)
 		}

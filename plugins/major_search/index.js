@@ -37,7 +37,8 @@ function major_search(context){
 				title: result.title,
 				subtitle: 'Department of '+result.department+'. '+result.level+' program.',
 				buttons:[
-					['web_url', 'Program page', result.link]
+					['web_url', 'Program page', result.link],
+					['element_share']
 				]			
 			})
 		}

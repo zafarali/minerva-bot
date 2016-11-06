@@ -276,16 +276,38 @@ function build_structured_response(text,button_triples){
 
 function build_buttons(button_triple){
 	var button_type = button_triple[0]; // the "type": "web_url" or "postback"
-	var button_title = button_triple[1]; // "title" to display
-	var button_payload = button_triple[2]; // the payload, either the "url" or "payload"
 
 	// temporary object
-	var to_save = {type:button_type, title:button_title}
+	var to_save = {type:button_type}
 	// console.log(button_triple)
+
+	// element share buttons are a bit different
+	// they do not have urls etc so we skip adding more information to them.
+	if(button_type === "element_share"){
+		return to_save;
+	}
+
+	// Since this is not an element share button, we extract more information.
+	var button_title = button_triple[1]; // "title" to display
+	var button_payload = button_triple[2]; // the payload, either the "url" or "payload"
+	to_save["title"] = button_title;
 
 	// extract what kind of button it is and work accordingly.		
 	if(button_type === "web_url"){
 		to_save["url"] = button_payload;
+
+		// check if we have a webview hight option.
+		if( button_triple.length == 4 ){
+			var height_ratio = button_triple[3];
+
+			// only available options right now.
+			if(["compact", "full", "tall"].indexOf(height_ratio) > -1){
+				to_save["webview_height_ratio"] = height_ratio;
+			}else{
+				throw Error("Height Ratio Unrecognized.");
+			}
+		}
+
 	}else if(button_type === "postback"){
 		to_save["payload"] = button_payload;
 	}else{
