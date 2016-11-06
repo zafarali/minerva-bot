@@ -313,31 +313,55 @@ function create_multi_section_reply(sections, year){
 
 function create_bot_reply(course, year){
 
-	var bot_reply = "In " + year_to_season( year ) + ", "
-	+ course.subject+ course.course_code + " is " +
-	course.title+" It takes place on "+course.days+
-	" at "+course.time+" in "+course.location+ 
-	" taught by "+course.instructor+".";
+	// var bot_reply = "In " + year_to_season( year ) + ", "
+	// + course.subject+ course.course_code + " is " +
+	// course.title+" It takes place on "+course.days+
+	// " at "+course.time+" in "+course.location+ 
+	// " taught by "+course.instructor+".";
 	
-	if(parseInt(course.WLcapacity) > 0 && parseInt(course.WLremain) === 0){
-		// no space in this...
-		bot_reply = bot_reply+array_utils.random_choice([" I think it is full :(", " It might be full..."]);
-	}else if(parseInt(course.WLcapacity) > 0 && parseInt(course.WLremain) > 0 ){
+	// if(parseInt(course.WLcapacity) > 0 && parseInt(course.WLremain) === 0){
+	// 	// no space in this...
+	// 	bot_reply = bot_reply+array_utils.random_choice([" I think it is full :(", " It might be full..."]);
+	// }else if(parseInt(course.WLcapacity) > 0 && parseInt(course.WLremain) > 0 ){
 
-		bot_reply = bot_reply + array_utils.random_choice(
-			[" There are spots in the waitlist!", 
-			" The waitlist is not full!"])
+	// 	bot_reply = bot_reply + array_utils.random_choice(
+	// 		[" There are spots in the waitlist!", 
+	// 		" The waitlist is not full!"])
+	// }
+	var reply_title = year_to_season( year )+' '+course.subject+course.course_code+': ' + course.title;
+	var reply_subtitle = '⏰: '+course.days+' at '+course.time+'\n🏛: '+course.location+'\n👥: '+course.instructor;
+
+	if(reply_title.length > 80){
+		reply_title = reply_title.substr(0,77)+'...';
 	}
+	
+	if(reply_subtitle.length > 80){
+		reply_subtitle = reply_subtitle.substr(0, 77) + '...';	
+	}
+	
+	var elements = [{
+			title: reply_title,
+			subtitle: reply_subtitle,
+			buttons:[
+					['postback', 'More information', 'more@'+course.subject+','+course.course_code+','+course.CRN+','+year], //summary request
+					['web_url', 'Go to course page', 
+						'https://horizon.mcgill.ca/pban1/bwckschd.p_disp_listcrse?term_in='+year+
+						'&subj_in='+course.subject+'&crse_in='+course.course_code+'&crn_in='+course.CRN], //link
+					['element_share']
+			]			
+			}]
 
-	bot_reply = chat_builders.structured_response(
-		bot_reply,
-		[
-			['postback', 'Give me a summary.', 'more@'+course.subject+','+course.course_code+','+course.CRN+','+year], //summary request
-			['postback', 'Where is it?', 'where@'+course.location.split(' ')[0]],
-			['web_url', 'Go to course page', 
-			'https://horizon.mcgill.ca/pban1/bwckschd.p_disp_listcrse?term_in='+year+
-			'&subj_in='+course.subject+'&crse_in='+course.course_code+'&crn_in='+course.CRN] //link
-		])
+	var bot_reply = chat_builders.generic_response(elements)
+	// bot_reply = chat_builders.structured_response(
+	// 	bot_reply,
+	// 	[
+	// 		['postback', 'More information.', 'more@'+course.subject+','+course.course_code+','+course.CRN+','+year], //summary request
+	// 		['postback', 'Directions', 'where@'+course.location.split(' ')[0]],
+	// 		['element_share']
+	// 		// ['web_url', 'Go to course page', 
+	// 		// 'https://horizon.mcgill.ca/pban1/bwckschd.p_disp_listcrse?term_in='+year+
+	// 		// '&subj_in='+course.subject+'&crse_in='+course.course_code+'&crn_in='+course.CRN] //link
+	// 	])
 	return bot_reply;
 }
 

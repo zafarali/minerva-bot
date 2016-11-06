@@ -188,7 +188,8 @@ function course_release(context, deferred){
 			subtitle: "Available during "+current_element.years,
 			buttons:[
 				['postback', 'Find times', 'search@'+current_element.title.substr(0,8)],
-				['web_url', 'Course Page', current_element.link ]
+				['web_url', 'Course Page', current_element.link ],
+				['element_share']
 			]
 		});
 	}
