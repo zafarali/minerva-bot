@@ -62,7 +62,7 @@ function query_execute(args){
 }
 function generate_query_by_subject_code(subject, code, year){
 	// hard coded for now
-	var years = typeof year !== 'undefined' ?  [year] : ['201609','201701'];
+	var years = typeof year !== 'undefined' ?  [year] : ['201701'];
 	var queries = [];
 	for (var i = 0; i < years.length; i++) {
 		queries.push(prepare_query(years[i], subject, code))
@@ -72,7 +72,7 @@ function generate_query_by_subject_code(subject, code, year){
 
 function generate_query_by_title(title, year){
 	// hard coded for now
-	var years = typeof year !== 'undefined' ?  [year] : ['201609','201701'];
+	var years = typeof year !== 'undefined' ?  [year] : ['201701'];
 	var queries = [];
 	title = title.substr(0,30);
 	for (var i = 0; i < years.length; i++) {
