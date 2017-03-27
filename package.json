@@ -20,5 +20,8 @@
   "scripts": {
     "start": "supervisor index.js"
   },
-  "main": "index.js"
+  "main": "index.js",
+  "engines": {
+    "node": "4.1.1"
+  }
 }
