@@ -60,11 +60,11 @@ function parse_phrase(user_text){
 	if (course_matches && course_matches.length > 0){
 		var year = undefined;
 		if(user_text.split(' ').contains('fall')){
-			year = '201609';
+			year = '201709';
 		}else if(user_text.split(' ').contains('winter')){
-			year = '201701';
+			year = '201801';
 		}else if(user_text.split(' ').contains('summer')){
-			year = '201605';
+			year = '201705';
 		}
 		for (var j = 0; j < course_matches.length; j++) {
 			var subject = course_matches[j].substr(0,4);
@@ -186,11 +186,11 @@ function refine_query_extract(key_words){
 				// we detect a date/semester
 
 				if( key_words[i] === 'fall'){
-					meta['when'] = '201609'
+					meta['when'] = '201709'
 				} else if( key_words[i] === 'winter'){
-					meta['when'] = '201701'
+					meta['when'] = '201801'
 				} else if( key_words[i] === 'summer'){
-					meta['when'] = '201605'
+					meta['when'] = '201705'
 				} else {
 					// didn't find a reason not to include this
 					refined.push(key_words[i])						

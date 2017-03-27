@@ -46,7 +46,7 @@ for (var i = 0; i < queries.length; i++) {
 	console.log('cleaned:',cleaned);
 	var result = index.search(cleaned.query);
 	console.log(result);
-	var canonical_url = 'http://www.mcgill.ca/study/2016-2017/courses/search?'+
+	var canonical_url = 'http://www.mcgill.ca/study/2017-2018/courses/search?'+
 			'sort_by=field_course_title&f[0]=field_subject_code%3A'+
 			result[0].ref+'&f[1]=course_level%3A'+cleaned.level;
 	console.log(canonical_url);

@@ -2,7 +2,7 @@ var request = require('request');
 var cheerio = require('cheerio');
 var jsonfile = require('jsonfile');
 
-var canonical_url = 'http://www.mcgill.ca/study/2016-2017/programs/search?search_api_views_fulltext=&sort_by=search_api_relevance&page=';
+var canonical_url = 'http://www.mcgill.ca/study/2017-2018/programs/search?search_api_views_fulltext=&sort_by=search_api_relevance&page=';
 
 
 var storage = [];

@@ -96,7 +96,7 @@ function catalog_search(context){
 		if(result.length > 0){
 			console.log(result);
 														//@ TODO remove the hard coding in this...?
-			var canonical_url = 'http://www.mcgill.ca/study/2016-2017/courses/search?sort_by='+
+			var canonical_url = 'http://www.mcgill.ca/study/2017-2018/courses/search?sort_by='+
 				'field_course_title&f[0]=field_subject_code%3A'+result[0].ref+'&f[1]=course_level%3A'+cleaned.level;
 			
 			var courses = [];
@@ -113,7 +113,7 @@ function catalog_search(context){
 
 function scrape(context, deferred, subject, level, page, courses, last_page){
 	
-	var canonical_url = 'http://www.mcgill.ca/study/2016-2017/courses/search?sort_by=field_course_title&f[0]=field_subject_code%3A'+subject+'&f[1]=course_level%3A'+level+'&page='+page;
+	var canonical_url = 'http://www.mcgill.ca/study/2017-2018/courses/search?sort_by=field_course_title&f[0]=field_subject_code%3A'+subject+'&f[1]=course_level%3A'+level+'&page='+page;
 
 	request(canonical_url, function(error, response, body){
 		var $ = cheerio.load(body);

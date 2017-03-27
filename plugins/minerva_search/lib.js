@@ -105,7 +105,7 @@ function prepare_query ( term, subject, code, title ) {
 	  var title = typeof title !== 'undefined' ?  title.replace(/\s/g, '%20') : '';
 	  var subject = typeof subject !== 'undefined' ?  subject : '';
 	  var code = typeof code !== 'undefined' ?  code : '';
-	  var term = typeof term !== 'undefined' ?  term : '201609';
+	  var term = typeof term !== 'undefined' ?  term : '201709';
 	  subject = subject.toUpperCase();
 	var EXTRA_stuff	= '?display_mode_in=LIST&search_mode_in='+
 	'&sel_subj=dummy&sel_day=dummy&sel_schd=dummy&sel_insm=dummy&'+
